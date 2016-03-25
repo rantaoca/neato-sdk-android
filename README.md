@@ -1,3 +1,5 @@
+[![Build Status](https://magnum.travis-ci.com/NeatoRobotics/neato-sdk-android.svg?token=Y4dRpXzLka6jmXX14Lfr&branch=master)](https://magnum.travis-ci.com/NeatoRobotics/neato-sdk-android)
+
 Neato SDK Android
 ===================
 This is the Neato SDK for Android
