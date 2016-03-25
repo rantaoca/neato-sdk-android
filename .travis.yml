@@ -16,5 +16,5 @@ android:
     - '.+'
 
 script:
-  - cd "Neato-SDK"
+  - cd Neato-SDK
   - ./gradlew :neato-sdk-android:clean
