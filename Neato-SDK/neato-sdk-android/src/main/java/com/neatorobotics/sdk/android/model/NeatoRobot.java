@@ -9,15 +9,8 @@ import java.io.Serializable;
  */
 public class NeatoRobot implements Serializable {
 
-    public String id;
-    NeatoClient client;
-
     private NeatoRobotState state;
 
     public NeatoRobot(){
-        client = NeatoClient.getInstance();
-    }
-
-    public void startCleaning() {
     }
 }

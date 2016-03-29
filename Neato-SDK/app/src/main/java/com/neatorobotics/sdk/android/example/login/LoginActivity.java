@@ -44,7 +44,7 @@ public class LoginActivity extends AppCompatActivity {
                 case TOKEN:
                     // Handle successful response
                     Log.d(TAG, response.getToken());
-                    onAuthenticated(response.getToken());
+                    onAuthenticated(response);
                     break;
                 // Auth flow returned an error
                 case ERROR:
@@ -60,8 +60,9 @@ public class LoginActivity extends AppCompatActivity {
         }
     }
 
-    private void onAuthenticated(String token) {
-        NeatoClient.getInstance().getSession().setAccessToken(token);
+    private void onAuthenticated(NeatoAuthenticationResponse response) {
+        NeatoClient.getInstance(this).getSession().setAccessToken(response.getToken(), response.getTokenExpirationDate());
+        //TODO goto authenticated page
     }
 
     public void loginClick(View view) {

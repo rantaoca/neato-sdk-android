@@ -5,6 +5,8 @@ import android.util.Log;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
@@ -17,6 +19,7 @@ public class NeatoAuthenticationResponse {
 
     private Response type;
     private String token;
+    private Date tokenExpirationDate;
     private String error;
     private String errorDescription;
 
@@ -52,6 +55,14 @@ public class NeatoAuthenticationResponse {
      */
     public String getToken() {
         return token;
+    }
+
+    /**
+     *
+     * @return the expiresIn time of the access token in seconds
+     */
+    public Date getTokenExpirationDate() {
+        return tokenExpirationDate;
     }
 
     /**
@@ -99,6 +110,16 @@ public class NeatoAuthenticationResponse {
             if(params.containsKey("access_token")) {
                 type = Response.TOKEN;
                 token = params.get("access_token");
+                if(params.containsKey("expires_in")) {
+                    try {
+                        tokenExpirationDate = getTokenExpirationDate(new Date(),Integer.parseInt(params.get("expires_in")));
+                    } catch (Exception e) {
+                        //set a default expire date -> 1 month on
+                        Calendar cal = Calendar.getInstance();
+                        cal.add(Calendar.MONTH, 1);
+                        tokenExpirationDate = cal.getTime();
+                    }
+                }
             }
             else if(params.containsKey("error")) {
                 type = Response.ERROR;
@@ -136,5 +157,17 @@ public class NeatoAuthenticationResponse {
             }
         }
         return query_pairs;
+    }
+
+    /**
+     *
+     * @param expires_in seconds from now()
+     * @return the date when the current access token will expire.
+     */
+    protected Date getTokenExpirationDate(Date now, int expires_in) {
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(now);
+        cal.add(Calendar.SECOND, expires_in);
+        return cal.getTime();
     }
 }

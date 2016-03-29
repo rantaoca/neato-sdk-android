@@ -10,12 +10,17 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.mockito.runners.MockitoJUnitRunner;
 
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.Locale;
 import java.util.Map;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.assertFalse;
 import static org.mockito.Mockito.*;
 
 @RunWith(MockitoJUnitRunner.class)
@@ -100,5 +105,58 @@ public class NeatoAuthenticationResponseTest {
         assertNotNull(params);
         assertNull(params.get("a"));
         assertNull(params.get("b"));
+    }
+
+    @Test
+    public void getTokenExpirationDateNoChange() throws Exception {
+        String inDateFormat = "yyyy-MM-dd'T'HH:mm:ss'Z'";
+        SimpleDateFormat inFormat = new SimpleDateFormat(inDateFormat, Locale.US);
+
+        Date date1 = inFormat.parse("2014-01-02T12:00:00Z");
+        Date expire = NeatoAuthenticationResponse.fromUri(null).getTokenExpirationDate(date1, 0);//0 sec
+
+        Calendar cal1 = Calendar.getInstance();
+        cal1.setTime(expire);
+
+        Calendar cal2 = Calendar.getInstance();
+        cal2.setTime(date1);
+        assertFalse(cal1.before(cal2));
+        assertFalse(cal2.after(cal1));
+    }
+
+    @Test
+    public void getTokenExpirationDate1Minute() throws Exception {
+        String inDateFormat = "yyyy-MM-dd'T'HH:mm:ss'Z'";
+        SimpleDateFormat inFormat = new SimpleDateFormat(inDateFormat, Locale.US);
+
+        Date date1 = inFormat.parse("2014-01-02T12:00:00Z");
+        Date expire = NeatoAuthenticationResponse.fromUri(null).getTokenExpirationDate(date1, 60);//60 sec
+        Date date2 = inFormat.parse("2014-01-02T12:01:00Z");//add exactly 1 minute
+
+        Calendar cal1 = Calendar.getInstance();
+        cal1.setTime(expire);
+
+        Calendar cal2 = Calendar.getInstance();
+        cal2.setTime(date2);
+        assertFalse(cal1.before(cal2));
+        assertFalse(cal2.after(cal1));
+    }
+
+    @Test
+    public void getTokenExpirationDate1Second() throws Exception {
+        String inDateFormat = "yyyy-MM-dd'T'HH:mm:ss'Z'";
+        SimpleDateFormat inFormat = new SimpleDateFormat(inDateFormat, Locale.US);
+
+        Date date1 = inFormat.parse("2014-01-02T12:00:00Z");
+        Date expire = NeatoAuthenticationResponse.fromUri(null).getTokenExpirationDate(date1, 1);//1 sec
+        Date date2 = inFormat.parse("2014-01-02T12:00:01Z");//add exactly 1 sec
+
+        Calendar cal1 = Calendar.getInstance();
+        cal1.setTime(expire);
+
+        Calendar cal2 = Calendar.getInstance();
+        cal2.setTime(date2);
+        assertFalse(cal1.before(cal2));
+        assertFalse(cal2.after(cal1));
     }
 }
