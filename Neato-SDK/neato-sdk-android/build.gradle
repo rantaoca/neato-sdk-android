@@ -27,3 +27,90 @@ dependencies {
     testCompile 'org.json:json:20140107'
     //compile 'com.android.support:appcompat-v7:23.2.0'
 }
+
+//BINTRAY - JCENTER
+group = 'com.neatorobotics.sdk.android'
+version = '0.0.1'
+
+def siteUrl = 'https://github.com/NeatoRobotics/neato-sdk-android'
+def gitUrl = 'https://github.com/NeatoRobotics/neato-sdk-android.git'
+
+Properties properties = new Properties()
+try {
+    properties.load(project.rootProject.file('local.properties').newDataInputStream())
+} catch (Exception e) {
+    println '[Neato SDK]local.properties file not found!'
+}
+
+
+bintray {
+    user = properties.getProperty("bintray.user")
+    key = properties.getProperty("bintray.apikey")
+
+    configurations = ['archives'] //When uploading configuration files
+    pkg {
+        repo = 'maven'
+        name = "neato-sdk-android"
+        desc = 'Neato SDK for Android'
+        websiteUrl = siteUrl
+        issueTrackerUrl = 'https://github.com/NeatoRobotics/neato-sdk-android'
+        vcsUrl = gitUrl
+        licenses = ['Apache-2.0']
+        labels = ['neato', 'android', 'sdk', 'java']
+        publicDownloadNumbers = true
+    }
+}
+
+install {
+    repositories.mavenInstaller {
+        pom {
+            project {
+                packaging 'aar'
+                name 'Neato SDK for Android'
+                url siteUrl
+                licenses {
+                    license {
+                        name 'The Apache Software License, Version 2.0'
+                        url 'http://www.apache.org/licenses/LICENSE-2.0.txt'
+                    }
+                }
+                developers {
+                    developer {
+                        id 'marcouberti'
+                        name 'Marco Uberti'
+                        email 'marco.uberti@neatorobotics.com'
+                    }
+                }
+                scm {
+                    connection 'https://github.com/NeatoRobotics/neato-sdk-android'
+                    developerConnection 'https://github.com/NeatoRobotics/neato-sdk-android'
+                    url siteUrl
+
+                }
+            }
+        }
+    }
+}
+
+task sourcesJar(type: Jar) {
+    from android.sourceSets.main.java.srcDirs
+    classifier = 'sources'
+}
+
+task javadoc(type: Javadoc) {
+    source = android.sourceSets.main.java.srcDirs
+    classpath += project.files(android.getBootClasspath().join(File.pathSeparator))
+}
+
+task javadocJar(type: Jar, dependsOn: javadoc) {
+    classifier = 'javadoc'
+    from javadoc.destinationDir
+}
+artifacts {
+    archives javadocJar
+    archives sourcesJar
+}
+
+task findConventions << {
+    println project.getConvention()
+}
