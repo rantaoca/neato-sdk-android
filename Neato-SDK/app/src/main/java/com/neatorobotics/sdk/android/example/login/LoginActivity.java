@@ -4,9 +4,11 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 
+import com.neatorobotics.sdk.android.NeatoClient;
 import com.neatorobotics.sdk.android.authentication.NeatoAuthentication;
 import com.neatorobotics.sdk.android.authentication.NeatoAuthenticationResponse;
 import com.neatorobotics.sdk.android.authentication.NeatoOAuth2Scope;
@@ -16,6 +18,8 @@ import com.neatorobotics.sdk.android.example.R;
  * Created by Marco on 25/03/16.
  */
 public class LoginActivity extends AppCompatActivity {
+
+    private static final String TAG = "LoginActivity";
 
     String REDIRECT_URI = "marco-app://neato";
     String CLIENT_ID = "c54d0ac5def8323befb61cfc74e514af80bde385d878c23e47ca990fccb40258";
@@ -39,21 +43,25 @@ public class LoginActivity extends AppCompatActivity {
                 // Response was successful and contains auth token
                 case TOKEN:
                     // Handle successful response
-                    Toast.makeText(this,"TOKEN: "+response.getToken(),Toast.LENGTH_SHORT).show();
+                    Log.d(TAG, response.getToken());
+                    onAuthenticated(response.getToken());
                     break;
-
                 // Auth flow returned an error
                 case ERROR:
                     // Handle error response
-                    Toast.makeText(this,"AUTH ERROR",Toast.LENGTH_SHORT).show();
+                    String errorCode = response.getError();
+                    String errorDescription = response.getErrorDescription();
+                    Toast.makeText(this,"Authentication error.",Toast.LENGTH_SHORT).show();
                     break;
-
                 // Most likely auth flow was cancelled
                 default:
-                    Toast.makeText(this,"CANCELLED",Toast.LENGTH_SHORT).show();
-                    // Handle other cases
+                    //You can do nothing
             }
         }
+    }
+
+    private void onAuthenticated(String token) {
+        NeatoClient.getInstance().getSession().setAccessToken(token);
     }
 
     public void loginClick(View view) {

@@ -18,6 +18,20 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
+    packagingOptions {
+        exclude 'LICENSE.txt'
+        exclude 'META-INF/ASL2.0'
+        exclude 'META-INF/LICENSE'
+        exclude 'META-INF/NOTICE'
+    }
+    testOptions {
+        unitTests.returnDefaultValues = true
+    }
+
+    sourceSets {
+        //Enable use R resources from local unit tests
+        test.java.srcDirs += "build/generated/source/r/debug"
+    }
 }
 
 dependencies {

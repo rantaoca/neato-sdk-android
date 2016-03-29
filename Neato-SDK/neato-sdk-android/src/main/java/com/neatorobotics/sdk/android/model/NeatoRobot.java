@@ -15,10 +15,9 @@ public class NeatoRobot implements Serializable {
     private NeatoRobotState state;
 
     public NeatoRobot(){
-        client = new NeatoClient();
+        client = NeatoClient.getInstance();
     }
 
     public void startCleaning() {
-        client.startCleaning(this.id);
     }
 }

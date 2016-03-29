@@ -1,6 +1,7 @@
 package com.neatorobotics.sdk.android.authentication;
 
 import android.net.Uri;
+import android.util.Log;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
@@ -11,6 +12,8 @@ import java.util.Map;
  * Created by Marco on 25/03/16.
  */
 public class NeatoAuthenticationResponse {
+
+    private static final String TAG = "NeatoAuthResponse";
 
     private Response type;
     private String token;
@@ -27,6 +30,7 @@ public class NeatoAuthenticationResponse {
      * @return an authentication request object starting from the response Uri
      */
     public static NeatoAuthenticationResponse fromUri(Uri uri) {
+        Log.d(TAG, uri!=null?uri.toString():"");
         return new NeatoAuthenticationResponse(uri);
     }
 
