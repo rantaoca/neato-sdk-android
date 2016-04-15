@@ -18,7 +18,7 @@ public class NeatoAuthenticationTest {
     public void buildOAuthAuthenticationUrl() throws Exception {
         String clientId = "12323232";
         String redirectUri = "myapp://neato";
-        NeatoOAuth2Scope[] scopes = new NeatoOAuth2Scope[]{NeatoOAuth2Scope.ROBOT_COMMANDS};
+        NeatoOAuth2Scope[] scopes = new NeatoOAuth2Scope[]{NeatoOAuth2Scope.CONTROL_ROBOTS};
 
         NeatoAuthentication neatoAuthentication = new NeatoAuthentication(clientId,redirectUri,scopes);
 
@@ -26,7 +26,7 @@ public class NeatoAuthenticationTest {
                 clientId,
                 neatoAuthentication.buildScopesParameter(scopes),
                 redirectUri).equals(
-                "https://beehive.neatocloud.com/oauth2/authorize?client_id=12323232&scope=robot_commands&response_type=token&redirect_uri=myapp://neato"));
+                "https://beehive.neatocloud.com/oauth2/authorize?client_id=12323232&scope=control_robots&response_type=token&redirect_uri=myapp://neato"));
     }
 
     @Test
@@ -48,17 +48,17 @@ public class NeatoAuthenticationTest {
     public void buildScopesParameter() throws Exception {
         NeatoAuthentication neatoAuthentication = new NeatoAuthentication(null,null,null);
 
-        NeatoOAuth2Scope[] scopes = new NeatoOAuth2Scope[]{NeatoOAuth2Scope.ROBOT_COMMANDS};
-        assertTrue(neatoAuthentication.buildScopesParameter(scopes).equals("robot_commands"));
+        NeatoOAuth2Scope[] scopes = new NeatoOAuth2Scope[]{NeatoOAuth2Scope.CONTROL_ROBOTS};
+        assertTrue(neatoAuthentication.buildScopesParameter(scopes).equals("control_robots"));
 
-        scopes = new NeatoOAuth2Scope[]{NeatoOAuth2Scope.ROBOT_COMMANDS, NeatoOAuth2Scope.READ};
-        assertTrue(neatoAuthentication.buildScopesParameter(scopes).equals("robot_commands,read"));
+        scopes = new NeatoOAuth2Scope[]{NeatoOAuth2Scope.CONTROL_ROBOTS, NeatoOAuth2Scope.READ};
+        assertTrue(neatoAuthentication.buildScopesParameter(scopes).equals("control_robots,read"));
 
-        scopes = new NeatoOAuth2Scope[]{NeatoOAuth2Scope.READ, NeatoOAuth2Scope.ROBOT_COMMANDS};
-        assertTrue(neatoAuthentication.buildScopesParameter(scopes).equals("read,robot_commands"));
+        scopes = new NeatoOAuth2Scope[]{NeatoOAuth2Scope.READ, NeatoOAuth2Scope.CONTROL_ROBOTS};
+        assertTrue(neatoAuthentication.buildScopesParameter(scopes).equals("read,control_robots"));
 
-        scopes = new NeatoOAuth2Scope[]{NeatoOAuth2Scope.ROBOT_COMMANDS, NeatoOAuth2Scope.READ,NeatoOAuth2Scope.WRITE};
-        assertTrue(neatoAuthentication.buildScopesParameter(scopes).equals("robot_commands,read,write"));
+        scopes = new NeatoOAuth2Scope[]{NeatoOAuth2Scope.CONTROL_ROBOTS, NeatoOAuth2Scope.READ,NeatoOAuth2Scope.WRITE};
+        assertTrue(neatoAuthentication.buildScopesParameter(scopes).equals("control_robots,read,write"));
 
         scopes = new NeatoOAuth2Scope[]{};
         assertTrue(neatoAuthentication.buildScopesParameter(scopes).equals(""));

@@ -32,12 +32,11 @@ public class AccessTokenDatasourceTest {
 
     @Test
     public void customAccessTokenDatasourceTest() throws Exception {
-        NeatoClient.getInstance(context).getSession().setAccessTokenDatasource(new CustomAccessTokenDatasource());
-        NeatoAuthSession session = NeatoClient.getInstance(context).getSession();
+        NeatoClient nucleoClient = NeatoClient.getInstance(context, new CustomAccessTokenDatasource());
         Date expires = new Date();
-        session.setAccessToken("123", expires);
-        assertEquals("123", session.getAccessToken());
-        assertTrue(session.isAuthenticated());
+        nucleoClient.setOauth2AccessToken("123", expires);
+        assertEquals("123", nucleoClient.getOauth2AccessToken());
+        assertTrue(nucleoClient.isAuthenticated());
     }
 
     /**
@@ -49,15 +48,18 @@ public class AccessTokenDatasourceTest {
         public Date expires;
 
         @Override
-        public void saveToken(String token, Date expires) {
+        public void storeToken(String token, Date expires) {
             this.token = token;
             this.expires = expires;
         }
 
         @Override
-        public String getToken() {
+        public String loadToken() {
             return token;
         }
+
+        @Override
+        public void clearToken() {}
 
         @Override
         public boolean isTokenValid() {

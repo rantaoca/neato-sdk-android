@@ -6,7 +6,7 @@ package com.neatorobotics.sdk.android.authentication;
 public enum NeatoOAuth2Scope {
     READ("read"),
     WRITE("write"),
-    ROBOT_COMMANDS("robot_commands");
+    CONTROL_ROBOTS("control_robots");
 
     private final String permission;
 

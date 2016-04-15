@@ -25,7 +25,7 @@ public class DefaultAccessTokenDatasource implements AccessTokenDatasource {
     }
 
     @Override
-    public void saveToken(String token, Date expires) {
+    public void storeToken(String token, Date expires) {
         SharedPreferences sharedPref = context.getSharedPreferences(TAG,Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPref.edit();
         editor.putString(TOKEN_KEY, token);
@@ -34,14 +34,22 @@ public class DefaultAccessTokenDatasource implements AccessTokenDatasource {
     }
 
     @Override
-    public String getToken() {
+    public String loadToken() {
         SharedPreferences settings = context.getSharedPreferences(TAG, Context.MODE_PRIVATE);
         return settings.getString(TOKEN_KEY, null);
     }
 
     @Override
+    public void clearToken() {
+        SharedPreferences sharedPref = context.getSharedPreferences(TAG,Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPref.edit();
+        editor.clear();
+        editor.commit();
+    }
+
+    @Override
     public boolean isTokenValid() {
-        if(getToken() == null) return false;
+        if(loadToken() == null) return false;
         SharedPreferences settings = context.getSharedPreferences(TAG, Context.MODE_PRIVATE);
         String expirationDateStr = settings.getString(DATE_EXPIRES_TOKEN_KEY, null);
         if(expirationDateStr!=null) {

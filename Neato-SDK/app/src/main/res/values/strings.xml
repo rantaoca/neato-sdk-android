@@ -1,3 +1,9 @@
 <resources>
     <string name="app_name">Neato SDK Sample App</string>
+    <string name="title_activity_robots">My Robots</string>
+
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+
+    <string name="action_settings">Settings</string>
 </resources>

@@ -9,10 +9,10 @@ import android.view.View;
 import android.widget.Toast;
 
 import com.neatorobotics.sdk.android.NeatoClient;
-import com.neatorobotics.sdk.android.authentication.NeatoAuthentication;
 import com.neatorobotics.sdk.android.authentication.NeatoAuthenticationResponse;
 import com.neatorobotics.sdk.android.authentication.NeatoOAuth2Scope;
 import com.neatorobotics.sdk.android.example.R;
+import com.neatorobotics.sdk.android.example.robots.RobotsActivity;
 
 /**
  * Created by Marco on 25/03/16.
@@ -21,14 +21,18 @@ public class LoginActivity extends AppCompatActivity {
 
     private static final String TAG = "LoginActivity";
 
+    private NeatoClient neatoClient;
+
     String REDIRECT_URI = "marco-app://neato";
     String CLIENT_ID = "c54d0ac5def8323befb61cfc74e514af80bde385d878c23e47ca990fccb40258";
-    NeatoOAuth2Scope[] scopes = new NeatoOAuth2Scope[]{NeatoOAuth2Scope.ROBOT_COMMANDS};
+    NeatoOAuth2Scope[] scopes = new NeatoOAuth2Scope[]{NeatoOAuth2Scope.CONTROL_ROBOTS};
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+
+        neatoClient = NeatoClient.getInstance(this);
     }
 
     @Override
@@ -37,14 +41,14 @@ public class LoginActivity extends AppCompatActivity {
 
         Uri uri = intent.getData();
         if (uri != null) {
-            NeatoAuthenticationResponse response = NeatoAuthenticationResponse.fromUri(uri);
+            NeatoAuthenticationResponse response = neatoClient.getOAuth2AuthResponseFromUri(uri);
 
             switch (response.getType()) {
                 // Response was successful and contains auth token
                 case TOKEN:
                     // Handle successful response
                     Log.d(TAG, response.getToken());
-                    onAuthenticated(response);
+                    onAuthenticated();
                     break;
                 // Auth flow returned an error
                 case ERROR:
@@ -60,13 +64,17 @@ public class LoginActivity extends AppCompatActivity {
         }
     }
 
-    private void onAuthenticated(NeatoAuthenticationResponse response) {
-        NeatoClient.getInstance(this).getSession().setAccessToken(response.getToken(), response.getTokenExpirationDate());
-        //TODO goto authenticated page
+    private void onAuthenticated() {
+        openRobotsActivity();
+    }
+
+    private void openRobotsActivity() {
+        Intent intent = new Intent(this, RobotsActivity.class);
+        startActivity(intent);
+        finish();
     }
 
     public void loginClick(View view) {
-        NeatoAuthentication neatoAuthentication = new NeatoAuthentication(CLIENT_ID,REDIRECT_URI,scopes);
-        neatoAuthentication.openLoginInBrowser(this);
+        neatoClient.openLoginInBrowser(CLIENT_ID,REDIRECT_URI,scopes);
     }
 }

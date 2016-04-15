@@ -1,5 +1,7 @@
 package com.neatorobotics.sdk.android.authentication;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.net.Uri;
 import android.test.suitebuilder.annotation.SmallTest;
 
@@ -18,15 +20,29 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
+import static org.mockito.Matchers.anyInt;
+import static org.mockito.Matchers.anyString;
 import static org.mockito.Mockito.when;
 
 @RunWith(MockitoJUnitRunner.class)
 @SmallTest
 public class DefaultAccessTokenDatasourceTest {
 
+    @Mock
+    SharedPreferences sharedPreferences;
+
+    @Mock
+    SharedPreferences.Editor editor;
+
+    @Mock
+    Context context;
+
     @Before
     public void setup() {
         MockitoAnnotations.initMocks(this);
+        when(sharedPreferences.getString(anyString(), anyString())).thenReturn("value");
+        when(sharedPreferences.edit()).thenReturn(editor);
+        when(context.getSharedPreferences(anyString(), anyInt())).thenReturn(sharedPreferences);
     }
 
     @Test
