@@ -1,5 +1,6 @@
 package com.neatorobotics.sdk.android.example.robots;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -19,6 +20,7 @@ import com.neatorobotics.sdk.android.NeatoCallback;
 import com.neatorobotics.sdk.android.NeatoClient;
 import com.neatorobotics.sdk.android.NeatoError;
 import com.neatorobotics.sdk.android.example.R;
+import com.neatorobotics.sdk.android.example.login.LoginActivity;
 
 public class RobotsActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -80,12 +82,15 @@ public class RobotsActivity extends AppCompatActivity
             @Override
             public void done(Boolean result) {
                 super.done(result);
-                Log.d("RobotsActivity", "### Succesfully logout");
+                Intent intent = new Intent(getApplicationContext(), LoginActivity.class);
+                startActivity(intent);
+                finish();
             }
 
             @Override
             public void fail(NeatoError error) {
                 super.fail(error);
+                Toast.makeText(getApplicationContext(),"Error during logout",Toast.LENGTH_SHORT).show();
             }
         });
     }

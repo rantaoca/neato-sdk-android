@@ -70,6 +70,7 @@ public class LoginActivity extends AppCompatActivity {
 
     private void openRobotsActivity() {
         Intent intent = new Intent(this, RobotsActivity.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
         startActivity(intent);
         finish();
     }
