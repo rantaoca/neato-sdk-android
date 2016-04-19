@@ -15,7 +15,9 @@ import com.neatorobotics.sdk.android.example.R;
 import com.neatorobotics.sdk.android.example.robots.RobotsActivity;
 
 /**
- * Created by Marco on 25/03/16.
+ * When the user tap the LOGIN button the OAuth2.0 authentication flow begin.
+ * In the current implementation we're using the external browser method to obtain the
+ * token. This method is more secure than the in-app web view.
  */
 public class LoginActivity extends AppCompatActivity {
 
@@ -44,22 +46,15 @@ public class LoginActivity extends AppCompatActivity {
             NeatoAuthenticationResponse response = neatoClient.getOAuth2AuthResponseFromUri(uri);
 
             switch (response.getType()) {
-                // Response was successful and contains auth token
                 case TOKEN:
-                    // Handle successful response
                     Log.d(TAG, response.getToken());
                     onAuthenticated();
                     break;
-                // Auth flow returned an error
                 case ERROR:
-                    // Handle error response
-                    String errorCode = response.getError();
-                    String errorDescription = response.getErrorDescription();
                     Toast.makeText(this,"Authentication error.",Toast.LENGTH_SHORT).show();
                     break;
-                // Most likely auth flow was cancelled
                 default:
-                    //You can do nothing
+                    //Nothing to do here
             }
         }
     }
@@ -76,6 +71,8 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     public void loginClick(View view) {
+        //we start the auth flow here
+        //later we'll receive the result in the onNewIntent method above
         neatoClient.openLoginInBrowser(CLIENT_ID,REDIRECT_URI,scopes);
     }
 }

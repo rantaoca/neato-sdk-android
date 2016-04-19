@@ -3,12 +3,15 @@ package com.neatorobotics.sdk.android.example;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.widget.Toast;
 
 import com.neatorobotics.sdk.android.NeatoClient;
 import com.neatorobotics.sdk.android.example.login.LoginActivity;
 import com.neatorobotics.sdk.android.example.robots.RobotsActivity;
 
+/**
+ * The splash activity simply check if we already have a valid access token. If we have one
+ * we'll go to robots page, otherwise we need to sign in.
+ */
 public class SplashActivity extends AppCompatActivity {
 
     private NeatoClient neatoClient;
@@ -18,10 +21,12 @@ public class SplashActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash);
 
+        //here we're checking the access token
         neatoClient = NeatoClient.getInstance(this);
         if(neatoClient.isAuthenticated()) {
             openRobotsActivity();
         }else {
+            //need to sign in first
             openLoginActivity();
         }
     }

@@ -22,6 +22,9 @@ import com.neatorobotics.sdk.android.NeatoError;
 import com.neatorobotics.sdk.android.example.R;
 import com.neatorobotics.sdk.android.example.login.LoginActivity;
 
+/**
+ * In this page we can see our robots list.
+ */
 public class RobotsActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
@@ -90,6 +93,7 @@ public class RobotsActivity extends AppCompatActivity
             @Override
             public void fail(NeatoError error) {
                 super.fail(error);
+                if(RobotsActivity.this.isFinishing()) return;
                 Toast.makeText(getApplicationContext(),"Error during logout",Toast.LENGTH_SHORT).show();
             }
         });
