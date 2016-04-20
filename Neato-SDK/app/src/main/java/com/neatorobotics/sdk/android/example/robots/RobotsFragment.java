@@ -1,14 +1,8 @@
 package com.neatorobotics.sdk.android.example.robots;
 
-import android.app.Activity;
-import android.content.Intent;
-import android.os.AsyncTask;
-import android.os.Build;
 import android.os.Bundle;
-import android.support.annotation.VisibleForTesting;
-import android.support.v4.app.ActivityOptionsCompat;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.support.v4.util.Pair;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -16,62 +10,53 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.ImageButton;
-import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.util.ArrayList;
-
-import android.app.Activity;
-import android.content.Intent;
-import android.os.AsyncTask;
-import android.os.Build;
-import android.os.Bundle;
-import android.support.annotation.VisibleForTesting;
-import android.support.v4.app.ActivityOptionsCompat;
-import android.support.v4.app.Fragment;
-import android.support.v4.util.Pair;
-import android.support.v4.widget.SwipeRefreshLayout;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.ImageButton;
-import android.widget.ImageView;
-import android.widget.RelativeLayout;
-import android.widget.TextView;
-
-
+import com.neatorobotics.sdk.android.NeatoCallback;
+import com.neatorobotics.sdk.android.NeatoClient;
+import com.neatorobotics.sdk.android.NeatoError;
 import com.neatorobotics.sdk.android.example.R;
-import com.neatorobotics.sdk.android.nucleo.NucleoClient;
+import com.neatorobotics.sdk.android.model.NeatoRobot;
 
-import java.net.MalformedURLException;
-import java.net.URL;
 import java.util.ArrayList;
 
 public class RobotsFragment extends Fragment {
 
     private static final String TAG = "RobotsFragment";
 
-    NucleoClient nucleoClient = new NucleoClient();
+    private NeatoClient neatoClient;
 
     private RecyclerView mRecyclerView;
     private RecyclerView.Adapter mAdapter;
     private RecyclerView.LayoutManager mLayoutManager;
     private SwipeRefreshLayout swipeContainer;
 
-    //private ArrayList<Robot> robots = new ArrayList<>();
+    private ArrayList<NeatoRobot> robots = new ArrayList<>();
 
     public RobotsFragment() {}
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putSerializable("ROBOT_LIST",robots);
+    }
+
+    private void restoreState(Bundle inState) {
+        robots = (ArrayList<NeatoRobot>) inState.getSerializable("ROBOT_LIST");
+    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setRetainInstance(true);
+
+        neatoClient = NeatoClient.getInstance(getContext());
+
+        if(savedInstanceState != null) {
+            restoreState(savedInstanceState);
+        }
     }
 
     @Override
@@ -84,7 +69,7 @@ public class RobotsFragment extends Fragment {
         mRecyclerView.setHasFixedSize(true);
         mLayoutManager = new LinearLayoutManager(getActivity());
         mRecyclerView.setLayoutManager(mLayoutManager);
-        mAdapter = new ListAdapter();
+        mAdapter = new RobotsListAdapter();
         mRecyclerView.setAdapter(mAdapter);
 
         //swipe to refresh
@@ -93,7 +78,7 @@ public class RobotsFragment extends Fragment {
         swipeContainer.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-
+                loadRobots();
             }
         });
         // Configure the refreshing colors
@@ -104,30 +89,64 @@ public class RobotsFragment extends Fragment {
         return rootView;
     }
 
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        if(savedInstanceState == null) {
+            loadRobots();
+        }
+        mAdapter.notifyDataSetChanged();
+    }
 
-    public class ListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
+    private void loadRobots() {
+        neatoClient.loadRobots(new NeatoCallback<ArrayList<NeatoRobot>>(){
+            @Override
+            public void done(ArrayList<NeatoRobot> result) {
+                super.done(result);
+                robots.clear();
+                robots.addAll(result);
+                swipeContainer.setRefreshing(false);
+                mAdapter.notifyDataSetChanged();
+            }
+
+            @Override
+            public void fail(NeatoError error) {
+                super.fail(error);
+                swipeContainer.setRefreshing(false);
+                if(error == NeatoError.INVALID_TOKEN) {
+                    Toast.makeText(getContext(), "Your session is expired.",Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+    }
+
+    public class RobotsListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
         public class ItemViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
 
-            public ItemViewHolder(Button v) {
+            public TextView robotName,robotModel;
+
+            public ItemViewHolder(View v) {
                 super(v);
+                this.robotName = (TextView) v.findViewById(R.id.robotName);
+                this.robotModel = (TextView) v.findViewById(R.id.robotModel);
                 v.setOnClickListener(this);
             }
 
             @Override
             public void onClick(View v) {
                 int position = getAdapterPosition();
-
+                Toast.makeText(getContext(),"Tap position "+position, Toast.LENGTH_SHORT).show();
             }
         }
 
-        public ListAdapter() {}
+        public RobotsListAdapter() {}
 
         @Override
         public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent,
                                                           int viewType) {
-            Button v = new Button(getActivity());
-            v.setText("ROBOT WALLY");
+            View v = LayoutInflater.from(parent.getContext())
+                    .inflate(R.layout.robot_list_item, parent, false);
 
             ItemViewHolder vh = new ItemViewHolder(v);
             return vh;
@@ -135,7 +154,8 @@ public class RobotsFragment extends Fragment {
 
         @Override
         public void onBindViewHolder(RecyclerView.ViewHolder holder, final int position) {
-
+            ((ItemViewHolder)holder).robotName.setText(robots.get(position).getName());
+            ((ItemViewHolder)holder).robotModel.setText(robots.get(position).getModel());
         }
 
 
@@ -146,7 +166,7 @@ public class RobotsFragment extends Fragment {
 
         @Override
         public int getItemCount() {
-            return 20;
+            return robots.size();
         }
     }
 }

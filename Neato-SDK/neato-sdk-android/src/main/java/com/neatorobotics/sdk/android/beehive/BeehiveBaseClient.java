@@ -1,10 +1,14 @@
 package com.neatorobotics.sdk.android.beehive;
 
+import android.os.AsyncTask;
 import android.util.Log;
 
+import com.neatorobotics.sdk.android.NeatoCallback;
+import com.neatorobotics.sdk.android.NeatoError;
 import com.neatorobotics.sdk.android.utils.DeviceUtils;
 
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 import org.json.JSONTokener;
 
@@ -16,6 +20,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
+import java.net.MalformedURLException;
 import java.net.URL;
 import javax.net.ssl.HttpsURLConnection;
 import javax.net.ssl.SSLHandshakeException;
@@ -28,7 +33,24 @@ public class BeehiveBaseClient {
 
     private static final String TAG = "BeehiveBaseClient";
 
-    public static BeehiveResponse executeCall(String accessToken, String verb,String url, JSONObject input) {
+    public void executeCall(final String accessToken, final String verb, final String url, final JSONObject input, final NeatoCallback<BeehiveResponse> callback) {
+        final AsyncTask<Void, Void, BeehiveResponse> task = new AsyncTask<Void, Void, BeehiveResponse>() {
+            protected void onPreExecute() {}
+            protected BeehiveResponse doInBackground(Void... unused) {
+                return executeCall(accessToken,verb,url,input);
+            }
+            protected void onPostExecute(BeehiveResponse response) {
+                callback.done(response);
+            }
+        };
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.HONEYCOMB) {
+            task.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+        }else {
+            task.execute();
+        }
+    }
+
+    public BeehiveResponse executeCall(String accessToken, String verb,String url, JSONObject input) {
 
         Log.d(TAG, "### JSON input " + input);
 
@@ -104,7 +126,7 @@ public class BeehiveBaseClient {
     }
 
     // convert InputStream to String
-    private static String getStringFromInputStream(InputStream is) {
+    private String getStringFromInputStream(InputStream is) {
 
         BufferedReader br = null;
         StringBuilder sb = new StringBuilder();

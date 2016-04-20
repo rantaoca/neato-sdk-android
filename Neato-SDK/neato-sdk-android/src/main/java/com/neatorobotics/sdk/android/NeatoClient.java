@@ -11,8 +11,10 @@ import com.neatorobotics.sdk.android.authentication.NeatoAuthentication;
 import com.neatorobotics.sdk.android.authentication.NeatoAuthenticationResponse;
 import com.neatorobotics.sdk.android.authentication.NeatoOAuth2Scope;
 import com.neatorobotics.sdk.android.beehive.BeehiveClient;
+import com.neatorobotics.sdk.android.model.NeatoRobot;
 import com.neatorobotics.sdk.android.nucleo.NucleoClient;
 
+import java.util.ArrayList;
 import java.util.Date;
 
 /**
@@ -26,7 +28,7 @@ public class NeatoClient {
     private AccessTokenDatasource accessTokenDatasource;
 
     protected NucleoClient nucleo = new NucleoClient();
-    protected BeehiveClient beehive = new BeehiveClient();
+    protected BeehiveClient beehive;
 
     /**
      * Use this method to get the singleton neato client that use the default access token datasource.
@@ -58,6 +60,7 @@ public class NeatoClient {
      */
     private NeatoClient(Context context) {
         this.context = context;
+        beehive = new BeehiveClient(context.getString(R.string.beehive_endpoint));
         accessTokenDatasource = new DefaultAccessTokenDatasource(context);
     }
 
@@ -135,6 +138,26 @@ public class NeatoClient {
             public void done(Boolean result) {
                 super.done(result);
                 clearAccessToken();
+                callback.done(result);
+            }
+
+            @Override
+            public void fail(NeatoError error) {
+                super.fail(error);
+                callback.fail(error);
+            }
+        });
+    }
+
+    /**
+     * Retrieve the user robots list.
+     * @param callback
+     */
+    public void loadRobots(final NeatoCallback<ArrayList<NeatoRobot>> callback) {
+        beehive.loadRobots(getOauth2AccessToken(), new NeatoCallback<ArrayList<NeatoRobot>>() {
+            @Override
+            public void done(ArrayList<NeatoRobot> result) {
+                super.done(result);
                 callback.done(result);
             }
 

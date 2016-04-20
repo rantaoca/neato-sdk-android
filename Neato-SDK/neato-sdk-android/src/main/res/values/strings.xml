@@ -1,4 +1,8 @@
 <resources>
     <string name="app_name">Neato SDK Android</string>
     <string name="oauth2_authentication_url">https://beehive.neatocloud.com/oauth2/authorize?client_id=%1$s&amp;scope=%2$s&amp;response_type=token&amp;redirect_uri=%3$s</string>
+    <!-- NUCLEO ENDPOINTS -->
+    <string translatable="false" name="nucleo_endpoint">https://nucleo.neatocloud.com</string>
+    <!-- BEEHIVE ENDPOINTS -->
+    <string translatable="false" name="beehive_endpoint">https://beehive.neatocloud.com</string>
 </resources>

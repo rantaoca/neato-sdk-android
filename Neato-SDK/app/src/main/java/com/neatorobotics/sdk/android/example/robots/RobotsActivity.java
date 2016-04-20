@@ -52,7 +52,8 @@ public class RobotsActivity extends AppCompatActivity
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
-        Toast.makeText(getApplicationContext(),neatoClient.getOauth2AccessToken(),Toast.LENGTH_SHORT).show();
+        //This is your OAuth2.0 access token
+        //Toast.makeText(getApplicationContext(),neatoClient.getOauth2AccessToken(),Toast.LENGTH_SHORT).show();
     }
 
     @Override
