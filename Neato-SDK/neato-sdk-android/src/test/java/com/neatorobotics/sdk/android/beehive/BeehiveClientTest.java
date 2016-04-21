@@ -26,23 +26,24 @@ import static org.mockito.Mockito.*;
 @SmallTest
 public class BeehiveClientTest {
 
+    //class under test
+    BeehiveClient client;
+
     @Mock
     BeehiveBaseClient mockBaseClient;
 
     @Mock
-    NeatoCallback<Boolean> mockNeatoCallback;
+    NeatoCallback mockNeatoCallback;
 
     @Before
     public void setup() {
         MockitoAnnotations.initMocks(this);
+        client = new BeehiveClient("http://example.com");
+        client.baseClient = mockBaseClient;
     }
 
     @Test
-    public void logoutOK() throws Exception {
-        //class under test
-        BeehiveClient client = new BeehiveClient("http://example.com");
-        client.baseClient = mockBaseClient;
-
+    public void logout() throws Exception {
         final BeehiveResponse response = new BeehiveResponse(HttpURLConnection.HTTP_OK, new JSONObject());
 
         doAnswer(new Answer() {
@@ -59,12 +60,8 @@ public class BeehiveClientTest {
     }
 
     @Test
-    public void logoutMalformedURL() throws Exception {
-        //class under test
-        BeehiveClient client = new BeehiveClient("malformed_url");
-        client.baseClient = mockBaseClient;
-
-        final BeehiveResponse response = new BeehiveResponse(HttpURLConnection.HTTP_OK, new JSONObject());
+    public void loadRobots_InvalidToken() throws Exception {
+        final BeehiveResponse response = new BeehiveResponse(HttpURLConnection.HTTP_UNAUTHORIZED, new JSONObject());
 
         doAnswer(new Answer() {
             @Override
@@ -74,9 +71,40 @@ public class BeehiveClientTest {
             }
         }).when(mockBaseClient).executeCall(anyString(),anyString(),anyString(),any(JSONObject.class),any(NeatoCallback.class));
 
-        client.logout("fakeToken",mockNeatoCallback);
+        client.loadRobots("fakeToken",mockNeatoCallback);
 
-        verify(mockNeatoCallback,never()).done(true);
-        verify(mockNeatoCallback).fail(NeatoError.MALFORMED_URL);
+        verify(mockNeatoCallback).fail(NeatoError.INVALID_TOKEN);
+    }
+
+    @Test
+    public void loadRobots_Error() throws Exception {
+        final BeehiveResponse response = new BeehiveResponse(HttpURLConnection.HTTP_NOT_FOUND, new JSONObject());
+
+        doAnswer(new Answer() {
+            @Override
+            public Object answer(InvocationOnMock invocation) throws Throwable {
+                ((NeatoCallback) invocation.getArguments()[4]).done(response);
+                return null;
+            }
+        }).when(mockBaseClient).executeCall(anyString(),anyString(),anyString(),any(JSONObject.class),any(NeatoCallback.class));
+
+        client.loadRobots("fakeToken",mockNeatoCallback);
+
+        verify(mockNeatoCallback).fail(NeatoError.GENERIC_ERROR);
+    }
+
+    @Test
+    public void loadRobots_GenericError() throws Exception {
+        doAnswer(new Answer() {
+            @Override
+            public Object answer(InvocationOnMock invocation) throws Throwable {
+                ((NeatoCallback) invocation.getArguments()[4]).done(null);
+                return null;
+            }
+        }).when(mockBaseClient).executeCall(anyString(),anyString(),anyString(),any(JSONObject.class),any(NeatoCallback.class));
+
+        client.loadRobots("fakeToken",mockNeatoCallback);
+
+        verify(mockNeatoCallback).fail(NeatoError.GENERIC_ERROR);
     }
 }
