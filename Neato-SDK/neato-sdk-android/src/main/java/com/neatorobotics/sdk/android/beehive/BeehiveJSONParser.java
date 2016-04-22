@@ -19,7 +19,7 @@ public class BeehiveJSONParser {
 
     public static ArrayList<NeatoRobot> parseRobots(JSONObject json) {
         ArrayList<NeatoRobot> robots = new ArrayList<>();
-        if (json.has("value")) {
+        if (json!= null && json.has("value")) {
             try {
                 JSONArray arr = json.getJSONArray("value");
                 for (int i = 0; i < arr.length(); i++) {
