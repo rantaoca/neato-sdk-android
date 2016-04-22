@@ -131,7 +131,7 @@ public class BeehiveClientTest {
 
     @Test
     public void loadRobots_OK_Robot_In_List() throws Exception {
-        final BeehiveResponse response = new BeehiveResponse(HttpURLConnection.HTTP_OK, new JSONObject(MockJSON.loadJSON(this,"json/robots_list.json")));
+        final BeehiveResponse response = new BeehiveResponse(HttpURLConnection.HTTP_OK, new JSONObject(MockJSON.loadJSON(this,"json/robots/robots_list.json")));
 
         doAnswer(new Answer() {
             @Override
