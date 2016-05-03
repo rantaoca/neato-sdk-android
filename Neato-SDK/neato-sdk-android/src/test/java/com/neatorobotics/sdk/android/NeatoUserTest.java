@@ -1,11 +1,11 @@
-package com.neatorobotics.sdk.android.beehive;
+package com.neatorobotics.sdk.android;
 
+import android.content.Context;
 import android.test.suitebuilder.annotation.SmallTest;
 
-import com.neatorobotics.sdk.android.MockJSON;
-import com.neatorobotics.sdk.android.NeatoCallback;
-import com.neatorobotics.sdk.android.NeatoError;
-import com.neatorobotics.sdk.android.model.NeatoRobot;
+import com.neatorobotics.sdk.android.authentication.NeatoAuthentication;
+import com.neatorobotics.sdk.android.beehive.BeehiveBaseClient;
+import com.neatorobotics.sdk.android.beehive.BeehiveResponse;
 
 import org.json.JSONObject;
 import org.junit.Before;
@@ -20,30 +20,56 @@ import org.mockito.stubbing.Answer;
 import java.net.HttpURLConnection;
 import java.util.ArrayList;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.assertFalse;
 import static org.mockito.Matchers.any;
+import static org.mockito.Matchers.anyString;
 import static org.mockito.Mockito.doAnswer;
+import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.when;
 
 @RunWith(MockitoJUnitRunner.class)
 @SmallTest
-public class BeehiveClientTest {
+public class NeatoUserTest {
 
     //class under test
-    BeehiveClient client;
+    NeatoUser neatoUser;
 
     @Mock
     BeehiveBaseClient mockBaseClient;
 
     @Mock
+    NeatoAuthentication mockNeatoAutentication;
+
+    @Mock
     NeatoCallback mockNeatoCallback;
+
+    @Mock
+    Context ctx;
 
     @Before
     public void setup() {
         MockitoAnnotations.initMocks(this);
-        client = new BeehiveClient("http://example.com");
-        client.baseClient = mockBaseClient;
+
+        neatoUser = NeatoUser.getInstance(ctx);
+        neatoUser.baseClient = mockBaseClient;
+        neatoUser.neatoAuthentication = mockNeatoAutentication;
     }
+
+    @Test
+    public void singletonTest() throws Exception {
+        NeatoUser neatoUser1 = NeatoUser.getInstance(ctx);
+        assertNotNull(neatoUser1);
+
+        NeatoUser neatoUser2 = NeatoUser.getInstance(ctx);
+        assertNotNull(neatoUser2);
+
+        assertEquals(neatoUser1, neatoUser2);
+    }
+
 
     @Test
     public void logout() throws Exception {
@@ -57,7 +83,7 @@ public class BeehiveClientTest {
             }
         }).when(mockBaseClient).executeCall(anyString(),anyString(),anyString(),any(JSONObject.class),any(NeatoCallback.class));
 
-        client.logout("fakeToken",mockNeatoCallback);
+        neatoUser.logout(mockNeatoCallback);
 
         verify(mockNeatoCallback).done(true);
     }
@@ -74,7 +100,7 @@ public class BeehiveClientTest {
             }
         }).when(mockBaseClient).executeCall(anyString(),anyString(),anyString(),any(JSONObject.class),any(NeatoCallback.class));
 
-        client.loadRobots("fakeToken",mockNeatoCallback);
+        neatoUser.loadRobots(mockNeatoCallback);
 
         verify(mockNeatoCallback).fail(NeatoError.INVALID_TOKEN);
     }
@@ -91,7 +117,7 @@ public class BeehiveClientTest {
             }
         }).when(mockBaseClient).executeCall(anyString(),anyString(),anyString(),any(JSONObject.class),any(NeatoCallback.class));
 
-        client.loadRobots("fakeToken",mockNeatoCallback);
+        neatoUser.loadRobots(mockNeatoCallback);
 
         verify(mockNeatoCallback).fail(NeatoError.GENERIC_ERROR);
     }
@@ -106,7 +132,7 @@ public class BeehiveClientTest {
             }
         }).when(mockBaseClient).executeCall(anyString(),anyString(),anyString(),any(JSONObject.class),any(NeatoCallback.class));
 
-        client.loadRobots("fakeToken",mockNeatoCallback);
+        neatoUser.loadRobots(mockNeatoCallback);
 
         verify(mockNeatoCallback).fail(NeatoError.GENERIC_ERROR);
     }
@@ -123,7 +149,7 @@ public class BeehiveClientTest {
             }
         }).when(mockBaseClient).executeCall(anyString(),anyString(),anyString(),any(JSONObject.class),any(NeatoCallback.class));
 
-        client.loadRobots("fakeToken",mockNeatoCallback);
+        neatoUser.loadRobots(mockNeatoCallback);
 
         verify(mockNeatoCallback, never()).fail(any(NeatoError.class));
         verify(mockNeatoCallback).done(any(ArrayList.class));//empty list, not null
@@ -141,7 +167,7 @@ public class BeehiveClientTest {
             }
         }).when(mockBaseClient).executeCall(anyString(),anyString(),anyString(),any(JSONObject.class),any(NeatoCallback.class));
 
-        client.loadRobots("fakeToken",mockNeatoCallback);
+        neatoUser.loadRobots(mockNeatoCallback);
 
         verify(mockNeatoCallback, never()).fail(any(NeatoError.class));
         verify(mockNeatoCallback).done(any(ArrayList.class));

@@ -20,7 +20,7 @@ public class NeatoAuthenticationTest {
         String redirectUri = "myapp://neato";
         NeatoOAuth2Scope[] scopes = new NeatoOAuth2Scope[]{NeatoOAuth2Scope.CONTROL_ROBOTS};
 
-        NeatoAuthentication neatoAuthentication = new NeatoAuthentication(clientId,redirectUri,scopes);
+        NeatoAuthentication neatoAuthentication = NeatoAuthentication.getInstance(null);
 
         assertTrue(neatoAuthentication.buildOAuthAuthenticationUrl(FORMATTED_AUTH_URL,
                 clientId,
@@ -35,7 +35,7 @@ public class NeatoAuthenticationTest {
         String redirectUri = null;
         NeatoOAuth2Scope[] scopes = null;
 
-        NeatoAuthentication neatoAuthentication = new NeatoAuthentication(clientId,redirectUri,scopes);
+        NeatoAuthentication neatoAuthentication = NeatoAuthentication.getInstance(null);
 
         assertTrue(neatoAuthentication.buildOAuthAuthenticationUrl(FORMATTED_AUTH_URL,
                 clientId,
@@ -46,7 +46,7 @@ public class NeatoAuthenticationTest {
 
     @Test
     public void buildScopesParameter() throws Exception {
-        NeatoAuthentication neatoAuthentication = new NeatoAuthentication(null,null,null);
+        NeatoAuthentication neatoAuthentication = NeatoAuthentication.getInstance(null);
 
         NeatoOAuth2Scope[] scopes = new NeatoOAuth2Scope[]{NeatoOAuth2Scope.CONTROL_ROBOTS};
         assertTrue(neatoAuthentication.buildScopesParameter(scopes).equals("control_robots"));

@@ -4,7 +4,7 @@ import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
-import com.neatorobotics.sdk.android.NeatoClient;
+import com.neatorobotics.sdk.android.authentication.NeatoAuthentication;
 import com.neatorobotics.sdk.android.example.login.LoginActivity;
 import com.neatorobotics.sdk.android.example.robots.RobotsActivity;
 
@@ -14,7 +14,7 @@ import com.neatorobotics.sdk.android.example.robots.RobotsActivity;
  */
 public class SplashActivity extends AppCompatActivity {
 
-    private NeatoClient neatoClient;
+    private NeatoAuthentication neatoAuth;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -22,8 +22,8 @@ public class SplashActivity extends AppCompatActivity {
         setContentView(R.layout.activity_splash);
 
         //here we're checking the access token
-        neatoClient = NeatoClient.getInstance(this);
-        if(neatoClient.isAuthenticated()) {
+        neatoAuth = NeatoAuthentication.getInstance(this);
+        if(neatoAuth.isAuthenticated()) {
             openRobotsActivity();
         }else {
             //need to sign in first

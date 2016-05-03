@@ -3,7 +3,7 @@ package com.neatorobotics.sdk.android.authentication;
 import android.content.Context;
 import android.test.suitebuilder.annotation.SmallTest;
 
-import com.neatorobotics.sdk.android.NeatoClient;
+import com.neatorobotics.sdk.android.NeatoUser;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -32,11 +32,11 @@ public class AccessTokenDatasourceTest {
 
     @Test
     public void customAccessTokenDatasourceTest() throws Exception {
-        NeatoClient nucleoClient = NeatoClient.getInstance(context, new CustomAccessTokenDatasource());
+        NeatoAuthentication auth = NeatoAuthentication.getInstance(context, new CustomAccessTokenDatasource());
         Date expires = new Date();
-        nucleoClient.setOauth2AccessToken("123", expires);
-        assertEquals("123", nucleoClient.getOauth2AccessToken());
-        assertTrue(nucleoClient.isAuthenticated());
+        auth.setOauth2AccessToken("123", expires);
+        assertEquals("123", auth.getOauth2AccessToken());
+        assertTrue(auth.isAuthenticated());
     }
 
     /**

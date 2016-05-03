@@ -8,7 +8,8 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 
-import com.neatorobotics.sdk.android.NeatoClient;
+import com.neatorobotics.sdk.android.NeatoUser;
+import com.neatorobotics.sdk.android.authentication.NeatoAuthentication;
 import com.neatorobotics.sdk.android.authentication.NeatoAuthenticationResponse;
 import com.neatorobotics.sdk.android.authentication.NeatoOAuth2Scope;
 import com.neatorobotics.sdk.android.example.R;
@@ -23,7 +24,7 @@ public class LoginActivity extends AppCompatActivity {
 
     private static final String TAG = "LoginActivity";
 
-    private NeatoClient neatoClient;
+    private NeatoAuthentication neatoAuth;
 
     String REDIRECT_URI = "marco-app://neato";
     String CLIENT_ID = "c54d0ac5def8323befb61cfc74e514af80bde385d878c23e47ca990fccb40258";
@@ -34,7 +35,7 @@ public class LoginActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
-        neatoClient = NeatoClient.getInstance(this);
+        neatoAuth = NeatoAuthentication.getInstance(this);
     }
 
     @Override
@@ -43,7 +44,7 @@ public class LoginActivity extends AppCompatActivity {
 
         Uri uri = intent.getData();
         if (uri != null) {
-            NeatoAuthenticationResponse response = neatoClient.getOAuth2AuthResponseFromUri(uri);
+            NeatoAuthenticationResponse response = neatoAuth.getOAuth2AuthResponseFromUri(uri);
 
             switch (response.getType()) {
                 case TOKEN:
@@ -73,6 +74,6 @@ public class LoginActivity extends AppCompatActivity {
     public void loginClick(View view) {
         //we start the auth flow here
         //later we'll receive the result in the onNewIntent method above
-        neatoClient.openLoginInBrowser(CLIENT_ID,REDIRECT_URI,scopes);
+        neatoAuth.openLoginInBrowser(this,CLIENT_ID,REDIRECT_URI,scopes);
     }
 }

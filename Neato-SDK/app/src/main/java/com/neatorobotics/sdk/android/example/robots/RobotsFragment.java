@@ -9,13 +9,11 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.neatorobotics.sdk.android.NeatoCallback;
-import com.neatorobotics.sdk.android.NeatoClient;
+import com.neatorobotics.sdk.android.NeatoUser;
 import com.neatorobotics.sdk.android.NeatoError;
 import com.neatorobotics.sdk.android.example.R;
 import com.neatorobotics.sdk.android.model.NeatoRobot;
@@ -26,7 +24,7 @@ public class RobotsFragment extends Fragment {
 
     private static final String TAG = "RobotsFragment";
 
-    private NeatoClient neatoClient;
+    private NeatoUser neatoUser;
 
     private RecyclerView mRecyclerView;
     private RecyclerView.Adapter mAdapter;
@@ -52,7 +50,7 @@ public class RobotsFragment extends Fragment {
         super.onCreate(savedInstanceState);
         setRetainInstance(true);
 
-        neatoClient = NeatoClient.getInstance(getContext());
+        neatoUser = NeatoUser.getInstance(getContext());
 
         if(savedInstanceState != null) {
             restoreState(savedInstanceState);
@@ -99,7 +97,7 @@ public class RobotsFragment extends Fragment {
     }
 
     private void loadRobots() {
-        neatoClient.loadRobots(new NeatoCallback<ArrayList<NeatoRobot>>(){
+        neatoUser.loadRobots(new NeatoCallback<ArrayList<NeatoRobot>>(){
             @Override
             public void done(ArrayList<NeatoRobot> result) {
                 super.done(result);

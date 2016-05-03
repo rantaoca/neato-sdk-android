@@ -2,22 +2,17 @@ package com.neatorobotics.sdk.android.example.robots;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
-import android.util.Log;
-import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
 
 import com.neatorobotics.sdk.android.NeatoCallback;
-import com.neatorobotics.sdk.android.NeatoClient;
+import com.neatorobotics.sdk.android.NeatoUser;
 import com.neatorobotics.sdk.android.NeatoError;
 import com.neatorobotics.sdk.android.example.R;
 import com.neatorobotics.sdk.android.example.login.LoginActivity;
@@ -28,14 +23,14 @@ import com.neatorobotics.sdk.android.example.login.LoginActivity;
 public class RobotsActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
-    private NeatoClient neatoClient;
+    private NeatoUser neatoUser;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_robots);
 
-        neatoClient = NeatoClient.getInstance(this);
+        neatoUser = NeatoUser.getInstance(this);
 
         //Toolbar
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -82,7 +77,7 @@ public class RobotsActivity extends AppCompatActivity
     }
 
     private void logout() {
-        neatoClient.logout(new NeatoCallback<Boolean>(){
+        neatoUser.logout(new NeatoCallback<Boolean>(){
             @Override
             public void done(Boolean result) {
                 super.done(result);
