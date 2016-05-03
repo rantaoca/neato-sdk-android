@@ -1,27 +1,22 @@
 package com.neatorobotics.sdk.android.beehive;
 
+import android.content.Context;
 import android.test.suitebuilder.annotation.SmallTest;
 
 import com.neatorobotics.sdk.android.MockJSON;
-import com.neatorobotics.sdk.android.NeatoCallback;
-import com.neatorobotics.sdk.android.NeatoError;
-import com.neatorobotics.sdk.android.model.NeatoRobot;
+import com.neatorobotics.sdk.android.models.Robot;
 
 import org.json.JSONObject;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mockito.invocation.InvocationOnMock;
+import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
 import org.mockito.runners.MockitoJUnitRunner;
-import org.mockito.stubbing.Answer;
 
-import java.net.HttpURLConnection;
 import java.util.ArrayList;
 
 import static org.mockito.Matchers.any;
-import static org.mockito.Matchers.anyString;
-import static org.mockito.Mockito.doAnswer;
-import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 import static org.junit.Assert.*;
 
@@ -29,18 +24,23 @@ import static org.junit.Assert.*;
 @SmallTest
 public class BeehiveJSONParserTest {
 
+    @Mock
+    Context ctx;
+
     @Before
-    public void setup() {}
+    public void setup() {
+        MockitoAnnotations.initMocks(this);
+    }
 
     @Test
     public void parseRobots() throws Exception {
         JSONObject json = new JSONObject(MockJSON.loadJSON(this,"json/robots/robots_list.json"));
 
-        ArrayList<NeatoRobot> robots = BeehiveJSONParser.parseRobots(json);
+        ArrayList<Robot> robots = BeehiveJSONParser.parseRobots(json);
         assertNotNull(robots);
         assertEquals(2,robots.size());
 
-        NeatoRobot robot = robots.get(0);
+        Robot robot = robots.get(0);
         assertEquals("Robot 1",robot.getName());
         assertEquals("botvac-85",robot.getModel());
         assertEquals("robot1",robot.getSerial());
@@ -51,7 +51,7 @@ public class BeehiveJSONParserTest {
     public void parseRobotsInvalidJSON() throws Exception {
         JSONObject json = new JSONObject("{\"value\":{}}");
 
-        ArrayList<NeatoRobot> robots = BeehiveJSONParser.parseRobots(json);
+        ArrayList<Robot> robots = BeehiveJSONParser.parseRobots(json);
         assertNotNull(robots);
         assertEquals(0,robots.size());
     }
@@ -60,7 +60,7 @@ public class BeehiveJSONParserTest {
     public void parseRobotsNullLinkedAt() throws Exception {
         JSONObject json = new JSONObject(MockJSON.loadJSON(this,"json/robots/robots_list_null_linked_at.json"));
 
-        ArrayList<NeatoRobot> robots = BeehiveJSONParser.parseRobots(json);
+        ArrayList<Robot> robots = BeehiveJSONParser.parseRobots(json);
         assertNotNull(robots);
         assertEquals(1,robots.size());
     }
@@ -69,7 +69,7 @@ public class BeehiveJSONParserTest {
     public void parseRobotsNoLinkedAt() throws Exception {
         JSONObject json = new JSONObject(MockJSON.loadJSON(this,"json/robots/robots_list_no_linked_at.json"));
 
-        ArrayList<NeatoRobot> robots = BeehiveJSONParser.parseRobots(json);
+        ArrayList<Robot> robots = BeehiveJSONParser.parseRobots(json);
         assertNotNull(robots);
         assertEquals(1,robots.size());
     }

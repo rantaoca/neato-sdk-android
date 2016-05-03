@@ -14,9 +14,10 @@ import android.widget.Toast;
 
 import com.neatorobotics.sdk.android.NeatoCallback;
 import com.neatorobotics.sdk.android.NeatoUser;
-import com.neatorobotics.sdk.android.NeatoError;
+import com.neatorobotics.sdk.android.constants.NeatoError;
 import com.neatorobotics.sdk.android.example.R;
-import com.neatorobotics.sdk.android.model.NeatoRobot;
+import com.neatorobotics.sdk.android.NeatoRobot;
+import com.neatorobotics.sdk.android.models.Robot;
 
 import java.util.ArrayList;
 
@@ -38,11 +39,19 @@ public class RobotsFragment extends Fragment {
     @Override
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-        outState.putSerializable("ROBOT_LIST",robots);
+        ArrayList serializedRobots = new ArrayList();
+        for (NeatoRobot robot : robots) {
+            serializedRobots.add(robot.serialize());
+        }
+        outState.putSerializable("ROBOT_LIST",serializedRobots);
     }
 
     private void restoreState(Bundle inState) {
-        robots = (ArrayList<NeatoRobot>) inState.getSerializable("ROBOT_LIST");
+        robots.clear();
+        ArrayList serializedRobots = (ArrayList) inState.getSerializable("ROBOT_LIST");
+        for (Object object : serializedRobots) {
+            robots.add(NeatoRobot.deserialize(getContext(),object));
+        }
     }
 
     @Override
@@ -134,7 +143,19 @@ public class RobotsFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 int position = getAdapterPosition();
-                Toast.makeText(getContext(),"Tap position "+position, Toast.LENGTH_SHORT).show();
+                //Toast.makeText(getContext(),"Tap position "+position, Toast.LENGTH_SHORT).show();
+                robots.get(position).updateRobotState(new NeatoCallback<Boolean>(){
+                    @Override
+                    public void done(Boolean result) {
+                        super.done(result);
+                    }
+
+                    @Override
+                    public void fail(NeatoError error) {
+                        super.fail(error);
+                        Toast.makeText(getContext(),"Impossibile recuperare lo stato", Toast.LENGTH_SHORT).show();
+                    }
+                });
             }
         }
 

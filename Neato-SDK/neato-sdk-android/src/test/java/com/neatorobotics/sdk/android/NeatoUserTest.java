@@ -4,8 +4,8 @@ import android.content.Context;
 import android.test.suitebuilder.annotation.SmallTest;
 
 import com.neatorobotics.sdk.android.authentication.NeatoAuthentication;
-import com.neatorobotics.sdk.android.beehive.BeehiveBaseClient;
 import com.neatorobotics.sdk.android.beehive.BeehiveResponse;
+import com.neatorobotics.sdk.android.constants.NeatoError;
 
 import org.json.JSONObject;
 import org.junit.Before;
@@ -29,7 +29,6 @@ import static org.mockito.Matchers.anyString;
 import static org.mockito.Mockito.doAnswer;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
 
 @RunWith(MockitoJUnitRunner.class)
 @SmallTest
@@ -39,7 +38,7 @@ public class NeatoUserTest {
     NeatoUser neatoUser;
 
     @Mock
-    BeehiveBaseClient mockBaseClient;
+    NeatoUser.AsyncCall mockBaseClient;
 
     @Mock
     NeatoAuthentication mockNeatoAutentication;
@@ -55,7 +54,7 @@ public class NeatoUserTest {
         MockitoAnnotations.initMocks(this);
 
         neatoUser = NeatoUser.getInstance(ctx);
-        neatoUser.baseClient = mockBaseClient;
+        neatoUser.asyncCall = mockBaseClient;
         neatoUser.neatoAuthentication = mockNeatoAutentication;
     }
 
