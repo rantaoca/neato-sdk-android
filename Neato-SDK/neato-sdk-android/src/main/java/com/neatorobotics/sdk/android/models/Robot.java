@@ -24,7 +24,6 @@ public class Robot implements Serializable{
     public HashMap<String, RobotFirmware> recentFirmware = new HashMap<>();
 
     //region .ctor
-    public Robot(){}
     public Robot(JSONObject json){
         if(json != null) {
             this.serial = json.optString("serial");
