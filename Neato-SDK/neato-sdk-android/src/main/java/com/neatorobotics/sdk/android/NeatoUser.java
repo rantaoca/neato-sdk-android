@@ -88,19 +88,17 @@ public class NeatoUser {
             @Override
             public void done(BeehiveResponse result) {
                 super.done(result);
-                if(result == null) {
-                    callback.fail(NeatoError.GENERIC_ERROR);
-                }else if(result.isUnauthorized()) {
-                    callback.fail(NeatoError.INVALID_TOKEN);
-                }else if(result.isHttpOK()) {
-                    ArrayList<NeatoRobot> neatoRobots = new ArrayList<NeatoRobot>();
-                    for (Robot model : BeehiveJSONParser.parseRobots(result.getJSON())) {
-                        neatoRobots.add(new NeatoRobot(context,model));
-                    }
-                    callback.done(neatoRobots);
-                }else {
-                    callback.fail(NeatoError.GENERIC_ERROR);
+                ArrayList<NeatoRobot> neatoRobots = new ArrayList<NeatoRobot>();
+                for (Robot model : BeehiveJSONParser.parseRobots(result.getJSON())) {
+                    neatoRobots.add(new NeatoRobot(context,model));
                 }
+                callback.done(neatoRobots);
+            }
+
+            @Override
+            public void fail(NeatoError error) {
+                super.fail(error);
+                callback.fail(error);
             }
         });
     }
@@ -117,7 +115,13 @@ public class NeatoUser {
                     return BeehiveBaseClient.executeCall(accessToken,verb,url,input);
                 }
                 protected void onPostExecute(BeehiveResponse response) {
-                    callback.done(response);
+                    if(response != null && response.isHttpOK()) {
+                        callback.done(response);
+                    }else if(response != null && response.isUnauthorized()) {
+                        callback.fail(NeatoError.INVALID_TOKEN);
+                    }else {
+                        callback.fail(NeatoError.GENERIC_ERROR);
+                    }
                 }
             };
             if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.HONEYCOMB) {

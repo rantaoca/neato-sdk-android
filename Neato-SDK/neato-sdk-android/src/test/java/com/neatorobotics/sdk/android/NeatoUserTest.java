@@ -93,7 +93,7 @@ public class NeatoUserTest {
         doAnswer(new Answer() {
             @Override
             public Object answer(InvocationOnMock invocation) throws Throwable {
-                ((NeatoCallback) invocation.getArguments()[4]).done(response);
+                ((NeatoCallback) invocation.getArguments()[4]).fail(NeatoError.INVALID_TOKEN);
                 return null;
             }
         }).when(mockBaseClient).executeCall(anyString(),anyString(),anyString(),any(JSONObject.class),any(NeatoCallback.class));
@@ -110,7 +110,7 @@ public class NeatoUserTest {
         doAnswer(new Answer() {
             @Override
             public Object answer(InvocationOnMock invocation) throws Throwable {
-                ((NeatoCallback) invocation.getArguments()[4]).done(response);
+                ((NeatoCallback) invocation.getArguments()[4]).fail(NeatoError.GENERIC_ERROR);
                 return null;
             }
         }).when(mockBaseClient).executeCall(anyString(),anyString(),anyString(),any(JSONObject.class),any(NeatoCallback.class));
@@ -125,7 +125,7 @@ public class NeatoUserTest {
         doAnswer(new Answer() {
             @Override
             public Object answer(InvocationOnMock invocation) throws Throwable {
-                ((NeatoCallback) invocation.getArguments()[4]).done(null);
+                ((NeatoCallback) invocation.getArguments()[4]).fail(NeatoError.GENERIC_ERROR);
                 return null;
             }
         }).when(mockBaseClient).executeCall(anyString(),anyString(),anyString(),any(JSONObject.class),any(NeatoCallback.class));
@@ -136,21 +136,20 @@ public class NeatoUserTest {
     }
 
     @Test
-    public void loadRobots_OK_NullJSON() throws Exception {
+    public void loadRobots_NullJSON() throws Exception {
         final BeehiveResponse response = new BeehiveResponse(HttpURLConnection.HTTP_OK, null);
 
         doAnswer(new Answer() {
             @Override
             public Object answer(InvocationOnMock invocation) throws Throwable {
-                ((NeatoCallback) invocation.getArguments()[4]).done(response);
+                ((NeatoCallback) invocation.getArguments()[4]).fail(NeatoError.GENERIC_ERROR);
                 return null;
             }
         }).when(mockBaseClient).executeCall(anyString(),anyString(),anyString(),any(JSONObject.class),any(NeatoCallback.class));
 
         neatoUser.loadRobots(mockNeatoCallback);
 
-        verify(mockNeatoCallback, never()).fail(any(NeatoError.class));
-        verify(mockNeatoCallback).done(any(ArrayList.class));//empty list, not null
+        verify(mockNeatoCallback).fail(NeatoError.GENERIC_ERROR);
     }
 
     @Test

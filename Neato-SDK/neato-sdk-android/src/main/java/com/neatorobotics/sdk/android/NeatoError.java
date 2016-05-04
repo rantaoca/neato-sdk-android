@@ -5,8 +5,7 @@ package com.neatorobotics.sdk.android;
  */
 public enum NeatoError {
     INVALID_TOKEN,
-    INVALID_EMAIL,
-    INVALID_PASSWORD,
     INVALID_JSON,
+    ROBOT_ERROR,
     GENERIC_ERROR
 }

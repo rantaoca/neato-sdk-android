@@ -17,8 +17,13 @@ import com.neatorobotics.sdk.android.NeatoUser;
 import com.neatorobotics.sdk.android.NeatoError;
 import com.neatorobotics.sdk.android.example.R;
 import com.neatorobotics.sdk.android.NeatoRobot;
+import com.neatorobotics.sdk.android.models.State;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.Locale;
 
 public class RobotsFragment extends Fragment {
 
@@ -143,9 +148,10 @@ public class RobotsFragment extends Fragment {
             public void onClick(View v) {
                 int position = getAdapterPosition();
                 final NeatoRobot robot = robots.get(position);
-                robot.updateRobotState(new NeatoCallback<Boolean>(){
+
+                robot.updateRobotState(new NeatoCallback<Void>(){
                     @Override
-                    public void done(Boolean result) {
+                    public void done(Void result) {
                         super.done(result);
                         Toast.makeText(getContext(),"Robot state: "+robot.getRobotState(), Toast.LENGTH_SHORT).show();
                     }
@@ -153,7 +159,19 @@ public class RobotsFragment extends Fragment {
                     @Override
                     public void fail(NeatoError error) {
                         super.fail(error);
-                        Toast.makeText(getContext(),"Impossibile recuperare lo stato", Toast.LENGTH_SHORT).show();
+                    }
+                });
+
+                String params = String.format(Locale.US, "{\"category\":%d,\"mode\":%d,\"modifier\":%d}",1,State.RobotCleaningMode.ECO.getValue(),1);
+                robot.startCleaning(params.toString(), new NeatoCallback<Void>(){
+                    @Override
+                    public void done(Void result) {
+                        super.done(result);
+                    }
+
+                    @Override
+                    public void fail(NeatoError error) {
+                        super.fail(error);
                     }
                 });
             }

@@ -1,12 +1,14 @@
 package com.neatorobotics.sdk.android.nucleo;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 /**
  * Created by Marco on 04/05/16.
  */
 public class NucleoCommands {
     //commands
     public static String START_CLEANING_COMMAND =           "{\"reqId\": \"77\",\"cmd\": \"startCleaning\",\"params\": {\"category\": 2,\"mode\": ECO_MODE_PLACEHOLDER,\"modifier\": 1}}";
-    public static String START_SPOT_CLEANING_COMMAND =      "{\"reqId\": \"77\",\"cmd\": \"startCleaning\",\"params\": {\"category\": 3,\"mode\": ECO_MODE_PLACEHOLDER,\"modifier\": MODIFIER_PLACEHOLDER,\"spotWidth\": SPOT_WIDTH_PLACEHOLDER,\"spotHeight\": SPOT_HEIGHT_PLACEHOLDER}}";
     public static String PAUSE_CLEANING_COMMAND =           "{\"reqId\": \"77\",\"cmd\": \"pauseCleaning\"}";
     public static String RESUME_CLEANING_COMMAND =          "{\"reqId\": \"77\",\"cmd\": \"resumeCleaning\"}";
     public static String STOP_CLEANING_COMMAND =            "{\"reqId\": \"77\",\"cmd\": \"stopCleaning\"}";
@@ -31,4 +33,26 @@ public class NucleoCommands {
     public static String GET_VISIBLE_NETWORKS_COMMAND =     "{\"reqId\": \"77\",\"cmd\": \"getAvailableWifiNetworks\"}";
     public static String START_IEC_TEST_COMMAND =           "{\"reqId\": \"77\",\"cmd\": \"startIECTest\",\"params\": {\"speed\": SPEED_PLACEHOLDER,\"distance\": DISTANCE_PLACEHOLDER,\"carpet\": CARPET_PLACEHOLDER}}";
     public static String GET_ROBOT_STATS_COMMAND =           "{\"reqId\": \"77\",\"cmd\": \"getLocalStats\"}";
+
+    //return the JSONObject command
+    public static JSONObject get(String command) {
+        try {
+            return new JSONObject(command);
+        } catch (JSONException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    //return the JSONObject command with filled params
+    public static JSONObject get(String command, String params) {
+        try {
+            JSONObject json = new JSONObject(command);
+            json.put("params", new JSONObject(params));
+            return json;
+        } catch (JSONException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
 }

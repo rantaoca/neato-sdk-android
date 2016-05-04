@@ -22,6 +22,22 @@ public class NucleoResponse {
         return getStatusCode() == HttpURLConnection.HTTP_OK;
     }
 
+    //true if the data response property is "ok"
+    public boolean isResponseOK() {
+        if(isHttpOK()) {
+            if(getJSON() != null && getJSON().has("result") && getJSON().optString("result") != null
+                    && getJSON().optString("result").equalsIgnoreCase("ok")) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    //true if http and robot response are both OK
+    public boolean isOK() {
+        return isHttpOK() && isResponseOK();
+    }
+
     public int getStatusCode() {
         return httpResultCode;
     }
@@ -31,7 +47,7 @@ public class NucleoResponse {
     }
 
     public boolean isStateResponse() {
-        //TODO
-        return true;
+        if(resultJson != null && resultJson.has("state")) return true;
+        return false;
     }
 }
