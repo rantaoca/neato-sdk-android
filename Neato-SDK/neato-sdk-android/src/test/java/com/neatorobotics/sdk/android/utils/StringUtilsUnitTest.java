@@ -6,7 +6,11 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.runners.MockitoJUnitRunner;
 
+import java.io.ByteArrayInputStream;
+import java.nio.charset.Charset;
+
 import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.assertEquals;
 
 @RunWith(MockitoJUnitRunner.class)
 @SmallTest
@@ -30,5 +34,13 @@ public class StringUtilsUnitTest {
 
         input = " ";
         assertTrue(StringUtils.toHex(input.getBytes("UTF-8")).equalsIgnoreCase("20"));
+    }
+
+    @Test
+    public void testGetStringFromInputStream() throws Exception{
+        String input = "{\"name\":\"marcoà.,.,.,!$%&€\"}";
+        ByteArrayInputStream bais = new ByteArrayInputStream(input.getBytes(Charset.forName("UTF-8")));
+        String outputString = StringUtils.getStringFromInputStream(bais);
+        assertEquals(input, outputString);
     }
 }
