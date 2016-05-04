@@ -14,10 +14,9 @@ import android.widget.Toast;
 
 import com.neatorobotics.sdk.android.NeatoCallback;
 import com.neatorobotics.sdk.android.NeatoUser;
-import com.neatorobotics.sdk.android.constants.NeatoError;
+import com.neatorobotics.sdk.android.NeatoError;
 import com.neatorobotics.sdk.android.example.R;
 import com.neatorobotics.sdk.android.NeatoRobot;
-import com.neatorobotics.sdk.android.models.Robot;
 
 import java.util.ArrayList;
 
@@ -143,11 +142,12 @@ public class RobotsFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 int position = getAdapterPosition();
-                //Toast.makeText(getContext(),"Tap position "+position, Toast.LENGTH_SHORT).show();
-                robots.get(position).updateRobotState(new NeatoCallback<Boolean>(){
+                final NeatoRobot robot = robots.get(position);
+                robot.updateRobotState(new NeatoCallback<Boolean>(){
                     @Override
                     public void done(Boolean result) {
                         super.done(result);
+                        Toast.makeText(getContext(),"Robot state: "+robot.getRobotState(), Toast.LENGTH_SHORT).show();
                     }
 
                     @Override

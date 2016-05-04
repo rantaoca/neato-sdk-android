@@ -1,7 +1,5 @@
 package com.neatorobotics.sdk.android;
 
-import com.neatorobotics.sdk.android.constants.NeatoError;
-
 /**
  * Created by Marco on 04/04/16.
  */

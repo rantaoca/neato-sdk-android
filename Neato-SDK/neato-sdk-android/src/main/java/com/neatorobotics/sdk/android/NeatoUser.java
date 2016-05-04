@@ -9,7 +9,6 @@ import com.neatorobotics.sdk.android.authentication.NeatoAuthentication;
 import com.neatorobotics.sdk.android.beehive.BeehiveBaseClient;
 import com.neatorobotics.sdk.android.beehive.BeehiveJSONParser;
 import com.neatorobotics.sdk.android.beehive.BeehiveResponse;
-import com.neatorobotics.sdk.android.constants.NeatoError;
 import com.neatorobotics.sdk.android.models.Robot;
 
 import org.json.JSONObject;

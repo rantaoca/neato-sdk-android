@@ -41,10 +41,10 @@ public class BeehiveJSONParserTest {
         assertEquals(2,robots.size());
 
         Robot robot = robots.get(0);
-        assertEquals("Robot 1",robot.getName());
-        assertEquals("botvac-85",robot.getModel());
-        assertEquals("robot1",robot.getSerial());
-        assertEquals("04a0fbe6b1f..2572d",robot.getSecretKey());
+        assertEquals("Robot 1",robot.name);
+        assertEquals("botvac-85",robot.model);
+        assertEquals("robot1",robot.serial);
+        assertEquals("04a0fbe6b1f..2572d",robot.secret_key);
     }
 
     @Test

@@ -25,7 +25,7 @@ public class BeehiveJSONParser {
                 for (int i = 0; i < arr.length(); i++) {
                     Robot robot = new Robot(arr.getJSONObject(i));
 
-                    if (robot.getLinkedAt() == null || "".equalsIgnoreCase(robot.getLinkedAt())) {
+                    if (robot.linkedAt == null || "".equalsIgnoreCase(robot.linkedAt)) {
                         continue;
                     }else robots.add(robot);
                 }

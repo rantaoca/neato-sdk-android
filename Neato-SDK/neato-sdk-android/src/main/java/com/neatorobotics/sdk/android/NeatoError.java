@@ -1,4 +1,4 @@
-package com.neatorobotics.sdk.android.constants;
+package com.neatorobotics.sdk.android;
 
 /**
  * Created by Marco on 04/04/16.

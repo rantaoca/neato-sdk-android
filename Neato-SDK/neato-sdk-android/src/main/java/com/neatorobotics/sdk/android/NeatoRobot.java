@@ -6,9 +6,10 @@ import android.support.annotation.VisibleForTesting;
 import android.util.Log;
 import android.widget.Toast;
 
-import com.neatorobotics.sdk.android.constants.NeatoError;
 import com.neatorobotics.sdk.android.models.Robot;
+import com.neatorobotics.sdk.android.models.State;
 import com.neatorobotics.sdk.android.nucleo.NucleoBaseClient;
+import com.neatorobotics.sdk.android.nucleo.NucleoCommands;
 import com.neatorobotics.sdk.android.nucleo.NucleoResponse;
 
 import org.json.JSONException;
@@ -38,7 +39,7 @@ public class NeatoRobot{
     }
 
     private void setRobotState(JSONObject json) {
-        //robot.setRobotState();
+        robot.state = new State(json);
     }
 
     /**
@@ -46,10 +47,9 @@ public class NeatoRobot{
      * @param callback
      */
     public void updateRobotState(final NeatoCallback<Boolean> callback) {
-        String GET_ROBOT_STATE_COMMAND = "{\"reqId\": \"77\",\"cmd\": \"getRobotState\"}";
         try {
-            JSONObject command = new JSONObject(GET_ROBOT_STATE_COMMAND);
-            asyncCall.executeCall(this,context, baseUrl, robot.serial,command, robot.secretKey, new NeatoCallback<NucleoResponse>(){
+            JSONObject command = new JSONObject(NucleoCommands.GET_ROBOT_STATE_COMMAND);
+            asyncCall.executeCall(this,context, baseUrl, robot.serial,command, robot.secret_key, new NeatoCallback<NucleoResponse>(){
                 @Override
                 public void done(NucleoResponse result) {
                     super.done(result);
@@ -57,7 +57,6 @@ public class NeatoRobot{
                         callback.fail(NeatoError.GENERIC_ERROR);
                     }else if(result.isHttpOK()) {
                         callback.done(true);
-                        Toast.makeText(context,result.getJSON().toString(),Toast.LENGTH_SHORT).show();
                     }else {
                         callback.fail(NeatoError.GENERIC_ERROR);
                     }
@@ -79,7 +78,7 @@ public class NeatoRobot{
     }
     //endregion
 
-    //region getters and setters
+    //region robot getters and setters
     public String getName() {
         return robot.name;
     }
@@ -89,7 +88,7 @@ public class NeatoRobot{
     }
 
     public String getSecretKey() {
-        return robot.secretKey;
+        return robot.secret_key;
     }
 
     public String getModel() {
@@ -98,6 +97,18 @@ public class NeatoRobot{
 
     public String getLinkedAt() {
         return robot.linkedAt;
+    }
+
+    public int getRobotState() {
+        if(robot != null && robot.state != null) {
+            return robot.state.state;
+        }else return -1;
+    }
+
+    public int getRobotAction() {
+        if(robot != null && robot.state != null) {
+            return robot.state.action;
+        }else return -1;
     }
     //endregion
 

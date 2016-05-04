@@ -13,7 +13,7 @@ import android.widget.Toast;
 
 import com.neatorobotics.sdk.android.NeatoCallback;
 import com.neatorobotics.sdk.android.NeatoUser;
-import com.neatorobotics.sdk.android.constants.NeatoError;
+import com.neatorobotics.sdk.android.NeatoError;
 import com.neatorobotics.sdk.android.example.R;
 import com.neatorobotics.sdk.android.example.login.LoginActivity;
 

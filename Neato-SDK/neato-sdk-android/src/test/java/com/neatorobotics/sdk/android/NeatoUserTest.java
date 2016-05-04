@@ -5,7 +5,6 @@ import android.test.suitebuilder.annotation.SmallTest;
 
 import com.neatorobotics.sdk.android.authentication.NeatoAuthentication;
 import com.neatorobotics.sdk.android.beehive.BeehiveResponse;
-import com.neatorobotics.sdk.android.constants.NeatoError;
 
 import org.json.JSONObject;
 import org.junit.Before;
