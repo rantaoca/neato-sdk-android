@@ -7,8 +7,6 @@ import android.os.Build;
  */
 public class DeviceUtils {
 
-    private static final String TAG = "DeviceUtils";
-
     public static String getModel(){
         return Build.MODEL;
     }

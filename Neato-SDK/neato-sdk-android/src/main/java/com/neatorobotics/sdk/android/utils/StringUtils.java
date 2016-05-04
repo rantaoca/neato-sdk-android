@@ -31,7 +31,6 @@ public class StringUtils {
             while ((line = br.readLine()) != null) {
                 sb.append(line);
             }
-
         } catch (IOException e) {
             e.printStackTrace();
         } finally {
@@ -43,7 +42,6 @@ public class StringUtils {
                 }
             }
         }
-
         return sb.toString();
     }
 }

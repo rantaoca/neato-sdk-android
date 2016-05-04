@@ -9,8 +9,7 @@ import java.util.TimeZone;
  * Created by Marco on 03/05/16.
  */
 public class DateUtils {
-    public static String getHTTP11DateStringHeaderWithDelta() {
-        Calendar calendar = Calendar.getInstance();
+    public static String getHTTP11DateStringHeader(Calendar calendar) {
         SimpleDateFormat dateFormat = new SimpleDateFormat(
                 "EEE, dd MMM yyyy HH:mm:ss 'GMT'", Locale.US);
         dateFormat.setTimeZone(TimeZone.getTimeZone("GMT"));

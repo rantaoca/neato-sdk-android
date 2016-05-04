@@ -17,6 +17,7 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.net.URL;
+import java.util.Calendar;
 
 import javax.crypto.Mac;
 import javax.crypto.spec.SecretKeySpec;
@@ -50,7 +51,7 @@ public class NucleoBaseClient {
             urlConnection.setRequestMethod("POST");
 
             //compute authorization header
-            String date_header = DateUtils.getHTTP11DateStringHeaderWithDelta();
+            String date_header = DateUtils.getHTTP11DateStringHeader(Calendar.getInstance());
             String string_to_sign = robot_serial.toLowerCase() + "\n" + date_header + "\n" + command;
             Mac mac = Mac.getInstance("HmacSha256");
             SecretKeySpec secret = new SecretKeySpec(robotSecretKey.getBytes(), "HmacSha256");
