@@ -1,9 +1,7 @@
 package com.neatorobotics.sdk.android.nucleo;
 
-import android.content.Context;
 import android.util.Log;
 
-import com.neatorobotics.sdk.android.helpers.http.SSLSocketFactoryHelper;
 import com.neatorobotics.sdk.android.utils.DateUtils;
 import com.neatorobotics.sdk.android.utils.DeviceUtils;
 import com.neatorobotics.sdk.android.utils.StringUtils;
@@ -31,7 +29,7 @@ public class NucleoBaseClient {
 
     private static final String TAG = "NucleoBaseClient";
 
-    public static NucleoResponse executeNucleoCall(Context context, String url, String robot_serial, JSONObject command, String robotSecretKey) {
+    public static NucleoResponse executeNucleoCall(String url, String robot_serial, JSONObject command, String robotSecretKey) {
         HttpsURLConnection urlConnection = null;
         OutputStream os = null;
         BufferedWriter writer = null;
@@ -44,8 +42,6 @@ public class NucleoBaseClient {
 
             URL url1 = new URL(url+full_url);
             urlConnection = (HttpsURLConnection) url1.openConnection();
-            //since we use self signed certificate, we have to trust it
-            urlConnection.setSSLSocketFactory(SSLSocketFactoryHelper.get(context,SSLSocketFactoryHelper.NUCLEO));
 
             urlConnection.setConnectTimeout(10000);
             urlConnection.setReadTimeout(10000);

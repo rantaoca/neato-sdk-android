@@ -110,7 +110,7 @@ public class NeatoRobot{
             final AsyncTask<Void, Void, NucleoResponse> task = new AsyncTask<Void, Void, NucleoResponse>() {
                 protected void onPreExecute() {}
                 protected NucleoResponse doInBackground(Void... unused) {
-                    return NucleoBaseClient.executeNucleoCall(context,url,robot_serial,command,robotSecretKey);
+                    return NucleoBaseClient.executeNucleoCall(url,robot_serial,command,robotSecretKey);
                 }
                 protected void onPostExecute(NucleoResponse response) {
                     if(response != null && response.isStateResponse()) neatoRobot.setRobotState(response.getJSON());
