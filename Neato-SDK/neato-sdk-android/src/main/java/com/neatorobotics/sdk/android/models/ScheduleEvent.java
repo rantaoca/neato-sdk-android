@@ -8,13 +8,14 @@ import org.json.JSONObject;
 import java.io.Serializable;
 
 /**
- * Created by Marco on 20/03/15.
+ * Neato-SDK
+ * Created by Marco on 06/05/16.
+ * Copyright © 2016 Neato Robotics. All rights reserved.
  */
 public class ScheduleEvent implements Serializable {
 
     private static final String TAG = "ScheduleEvent";
 
-    //public String eventId = "0";
     public String startTime;//24hours format
     public int mode, day;//0 is sunday
 
@@ -38,7 +39,7 @@ public class ScheduleEvent implements Serializable {
         try {
             //json.put("eventId",eventId);
             json.put("startTime",startTime);
-            json.put("mode",mode);
+            json.put("mode", mode);
             json.put("day",day);
         }catch(JSONException e) {Log.e(TAG, "Exception", e);return null;}
         return json;

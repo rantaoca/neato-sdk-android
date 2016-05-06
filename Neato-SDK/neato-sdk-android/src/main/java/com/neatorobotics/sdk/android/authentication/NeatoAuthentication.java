@@ -9,7 +9,9 @@ import com.neatorobotics.sdk.android.R;
 import java.util.Date;
 
 /**
- * Created by Marco on 24/03/16.
+ * Neato-SDK
+ * Created by Marco on 06/05/16.
+ * Copyright © 2016 Neato Robotics. All rights reserved.
  */
 public class NeatoAuthentication {
 

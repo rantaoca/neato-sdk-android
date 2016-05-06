@@ -10,7 +10,9 @@ import java.util.Date;
 import java.util.Locale;
 
 /**
- * Created by Marco on 29/03/16.
+ * Neato-SDK
+ * Created by Marco on 06/05/16.
+ * Copyright © 2016 Neato Robotics. All rights reserved.
  */
 public class DefaultAccessTokenDatasource implements AccessTokenDatasource {
 

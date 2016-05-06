@@ -21,7 +21,9 @@ import javax.net.ssl.HttpsURLConnection;
 import javax.net.ssl.SSLHandshakeException;
 
 /**
- * Created by Marco on 03/05/16.
+ * Neato-SDK
+ * Created by Marco on 06/05/16.
+ * Copyright © 2016 Neato Robotics. All rights reserved.
  */
 public class BeehiveBaseClient {
     private static final String TAG = "BeehiveBaseClient";

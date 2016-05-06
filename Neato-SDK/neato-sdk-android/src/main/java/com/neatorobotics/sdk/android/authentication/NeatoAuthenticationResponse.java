@@ -11,7 +11,9 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 
 /**
- * Created by Marco on 25/03/16.
+ * Neato-SDK
+ * Created by Marco on 06/05/16.
+ * Copyright © 2016 Neato Robotics. All rights reserved.
  */
 public class NeatoAuthenticationResponse {
 

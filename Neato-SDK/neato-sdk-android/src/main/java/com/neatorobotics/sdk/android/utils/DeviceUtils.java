@@ -3,7 +3,9 @@ package com.neatorobotics.sdk.android.utils;
 import android.os.Build;
 
 /**
- * Created by Marco on 04/04/15.
+ * Neato-SDK
+ * Created by Marco on 06/05/16.
+ * Copyright © 2016 Neato Robotics. All rights reserved.
  */
 public class DeviceUtils {
 

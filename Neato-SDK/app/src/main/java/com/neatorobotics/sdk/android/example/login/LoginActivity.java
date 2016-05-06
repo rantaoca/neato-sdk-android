@@ -16,6 +16,10 @@ import com.neatorobotics.sdk.android.example.R;
 import com.neatorobotics.sdk.android.example.robots.RobotsActivity;
 
 /**
+ * Neato-SDK
+ * Created by Marco on 06/05/16.
+ * Copyright © 2016 Neato Robotics. All rights reserved.
+ *
  * When the user tap the LOGIN button the OAuth2.0 authentication flow begin.
  * In the current implementation we're using the external browser method to obtain the
  * token. This method is more secure than the in-app web view.

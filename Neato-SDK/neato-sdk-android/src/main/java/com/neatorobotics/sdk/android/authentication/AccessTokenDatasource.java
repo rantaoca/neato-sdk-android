@@ -3,7 +3,9 @@ package com.neatorobotics.sdk.android.authentication;
 import java.util.Date;
 
 /**
- * Created by Marco on 29/03/16.
+ * Neato-SDK
+ * Created by Marco on 06/05/16.
+ * Copyright © 2016 Neato Robotics. All rights reserved.
  */
 public interface AccessTokenDatasource {
     void storeToken(String token, Date expires);

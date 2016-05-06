@@ -2,6 +2,8 @@ package com.neatorobotics.sdk.android.models;
 
 import android.util.Log;
 
+import com.neatorobotics.sdk.android.utils.RobotVersionComparator;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -10,7 +12,9 @@ import java.util.HashMap;
 import java.util.Iterator;
 
 /**
- * Created by Marco on 03/05/16.
+ * Neato-SDK
+ * Created by Marco on 06/05/16.
+ * Copyright © 2016 Neato Robotics. All rights reserved.
  */
 public class Robot implements Serializable{
 
@@ -20,7 +24,7 @@ public class Robot implements Serializable{
     public double lat, lon;
     public String linkedAt;
 
-    public State state;
+    public RobotState state;
     public HashMap<String, RobotFirmware> recentFirmware = new HashMap<>();
 
     //region .ctor

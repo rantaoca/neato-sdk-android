@@ -4,9 +4,11 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 /**
- * Created by Marco on 04/05/16.
+ * Neato-SDK
+ * Created by Marco on 06/05/16.
+ * Copyright © 2016 Neato Robotics. All rights reserved.
  */
-public class NucleoCommands {
+public class RobotCommands {
     //commands
     public static String START_CLEANING_COMMAND =           "{\"reqId\": \"77\",\"cmd\": \"startCleaning\",\"params\": {\"category\": 2,\"mode\": ECO_MODE_PLACEHOLDER,\"modifier\": 1}}";
     public static String PAUSE_CLEANING_COMMAND =           "{\"reqId\": \"77\",\"cmd\": \"pauseCleaning\"}";

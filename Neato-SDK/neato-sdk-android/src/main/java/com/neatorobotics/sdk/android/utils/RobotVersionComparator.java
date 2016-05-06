@@ -1,7 +1,9 @@
-package com.neatorobotics.sdk.android.models;
+package com.neatorobotics.sdk.android.utils;
 
 /**
- * Created by Marco on 19/04/16.
+ * Neato-SDK
+ * Created by Marco on 06/05/16.
+ * Copyright © 2016 Neato Robotics. All rights reserved.
  */
 public class RobotVersionComparator {
     /**

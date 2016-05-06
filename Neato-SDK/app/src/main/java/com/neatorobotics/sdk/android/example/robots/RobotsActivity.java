@@ -18,8 +18,10 @@ import com.neatorobotics.sdk.android.example.R;
 import com.neatorobotics.sdk.android.example.login.LoginActivity;
 
 /**
- * In this page we can see our robots list.
- */
+ * Neato-SDK
+ * Created by Marco on 06/05/16.
+ * Copyright © 2016 Neato Robotics. All rights reserved.
+ **/
 public class RobotsActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 

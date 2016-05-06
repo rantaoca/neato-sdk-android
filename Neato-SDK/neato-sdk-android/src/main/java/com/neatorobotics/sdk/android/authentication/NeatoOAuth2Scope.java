@@ -1,7 +1,9 @@
 package com.neatorobotics.sdk.android.authentication;
 
 /**
- * Created by Marco on 24/03/16.
+ * Neato-SDK
+ * Created by Marco on 06/05/16.
+ * Copyright © 2016 Neato Robotics. All rights reserved.
  */
 public enum NeatoOAuth2Scope {
     READ("read"),

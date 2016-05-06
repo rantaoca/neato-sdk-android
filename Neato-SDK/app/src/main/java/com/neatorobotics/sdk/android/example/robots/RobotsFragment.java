@@ -17,14 +17,16 @@ import com.neatorobotics.sdk.android.NeatoUser;
 import com.neatorobotics.sdk.android.NeatoError;
 import com.neatorobotics.sdk.android.example.R;
 import com.neatorobotics.sdk.android.NeatoRobot;
-import com.neatorobotics.sdk.android.models.State;
-
-import org.json.JSONException;
-import org.json.JSONObject;
+import com.neatorobotics.sdk.android.nucleo.RobotConstants;
 
 import java.util.ArrayList;
 import java.util.Locale;
 
+/**
+ * Neato-SDK
+ * Created by Marco on 06/05/16.
+ * Copyright © 2016 Neato Robotics. All rights reserved.
+ **/
 public class RobotsFragment extends Fragment {
 
     private static final String TAG = "RobotsFragment";
@@ -153,7 +155,7 @@ public class RobotsFragment extends Fragment {
                     @Override
                     public void done(Void result) {
                         super.done(result);
-                        Toast.makeText(getContext(),"Robot state: "+robot.getRobotState(), Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getContext(),"Robot state: "+robot.getState().getState(), Toast.LENGTH_SHORT).show();
                     }
 
                     @Override
@@ -162,8 +164,12 @@ public class RobotsFragment extends Fragment {
                     }
                 });
 
-                String params = String.format(Locale.US, "{\"category\":%d,\"mode\":%d,\"modifier\":%d}",1,State.RobotCleaningMode.ECO.getValue(),1);
-                robot.startCleaning(params.toString(), new NeatoCallback<Void>(){
+                String params = String.format(Locale.US,
+                                "{\"category\":%d,\"mode\":%d,\"modifier\":%d}",
+                                1,
+                                RobotConstants.ROBOT_CLEANING_MODE_ECO,1);
+
+                robot.startCleaning(params, new NeatoCallback<Void>(){
                     @Override
                     public void done(Void result) {
                         super.done(result);

@@ -2,18 +2,24 @@ package com.neatorobotics.sdk.android;
 
 import android.content.Context;
 import android.os.AsyncTask;
+import android.support.annotation.Nullable;
 import android.support.annotation.VisibleForTesting;
 
 import com.neatorobotics.sdk.android.models.Robot;
-import com.neatorobotics.sdk.android.models.State;
+import com.neatorobotics.sdk.android.models.RobotState;
 import com.neatorobotics.sdk.android.nucleo.NucleoBaseClient;
-import com.neatorobotics.sdk.android.nucleo.NucleoCommands;
+import com.neatorobotics.sdk.android.nucleo.RobotCommands;
 import com.neatorobotics.sdk.android.nucleo.NucleoResponse;
 
 import org.json.JSONObject;
 
 /**
- * Created by Marco on 11/03/16.
+ * Neato-SDK
+ * Created by Marco on 06/05/16.
+ * Copyright © 2016 Neato Robotics. All rights reserved.
+ *
+ * This class represents a Robot and must be used to invoke commands. You can obtains your NeatoRobot
+ * from the NeatoUser.loadRobots method.
  */
 public class NeatoRobot{
 
@@ -21,6 +27,7 @@ public class NeatoRobot{
 
     private Context context;
     //the serializable model
+    //use it to save and restore the NeatoRobot state
     private Robot robot;
 
     private String baseUrl;
@@ -35,16 +42,18 @@ public class NeatoRobot{
         this.robot = robot;
     }
 
+    //this method is automatically invoked when a Nucleo call contains the robot state, so the
+    //developer can immediatly use the updated robot state into the done() callbacks.
     private void setRobotState(JSONObject json) {
-        robot.state = new State(json);
+        robot.state = new RobotState(json);
     }
 
     /**
-     * Retrieve the user robots list.
+     * Update the robot state.
      * @param callback
      */
     public void updateRobotState(final NeatoCallback<Void> callback) {
-        JSONObject command = NucleoCommands.get(NucleoCommands.GET_ROBOT_STATE_COMMAND);
+        JSONObject command = RobotCommands.get(RobotCommands.GET_ROBOT_STATE_COMMAND);
         asyncCall.executeCall(this,context, baseUrl, robot.serial,command, robot.secret_key, new NeatoCallback<NucleoResponse>(){
             @Override
             public void done(NucleoResponse result) {
@@ -60,8 +69,17 @@ public class NeatoRobot{
         });
     }
 
+    /**
+     * Start the robot cleaning.
+     * @param params the JSON "params" property of the input commands.
+     * @param callback
+     */
     public void startCleaning(String params, final NeatoCallback<Void> callback) {
-        JSONObject command = NucleoCommands.get(NucleoCommands.START_CLEANING_COMMAND, params);
+        JSONObject command = RobotCommands.get(RobotCommands.START_CLEANING_COMMAND, params);
+        if(command == null) {
+            callback.fail(NeatoError.INVALID_JSON);
+            return;
+        }
         asyncCall.executeCall(this,context, baseUrl, robot.serial,command, robot.secret_key, new NeatoCallback<NucleoResponse>(){
             @Override
             public void done(NucleoResponse result) {
@@ -77,8 +95,12 @@ public class NeatoRobot{
         });
     }
 
+    /**
+     * Pause the robot cleaning.
+     * @param callback
+     */
     public void pauseCleaning(final NeatoCallback<Void> callback) {
-        JSONObject command = NucleoCommands.get(NucleoCommands.PAUSE_CLEANING_COMMAND);
+        JSONObject command = RobotCommands.get(RobotCommands.PAUSE_CLEANING_COMMAND);
         asyncCall.executeCall(this,context, baseUrl, robot.serial,command, robot.secret_key, new NeatoCallback<NucleoResponse>(){
             @Override
             public void done(NucleoResponse result) {
@@ -94,8 +116,12 @@ public class NeatoRobot{
         });
     }
 
+    /**
+     * Stop the robot cleaning.
+     * @param callback
+     */
     public void stopCleaning(final NeatoCallback<Void> callback) {
-        JSONObject command = NucleoCommands.get(NucleoCommands.STOP_CLEANING_COMMAND);
+        JSONObject command = RobotCommands.get(RobotCommands.STOP_CLEANING_COMMAND);
         asyncCall.executeCall(this,context, baseUrl, robot.serial,command, robot.secret_key, new NeatoCallback<NucleoResponse>(){
             @Override
             public void done(NucleoResponse result) {
@@ -111,8 +137,12 @@ public class NeatoRobot{
         });
     }
 
+    /**
+     * Resume the robot cleaning.
+     * @param callback
+     */
     public void resumeCleaning(final NeatoCallback<Void> callback) {
-        JSONObject command = NucleoCommands.get(NucleoCommands.RESUME_CLEANING_COMMAND);
+        JSONObject command = RobotCommands.get(RobotCommands.RESUME_CLEANING_COMMAND);
         asyncCall.executeCall(this,context, baseUrl, robot.serial,command, robot.secret_key, new NeatoCallback<NucleoResponse>(){
             @Override
             public void done(NucleoResponse result) {
@@ -128,8 +158,12 @@ public class NeatoRobot{
         });
     }
 
+    /**
+     * Return the robot to is charging base.
+     * @param callback
+     */
     public void goToBase(final NeatoCallback<Void> callback) {
-        JSONObject command = NucleoCommands.get(NucleoCommands.SEND_TO_BASE_CLEANING_COMMAND);
+        JSONObject command = RobotCommands.get(RobotCommands.SEND_TO_BASE_CLEANING_COMMAND);
         asyncCall.executeCall(this,context, baseUrl, robot.serial,command, robot.secret_key, new NeatoCallback<NucleoResponse>(){
             @Override
             public void done(NucleoResponse result) {
@@ -146,10 +180,21 @@ public class NeatoRobot{
     }
 
     //region serialization
+    /**
+     * Obtain a serializable version of this robot.
+     * You can deserialize it with the deserialize method.
+     * @return a Serializable object in order to eventually store this robot.
+     */
     public Object serialize() {
         return robot;
     }
 
+    /**
+     *
+     * @param context
+     * @param serializable the previously Serializable object obtained from the serialize method.
+     * @return a state restored NeatoRobot instance ready to be used.
+     */
     public static NeatoRobot deserialize(Context context, Object serializable) {
         return new NeatoRobot(context,(Robot) serializable);
     }
@@ -176,24 +221,15 @@ public class NeatoRobot{
         return robot.linkedAt;
     }
 
-    public int getRobotState() {
-        if(robot != null && robot.state != null) {
-            return robot.state.state;
-        }else return -1;
-    }
-
-    public int getRobotAction() {
-        if(robot != null && robot.state != null) {
-            return robot.state.action;
-        }else return -1;
+    @Nullable
+    public RobotState getState() {
+        if(robot!=null) return robot.state;
+        else return null;
     }
     //endregion
 
     //region async call
     private class AsyncCall {
-
-        private static final String TAG = "AsyncCall";
-
         public void executeCall(final NeatoRobot neatoRobot, final Context context, final String url, final String robot_serial, final JSONObject command, final String robotSecretKey, final NeatoCallback<NucleoResponse> callback) {
             final AsyncTask<Void, Void, NucleoResponse> task = new AsyncTask<Void, Void, NucleoResponse>() {
                 protected void onPreExecute() {}

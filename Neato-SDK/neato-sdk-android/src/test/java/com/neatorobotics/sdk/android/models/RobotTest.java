@@ -31,7 +31,7 @@ public class RobotTest {
                 "    }\n" +
                 "}";
         Robot robotTest = new Robot(new JSONObject("{}"));
-        State state = new State(new JSONObject("{}"));
+        RobotState state = new RobotState(new JSONObject("{}"));
         state.robotModelName = "BotVacConnected";
         state.firmware = "2.0.0";
         robotTest.state = state;
@@ -65,7 +65,7 @@ public class RobotTest {
                 "    }\n" +
                 "}";
         Robot robotTest = new Robot(new JSONObject("{}"));
-        State state = new State(new JSONObject("{}"));
+        RobotState state = new RobotState(new JSONObject("{}"));
         state.robotModelName = "BotVacConnected";
         state.firmware = "2.0.0";
         robotTest.state = state;
