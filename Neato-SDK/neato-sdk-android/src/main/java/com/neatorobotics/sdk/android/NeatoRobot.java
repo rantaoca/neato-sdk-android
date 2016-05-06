@@ -13,6 +13,8 @@ import com.neatorobotics.sdk.android.nucleo.NucleoResponse;
 
 import org.json.JSONObject;
 
+import java.io.Serializable;
+
 /**
  * Neato-SDK
  * Created by Marco on 06/05/16.
@@ -185,7 +187,7 @@ public class NeatoRobot{
      * You can deserialize it with the deserialize method.
      * @return a Serializable object in order to eventually store this robot.
      */
-    public Object serialize() {
+    public Serializable serialize() {
         return robot;
     }
 
@@ -195,7 +197,7 @@ public class NeatoRobot{
      * @param serializable the previously Serializable object obtained from the serialize method.
      * @return a state restored NeatoRobot instance ready to be used.
      */
-    public static NeatoRobot deserialize(Context context, Object serializable) {
+    public static NeatoRobot deserialize(Context context, Serializable serializable) {
         return new NeatoRobot(context,(Robot) serializable);
     }
     //endregion

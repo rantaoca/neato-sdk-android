@@ -1,5 +1,6 @@
 package com.neatorobotics.sdk.android.example.robots;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -17,8 +18,10 @@ import com.neatorobotics.sdk.android.NeatoUser;
 import com.neatorobotics.sdk.android.NeatoError;
 import com.neatorobotics.sdk.android.example.R;
 import com.neatorobotics.sdk.android.NeatoRobot;
+import com.neatorobotics.sdk.android.nucleo.RobotCommands;
 import com.neatorobotics.sdk.android.nucleo.RobotConstants;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Locale;
 
@@ -56,7 +59,7 @@ public class RobotsFragment extends Fragment {
         robots.clear();
         ArrayList serializedRobots = (ArrayList) inState.getSerializable("ROBOT_LIST");
         for (Object object : serializedRobots) {
-            robots.add(NeatoRobot.deserialize(getContext(),object));
+            robots.add(NeatoRobot.deserialize(getContext(),(Serializable) object));
         }
     }
 
@@ -120,6 +123,22 @@ public class RobotsFragment extends Fragment {
                 robots.addAll(result);
                 swipeContainer.setRefreshing(false);
                 mAdapter.notifyDataSetChanged();
+
+                //request the robot states
+                for (NeatoRobot robot : result) {
+                        robot.updateRobotState(new NeatoCallback<Void>(){
+                            @Override
+                            public void done(Void result) {
+                                super.done(result);
+                                mAdapter.notifyDataSetChanged();
+                            }
+
+                            @Override
+                            public void fail(NeatoError error) {
+                                super.fail(error);
+                            }
+                        });
+                }
             }
 
             @Override
@@ -137,12 +156,14 @@ public class RobotsFragment extends Fragment {
 
         public class ItemViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
 
-            public TextView robotName,robotModel;
+            public TextView robotName,robotModel, robotStatus, robotCharge;
 
             public ItemViewHolder(View v) {
                 super(v);
                 this.robotName = (TextView) v.findViewById(R.id.robotName);
                 this.robotModel = (TextView) v.findViewById(R.id.robotModel);
+                this.robotStatus = (TextView) v.findViewById(R.id.robotStatus);
+                this.robotCharge = (TextView) v.findViewById(R.id.robotCharge);
                 v.setOnClickListener(this);
             }
 
@@ -151,35 +172,10 @@ public class RobotsFragment extends Fragment {
                 int position = getAdapterPosition();
                 final NeatoRobot robot = robots.get(position);
 
-                robot.updateRobotState(new NeatoCallback<Void>(){
-                    @Override
-                    public void done(Void result) {
-                        super.done(result);
-                        Toast.makeText(getContext(),"Robot state: "+robot.getState().getState(), Toast.LENGTH_SHORT).show();
-                    }
-
-                    @Override
-                    public void fail(NeatoError error) {
-                        super.fail(error);
-                    }
-                });
-
-                String params = String.format(Locale.US,
-                                "{\"category\":%d,\"mode\":%d,\"modifier\":%d}",
-                                1,
-                                RobotConstants.ROBOT_CLEANING_MODE_ECO,1);
-
-                robot.startCleaning(params, new NeatoCallback<Void>(){
-                    @Override
-                    public void done(Void result) {
-                        super.done(result);
-                    }
-
-                    @Override
-                    public void fail(NeatoError error) {
-                        super.fail(error);
-                    }
-                });
+                Intent intent = new Intent(getContext(), RobotCommandsActivity.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
+                intent.putExtra("ROBOT",robot.serialize());
+                startActivity(intent);
             }
         }
 
@@ -199,6 +195,10 @@ public class RobotsFragment extends Fragment {
         public void onBindViewHolder(RecyclerView.ViewHolder holder, final int position) {
             ((ItemViewHolder)holder).robotName.setText(robots.get(position).getName());
             ((ItemViewHolder)holder).robotModel.setText(robots.get(position).getModel());
+            if(robots.get(position).getState() != null) {
+                ((ItemViewHolder) holder).robotStatus.setText(robots.get(position).getState().getState() + "");
+                ((ItemViewHolder) holder).robotCharge.setText(robots.get(position).getState().getCharge() + "%");
+            }
         }
 
 

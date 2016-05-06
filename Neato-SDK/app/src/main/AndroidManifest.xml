@@ -10,31 +10,35 @@
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-
         <activity
             android:name=".login.LoginActivity"
             android:launchMode="singleInstance">
             <intent-filter>
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
+
                 <action android:name="android.intent.action.VIEW" />
+
                 <data
                     android:host="neato"
                     android:scheme="marco-app" />
             </intent-filter>
         </activity>
-
         <activity android:name=".SplashActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
         <activity
             android:name=".robots.RobotsActivity"
             android:label="@string/title_activity_robots"
-            android:theme="@style/AppTheme.NoActionBar"/>
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".robots.RobotCommandsActivity"
+            android:label="@string/title_activity_robot_commands"
+            android:theme="@style/AppTheme.NoActionBar"></activity>
     </application>
 
 </manifest>
