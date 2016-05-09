@@ -83,4 +83,28 @@ public class RobotTest {
         state.firmware = "1.2.2";
         assertTrue(robotTest.isUpdateAvailable());
     }
+
+    @Test
+    public void hasService() throws Exception{
+        Robot robot = new Robot(null);
+        RobotState robotState = new RobotState(null);
+        robot.state = robotState;
+
+        robotState.availableServices.put("findMe","basic-1");
+
+        assertTrue(robot.hasService("findMe"));
+        assertFalse(robot.hasService("flyAndClean"));
+    }
+
+    @Test
+    public void hasServiceSpecificVersion() throws Exception{
+        Robot robot = new Robot(null);
+        RobotState robotState = new RobotState(null);
+        robot.state = robotState;
+
+        robotState.availableServices.put("findMe","basic-1");
+
+        assertTrue(robot.hasService("findMe","basic-1"));
+        assertFalse(robot.hasService("findMe","minimal-1"));
+    }
 }

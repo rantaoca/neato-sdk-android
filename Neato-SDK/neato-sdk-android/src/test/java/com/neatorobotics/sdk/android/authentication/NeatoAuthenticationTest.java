@@ -51,14 +51,14 @@ public class NeatoAuthenticationTest {
         NeatoOAuth2Scope[] scopes = new NeatoOAuth2Scope[]{NeatoOAuth2Scope.CONTROL_ROBOTS};
         assertTrue(neatoAuthentication.buildScopesParameter(scopes).equals("control_robots"));
 
-        scopes = new NeatoOAuth2Scope[]{NeatoOAuth2Scope.CONTROL_ROBOTS, NeatoOAuth2Scope.READ};
-        assertTrue(neatoAuthentication.buildScopesParameter(scopes).equals("control_robots,read"));
+        scopes = new NeatoOAuth2Scope[]{NeatoOAuth2Scope.CONTROL_ROBOTS, NeatoOAuth2Scope.EMAIL};
+        assertTrue(neatoAuthentication.buildScopesParameter(scopes).equals("control_robots+email"));
 
-        scopes = new NeatoOAuth2Scope[]{NeatoOAuth2Scope.READ, NeatoOAuth2Scope.CONTROL_ROBOTS};
-        assertTrue(neatoAuthentication.buildScopesParameter(scopes).equals("read,control_robots"));
+        scopes = new NeatoOAuth2Scope[]{NeatoOAuth2Scope.EMAIL, NeatoOAuth2Scope.CONTROL_ROBOTS};
+        assertTrue(neatoAuthentication.buildScopesParameter(scopes).equals("email+control_robots"));
 
-        scopes = new NeatoOAuth2Scope[]{NeatoOAuth2Scope.CONTROL_ROBOTS, NeatoOAuth2Scope.READ,NeatoOAuth2Scope.WRITE};
-        assertTrue(neatoAuthentication.buildScopesParameter(scopes).equals("control_robots,read,write"));
+        scopes = new NeatoOAuth2Scope[]{NeatoOAuth2Scope.CONTROL_ROBOTS, NeatoOAuth2Scope.EMAIL,NeatoOAuth2Scope.PUBLIC_PROFILE};
+        assertTrue(neatoAuthentication.buildScopesParameter(scopes).equals("control_robots+email+public_profile"));
 
         scopes = new NeatoOAuth2Scope[]{};
         assertTrue(neatoAuthentication.buildScopesParameter(scopes).equals(""));

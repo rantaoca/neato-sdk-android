@@ -105,6 +105,26 @@ public class NeatoUser {
         });
     }
 
+    /**
+     * Get information about the user currently authenticated.
+     * @param callback
+     */
+    public void getUserInfo(final NeatoCallback<JSONObject> callback) {
+        asyncCall.executeCall(neatoAuthentication.getOauth2AccessToken(), "GET", baseUrl+"/users/me", null, new NeatoCallback<BeehiveResponse>(){
+            @Override
+            public void done(BeehiveResponse result) {
+                super.done(result);
+                callback.done(result.getJSON());
+            }
+
+            @Override
+            public void fail(NeatoError error) {
+                super.fail(error);
+                callback.fail(error);
+            }
+        });
+    }
+
     //region async call
     protected class AsyncCall {
 
@@ -117,7 +137,7 @@ public class NeatoUser {
                     return BeehiveBaseClient.executeCall(accessToken,verb,url,input);
                 }
                 protected void onPostExecute(BeehiveResponse response) {
-                    if(response != null && response.isHttpOK()) {
+                    if(response != null && response.getJSON() != null && response.isHttpOK()) {
                         callback.done(response);
                     }else if(response != null && response.isUnauthorized()) {
                         callback.fail(NeatoError.INVALID_TOKEN);

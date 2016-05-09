@@ -84,12 +84,35 @@ public class RobotCommandsActivityFragment extends Fragment {
             }
         });
 
+        rootView.findViewById(R.id.resumeCleaning).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                executeResumeCleaning();
+            }
+        });
+
         return rootView;
     }
 
     private void executePause() {
         if(robot != null) {
             robot.pauseCleaning(new NeatoCallback<Void>(){
+                @Override
+                public void done(Void result) {
+                    super.done(result);
+                }
+
+                @Override
+                public void fail(NeatoError error) {
+                    super.fail(error);
+                }
+            });
+        }
+    }
+
+    private void executeResumeCleaning() {
+        if(robot != null) {
+            robot.resumeCleaning(new NeatoCallback<Void>(){
                 @Override
                 public void done(Void result) {
                     super.done(result);

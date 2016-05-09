@@ -102,7 +102,7 @@ public class NeatoAuthentication {
         if(scopes != null && scopes.length > 0) {
             for (NeatoOAuth2Scope scope : scopes) {
                 scopesBuffer.append(scope);
-                scopesBuffer.append(",");
+                scopesBuffer.append("+");
             }
             scopesBuffer.deleteCharAt(scopesBuffer.length()-1);
         }

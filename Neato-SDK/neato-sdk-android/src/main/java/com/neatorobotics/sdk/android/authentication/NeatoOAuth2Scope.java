@@ -6,8 +6,9 @@ package com.neatorobotics.sdk.android.authentication;
  * Copyright © 2016 Neato Robotics. All rights reserved.
  */
 public enum NeatoOAuth2Scope {
-    READ("read"),
-    WRITE("write"),
+    PUBLIC_PROFILE("public_profile"),
+    EMAIL("email"),
+    VIEW_ROBOTS("view_robots"),
     CONTROL_ROBOTS("control_robots");
 
     private final String permission;

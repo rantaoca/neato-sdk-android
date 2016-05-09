@@ -9,6 +9,7 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.neatorobotics.sdk.android.NeatoCallback;
@@ -16,6 +17,10 @@ import com.neatorobotics.sdk.android.NeatoUser;
 import com.neatorobotics.sdk.android.NeatoError;
 import com.neatorobotics.sdk.android.example.R;
 import com.neatorobotics.sdk.android.example.login.LoginActivity;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+import org.w3c.dom.Text;
 
 /**
  * Neato-SDK
@@ -26,6 +31,20 @@ public class RobotsActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
     private NeatoUser neatoUser;
+    private NavigationView navigationView;
+
+    private String userEmail;
+
+    private void restoreState(Bundle inState) {
+        userEmail = inState.getString("EMAIL");
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+
+        outState.putString("EMAIL", userEmail);
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,6 +52,8 @@ public class RobotsActivity extends AppCompatActivity
         setContentView(R.layout.activity_robots);
 
         neatoUser = NeatoUser.getInstance(this);
+
+        navigationView = (NavigationView)findViewById(R.id.nav_view);
 
         //Toolbar
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -49,8 +70,33 @@ public class RobotsActivity extends AppCompatActivity
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
-        //This is your OAuth2.0 access token
-        //Toast.makeText(getApplicationContext(),neatoClient.getOauth2AccessToken(),Toast.LENGTH_SHORT).show();
+        //Retrieve user email
+        if(savedInstanceState == null) {
+            neatoUser.getUserInfo(new NeatoCallback<JSONObject>(){
+                @Override
+                public void done(JSONObject result) {
+                    super.done(result);
+                    try {
+                        userEmail = result.getString("email");
+                    } catch (JSONException e) {e.printStackTrace();}
+                    fillUserInfo();
+                }
+
+                @Override
+                public void fail(NeatoError error) {
+                    super.fail(error);
+                }
+            });
+        }else {
+            restoreState(savedInstanceState);
+            fillUserInfo();
+        }
+    }
+
+    private void fillUserInfo() {
+        if(userEmail!= null) {
+            ((TextView)(navigationView.getHeaderView(0).findViewById(R.id.emailText))).setText(userEmail);
+        }
     }
 
     @Override

@@ -3,6 +3,7 @@ package com.neatorobotics.sdk.android;
 import android.content.Context;
 import android.test.suitebuilder.annotation.SmallTest;
 
+import com.neatorobotics.sdk.android.authentication.DefaultAccessTokenDatasource;
 import com.neatorobotics.sdk.android.authentication.NeatoAuthentication;
 import com.neatorobotics.sdk.android.beehive.BeehiveResponse;
 
@@ -10,6 +11,7 @@ import org.json.JSONObject;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.mockito.invocation.InvocationOnMock;
@@ -18,6 +20,7 @@ import org.mockito.stubbing.Answer;
 
 import java.net.HttpURLConnection;
 import java.util.ArrayList;
+import java.util.List;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
@@ -60,6 +63,17 @@ public class NeatoUserTest {
     @Test
     public void singletonTest() throws Exception {
         NeatoUser neatoUser1 = NeatoUser.getInstance(ctx);
+        assertNotNull(neatoUser1);
+
+        NeatoUser neatoUser2 = NeatoUser.getInstance(ctx);
+        assertNotNull(neatoUser2);
+
+        assertEquals(neatoUser1, neatoUser2);
+    }
+
+    @Test
+    public void singletonWithCustomDatasourceTest() throws Exception {
+        NeatoUser neatoUser1 = NeatoUser.getInstance(ctx, new DefaultAccessTokenDatasource(ctx));
         assertNotNull(neatoUser1);
 
         NeatoUser neatoUser2 = NeatoUser.getInstance(ctx);
@@ -168,5 +182,45 @@ public class NeatoUserTest {
 
         verify(mockNeatoCallback, never()).fail(any(NeatoError.class));
         verify(mockNeatoCallback).done(any(ArrayList.class));
+    }
+
+    @Test
+    public void getUserInfo() throws Exception {
+        final BeehiveResponse response = new BeehiveResponse(HttpURLConnection.HTTP_OK, new JSONObject(MockJSON.loadJSON(this,"json/user/me.json")));
+
+        doAnswer(new Answer() {
+            @Override
+            public Object answer(InvocationOnMock invocation) throws Throwable {
+                ((NeatoCallback) invocation.getArguments()[4]).done(response);
+                return null;
+            }
+        }).when(mockBaseClient).executeCall(anyString(),anyString(),anyString(),any(JSONObject.class),any(NeatoCallback.class));
+
+        neatoUser.getUserInfo(mockNeatoCallback);
+
+        verify(mockNeatoCallback, never()).fail(any(NeatoError.class));
+
+        ArgumentCaptor<JSONObject> argument = ArgumentCaptor.forClass(JSONObject.class);
+        verify(mockNeatoCallback).done(argument.capture());
+        assertEquals("marco@example.com", argument.getValue().getString("email"));
+        assertEquals("Marco", argument.getValue().getString("first_name"));
+        assertEquals("Uberti", argument.getValue().getString("last_name"));
+    }
+
+    @Test
+    public void getUserInfoFail() throws Exception {
+        final BeehiveResponse response = new BeehiveResponse(HttpURLConnection.HTTP_OK, new JSONObject(MockJSON.loadJSON(this,"json/user/me.json")));
+
+        doAnswer(new Answer() {
+            @Override
+            public Object answer(InvocationOnMock invocation) throws Throwable {
+                ((NeatoCallback) invocation.getArguments()[4]).fail(NeatoError.GENERIC_ERROR);
+                return null;
+            }
+        }).when(mockBaseClient).executeCall(anyString(),anyString(),anyString(),any(JSONObject.class),any(NeatoCallback.class));
+
+        neatoUser.getUserInfo(mockNeatoCallback);
+
+        verify(mockNeatoCallback).fail(NeatoError.GENERIC_ERROR);
     }
 }

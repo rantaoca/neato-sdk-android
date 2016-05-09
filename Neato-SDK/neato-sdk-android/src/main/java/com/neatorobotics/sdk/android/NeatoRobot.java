@@ -239,7 +239,7 @@ public class NeatoRobot{
                     return NucleoBaseClient.executeNucleoCall(url,robot_serial,command,robotSecretKey);
                 }
                 protected void onPostExecute(NucleoResponse response) {
-                    if(response != null && response.isOK()) {
+                    if(response != null  && response.getJSON() != null && response.isOK()) {
                         if(response.isStateResponse()) neatoRobot.setRobotState(response.getJSON());
                         callback.done(response);
                     }

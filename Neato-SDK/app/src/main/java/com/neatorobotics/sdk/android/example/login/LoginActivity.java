@@ -32,7 +32,7 @@ public class LoginActivity extends AppCompatActivity {
 
     String REDIRECT_URI = "marco-app://neato";
     String CLIENT_ID = "c54d0ac5def8323befb61cfc74e514af80bde385d878c23e47ca990fccb40258";
-    NeatoOAuth2Scope[] scopes = new NeatoOAuth2Scope[]{NeatoOAuth2Scope.CONTROL_ROBOTS};
+    NeatoOAuth2Scope[] scopes = new NeatoOAuth2Scope[]{NeatoOAuth2Scope.CONTROL_ROBOTS,NeatoOAuth2Scope.EMAIL};
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
