@@ -181,6 +181,29 @@ public class NeatoRobot{
         });
     }
 
+    /**
+     * Execute a raw robot call
+     *
+     * This method exists if the developer need to invoke commands not yet implemented into the SDK.
+     * @param command the full JSON input command to send to the robot
+     * @param callback the full JSON response from the robot
+     */
+    public void executeRobotCall(JSONObject command, final NeatoCallback<JSONObject> callback) {
+        asyncCall.executeCall(this,context, baseUrl, robot.serial,command, robot.secret_key, new NeatoCallback<NucleoResponse>(){
+            @Override
+            public void done(NucleoResponse result) {
+                super.done(result);
+                if(result == null) {
+                    callback.fail(NeatoError.GENERIC_ERROR);
+                }else if(result.isHttpOK()) {
+                    callback.done(result.getJSON());
+                }else {
+                    callback.fail(NeatoError.GENERIC_ERROR);
+                }
+            }
+        });
+    }
+
     //region serialization
     /**
      * Obtain a serializable version of this robot.

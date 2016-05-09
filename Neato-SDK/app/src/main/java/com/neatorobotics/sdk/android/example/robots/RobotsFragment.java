@@ -172,10 +172,14 @@ public class RobotsFragment extends Fragment {
                 int position = getAdapterPosition();
                 final NeatoRobot robot = robots.get(position);
 
-                Intent intent = new Intent(getContext(), RobotCommandsActivity.class);
-                intent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
-                intent.putExtra("ROBOT",robot.serialize());
-                startActivity(intent);
+                if(robot.getState() != null) {
+                    Intent intent = new Intent(getContext(), RobotCommandsActivity.class);
+                    intent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
+                    intent.putExtra("ROBOT", robot.serialize());
+                    startActivity(intent);
+                }else {
+                    Toast.makeText(getContext(),"No robot state available yet...", Toast.LENGTH_SHORT).show();
+                }
             }
         }
 
@@ -196,8 +200,27 @@ public class RobotsFragment extends Fragment {
             ((ItemViewHolder)holder).robotName.setText(robots.get(position).getName());
             ((ItemViewHolder)holder).robotModel.setText(robots.get(position).getModel());
             if(robots.get(position).getState() != null) {
-                ((ItemViewHolder) holder).robotStatus.setText(robots.get(position).getState().getState() + "");
                 ((ItemViewHolder) holder).robotCharge.setText(robots.get(position).getState().getCharge() + "%");
+                if(robots.get(position).getState().getState() == RobotConstants.ROBOT_STATE_IDLE) {
+                    ((ItemViewHolder) holder).robotStatus.setTextColor(getResources().getColor(R.color.green));
+                    ((ItemViewHolder) holder).robotStatus.setText("ROBOT IDLE");
+                }else if(robots.get(position).getState().getState() == RobotConstants.ROBOT_STATE_BUSY){
+                    ((ItemViewHolder) holder).robotStatus.setTextColor(getResources().getColor(R.color.yellow));
+                    ((ItemViewHolder) holder).robotStatus.setText("ROBOT BUSY");
+                }else if(robots.get(position).getState().getState() == RobotConstants.ROBOT_STATE_ERROR){
+                    ((ItemViewHolder) holder).robotStatus.setTextColor(getResources().getColor(R.color.colorAccent));
+                    ((ItemViewHolder) holder).robotStatus.setText("ROBOT ERROR");
+                }else {
+                    ((ItemViewHolder) holder).robotStatus.setTextColor(getResources().getColor(R.color.colorPrimary));
+                    ((ItemViewHolder) holder).robotStatus.setText("OTHER ROBOT STATE");
+                }
+
+                ((ItemViewHolder) holder).robotCharge.setTextColor(getResources().getColor(R.color.colorPrimary));
+            }else {
+                ((ItemViewHolder) holder).robotStatus.setText("Not available or offline");
+                ((ItemViewHolder) holder).robotCharge.setText("Battery status not available");
+                ((ItemViewHolder) holder).robotStatus.setTextColor(getResources().getColor(R.color.colorAccent));
+                ((ItemViewHolder) holder).robotCharge.setTextColor(getResources().getColor(R.color.colorAccent));
             }
         }
 

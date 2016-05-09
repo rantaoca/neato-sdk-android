@@ -27,8 +27,12 @@ public class RobotCommandsActivity extends AppCompatActivity {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
+                Snackbar.make(view, "Reloading robot state...", Snackbar.LENGTH_LONG)
                         .setAction("Action", null).show();
+                RobotCommandsActivityFragment fragment = ((RobotCommandsActivityFragment)getSupportFragmentManager().findFragmentById(R.id.robotCommandFragment));
+                if(fragment != null) {
+                    fragment.reloadRobotState();
+                }
             }
         });
 

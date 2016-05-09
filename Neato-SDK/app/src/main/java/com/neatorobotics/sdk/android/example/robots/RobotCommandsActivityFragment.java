@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 
 import com.neatorobotics.sdk.android.NeatoCallback;
 import com.neatorobotics.sdk.android.NeatoError;
@@ -24,6 +25,8 @@ import java.util.Locale;
 public class RobotCommandsActivityFragment extends Fragment {
 
     protected NeatoRobot robot;
+
+    private Button houseCleaning, spotCleaning, pauseCleaning, stopCleaning, resumeCleaning, returnToBaseCleaning;
 
     public RobotCommandsActivityFragment() {
     }
@@ -49,42 +52,50 @@ public class RobotCommandsActivityFragment extends Fragment {
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_robot_commands, container, false);
 
-        rootView.findViewById(R.id.spotCleaning).setOnClickListener(new View.OnClickListener() {
+        houseCleaning = (Button)rootView.findViewById(R.id.houseCleaning);
+        spotCleaning = (Button)rootView.findViewById(R.id.spotCleaning);
+        pauseCleaning = (Button)rootView.findViewById(R.id.pauseCleaning);
+        stopCleaning = (Button)rootView.findViewById(R.id.stopCleaning);
+        resumeCleaning = (Button)rootView.findViewById(R.id.resumeCleaning);
+        returnToBaseCleaning = (Button)rootView.findViewById(R.id.returnToBaseCleaning);
+
+
+        spotCleaning.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 executeSpotCleaning();
             }
         });
 
-        rootView.findViewById(R.id.houseCleaning).setOnClickListener(new View.OnClickListener() {
+        houseCleaning.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 executeHouseCleaning();
             }
         });
 
-        rootView.findViewById(R.id.pauseCleaning).setOnClickListener(new View.OnClickListener() {
+        pauseCleaning.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 executePause();
             }
         });
 
-        rootView.findViewById(R.id.stopCleaning).setOnClickListener(new View.OnClickListener() {
+        stopCleaning.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 executeStop();
             }
         });
 
-        rootView.findViewById(R.id.returnToBaseCleaning).setOnClickListener(new View.OnClickListener() {
+        returnToBaseCleaning.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 executeReturnToBase();
             }
         });
 
-        rootView.findViewById(R.id.resumeCleaning).setOnClickListener(new View.OnClickListener() {
+        resumeCleaning.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 executeResumeCleaning();
@@ -94,17 +105,37 @@ public class RobotCommandsActivityFragment extends Fragment {
         return rootView;
     }
 
+    private void updateUIButtons() {
+        if(robot != null && robot.getState() != null) {
+            houseCleaning.setEnabled(robot.getState().isStartAvailable());
+            spotCleaning.setEnabled(robot.getState().isStartAvailable());
+            pauseCleaning.setEnabled(robot.getState().isPauseAvailable());
+            stopCleaning.setEnabled(robot.getState().isStopAvailable());
+            resumeCleaning.setEnabled(robot.getState().isResumeAvailable());
+            returnToBaseCleaning.setEnabled(robot.getState().isGoToBaseAvailable());
+        }else {
+            houseCleaning.setEnabled(false);
+            spotCleaning.setEnabled(false);
+            pauseCleaning.setEnabled(false);
+            stopCleaning.setEnabled(false);
+            resumeCleaning.setEnabled(false);
+            returnToBaseCleaning.setEnabled(false);
+        }
+    }
+
     private void executePause() {
         if(robot != null) {
             robot.pauseCleaning(new NeatoCallback<Void>(){
                 @Override
                 public void done(Void result) {
                     super.done(result);
+                    updateUIButtons();
                 }
 
                 @Override
                 public void fail(NeatoError error) {
                     super.fail(error);
+                    updateUIButtons();
                 }
             });
         }
@@ -116,11 +147,13 @@ public class RobotCommandsActivityFragment extends Fragment {
                 @Override
                 public void done(Void result) {
                     super.done(result);
+                    updateUIButtons();
                 }
 
                 @Override
                 public void fail(NeatoError error) {
                     super.fail(error);
+                    updateUIButtons();
                 }
             });
         }
@@ -138,11 +171,13 @@ public class RobotCommandsActivityFragment extends Fragment {
                 @Override
                 public void done(Void result) {
                     super.done(result);
+                    updateUIButtons();
                 }
 
                 @Override
                 public void fail(NeatoError error) {
                     super.fail(error);
+                    updateUIButtons();
                 }
             });
         }
@@ -154,11 +189,13 @@ public class RobotCommandsActivityFragment extends Fragment {
                 @Override
                 public void done(Void result) {
                     super.done(result);
+                    updateUIButtons();
                 }
 
                 @Override
                 public void fail(NeatoError error) {
                     super.fail(error);
+                    updateUIButtons();
                 }
             });
         }
@@ -170,11 +207,13 @@ public class RobotCommandsActivityFragment extends Fragment {
                 @Override
                 public void done(Void result) {
                     super.done(result);
+                    updateUIButtons();
                 }
 
                 @Override
                 public void fail(NeatoError error) {
                     super.fail(error);
+                    updateUIButtons();
                 }
             });
         }
@@ -192,11 +231,13 @@ public class RobotCommandsActivityFragment extends Fragment {
                 @Override
                 public void done(Void result) {
                     super.done(result);
+                    updateUIButtons();
                 }
 
                 @Override
                 public void fail(NeatoError error) {
                     super.fail(error);
+                    updateUIButtons();
                 }
             });
         }
@@ -212,5 +253,22 @@ public class RobotCommandsActivityFragment extends Fragment {
 
     public void injectRobot(Robot robot) {
         this.robot = new NeatoRobot(getContext(),robot);
+        updateUIButtons();
+    }
+
+    public void reloadRobotState() {
+        robot.updateRobotState(new NeatoCallback<Void>(){
+            @Override
+            public void done(Void result) {
+                super.done(result);
+                updateUIButtons();
+            }
+
+            @Override
+            public void fail(NeatoError error) {
+                super.fail(error);
+                updateUIButtons();
+            }
+        });
     }
 }
