@@ -225,6 +225,27 @@ public class NeatoRobot{
     }
     //endregion
 
+    //region available services
+    /**
+     *
+     * @param serviceName
+     * @return true if the robot support this service, any version
+     */
+    public boolean hasService(String serviceName) {
+        return robot.hasService(serviceName);
+    }
+
+    /**
+     *
+     * @param serviceName
+     * @param serviceVersion
+     * @return true if the robot support this specific service version
+     */
+    public boolean hasService(String serviceName, String serviceVersion) {
+        return robot.hasService(serviceName,serviceVersion);
+    }
+    //endregion
+
     //region robot getters and setters
     public String getName() {
         return robot.name;

@@ -86,8 +86,8 @@ protected void onNewIntent(Intent intent) {
 
         switch (response.getType()) {
             case TOKEN:
-	            //the token is automatically saved for you by the
-	            //NeatoAuthentication class, no need to save it!
+                //the token is automatically saved for you by the
+                //NeatoAuthentication class, no need to save it!
                 //Yay! we can now play with our robots!!
                 break;
             case ERROR:
@@ -116,17 +116,157 @@ if(neatoAuth.isAuthenticated()) {
 
 
 ### Working with Users
+Once the user is authenticated you can retrieve user informations using the NeatoUser class:
 
+```java
+NeatoUser neatoUser = NeatoUser.getInstance(context);
+```
+#### Get user robots
+To get the user robots list you can do this:
+
+```java
+neatoUser.loadRobots(new NeatoCallback<ArrayList<NeatoRobot>>(){
+    @Override
+    public void done(ArrayList<NeatoRobot> result) {
+        super.done(result);
+        //now you have the robot list
+        }
+    }
+
+    @Override
+    public void fail(NeatoError error) {
+        super.fail(error);
+        }
+    }
+});
+```
+
+*NeatoRobot* is a special class we have developed for you that can be used to directly invoke commands on the robot, see next paragraphs.
+
+#### Get user info
+If you want to retrieve the logged user email you can do this:
+
+```java
+neatoUser.getUserInfo(new NeatoCallback<JSONObject>(){
+    @Override
+    public void done(JSONObject result) {
+        super.done(result);
+        try {
+            String userEmail = result.getString("email");
+        } catch (JSONException e) {e.printStackTrace();}
+    }
+
+    @Override
+    public void fail(NeatoError error) {
+        super.fail(error);
+    }
+});
+```
 
 ### Communicating with Robots
 Now that you have the robots for an authenticated user it’s time to communicate with them.
 In the previous call you've seen how easy is to retrieve `NeatoRobot` instances for your current user. Those instances are ready to receive messages from your app (if the robots are online obviously).
 
 #### The robot status
+Before we saw how to retrieve the robots list from the NeatoUser class. Is a best practice to check the robot state before sending commands to it otherwise the robot maybe in the situation he cannot accepts the command and returns an error code. To update/get the robot state do this:
 
+```java
+robot.updateRobotState(new NeatoCallback<Void>(){
+    @Override
+    public void done(Void result) {
+        super.done(result);
+        //the NeatoRobot state is now automatically filled
+        RobotState state = robot.getState();
+    }
+
+    @Override
+    public void fail(NeatoError error) {
+        super.fail(error);
+        //the robot maybe OFFLINE or in ERROR state
+        //check the NeatoError for details
+    }
+});
+```
 
 #### Sending commands to a Robot
-An online robot is ready to receives your commands like `start cleaning`:
+An online robot is ready to receives your commands like `start cleaning`. Some commands require parameters others not, see the API doc for details.
+
+```java
+robot.pauseCleaning(new NeatoCallback<Void>(){
+    @Override
+    public void done(Void result) {
+        super.done(result);
+    }
+
+    @Override
+    public void fail(NeatoError error) {
+        super.fail(error);
+    }
+});
+```
+
+```java
+String params = String.format(Locale.US,
+                "{\"category\":%d,\"mode\":%d,\"modifier\":%d}",
+                RobotConstants.ROBOT_CLEANING_CATEGORY_HOUSE,
+                RobotConstants.ROBOT_CLEANING_MODE_ECO,
+                RobotConstants.ROBOT_CLEANING_MODIFIER_NORMAL);
+
+robot.startCleaning(params, new NeatoCallback<Void>(){
+    @Override
+    public void done(Void result) {
+        super.done(result);
+    }
+
+    @Override
+    public void fail(NeatoError error) {
+        super.fail(error);
+    }
+});
+```
+
+#### Checking robot available services
+
+Different robot models and versions have different features. So before sending commands to the robot you should check if that command is available on the robot. Otherwise the robot will responde with an error. You can check the available services on the robot looking into the *RobotState* class:
+
+```java
+HashMap<String, String> services = robot.getState().getAvailableServices();
+```
+
+In addition there are some utility methods you can use to check if the robot support the services.
+
+```java
+//any version
+boolean supportFindMe = robot.hasService("findMe");
+```
+
+```java
+//specific service version
+boolean supportManualCleaning = robot.hasService("manualCleaning","basic-1");
+```
+
+#### How to pass the NeatoRobot class throught activities
+*NeatoRobot* has two useful methods, *serialize()* and *deserialize()* that can be used in order to pass the robot throught different activities.  For example in the first activity, say the robots list, we can click on the robot and pass it to the robot commands activity:
+
+```java
+public void onRobotClick(NeatoRobot robot) {
+    Intent intent = new Intent(getContext(), RobotCommandsActivity.class);
+    intent.putExtra("ROBOT", robot.serialize());
+    startActivity(intent);
+}
+```
+
+And in the onCreate method of the receiving activity:
+
+```java
+Bundle extras = getIntent().getExtras();
+if (extras != null) {
+    Robot serialized = (Robot)extras.getSerializable("ROBOT");
+    this.robot = new NeatoRobot(getContext(),serialized);
+}
+```
+
+In the same way you can save and restore your activities and fragments state when needed.
 
 
 
