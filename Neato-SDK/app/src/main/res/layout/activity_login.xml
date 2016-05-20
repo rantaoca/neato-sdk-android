@@ -3,11 +3,14 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.neatorobotics.sdk.android.example.OAuth2Activity">
+    tools:context="com.neatorobotics.sdk.android.example.login.LoginActivity">
 
-    <Button
+    <ImageButton
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="LOGIN"
+        android:text=""
+        android:background="@android:color/transparent"
+        android:src="@drawable/login_button"
+        android:layout_centerInParent="true"
         android:onClick="loginClick"/>
 </RelativeLayout>
