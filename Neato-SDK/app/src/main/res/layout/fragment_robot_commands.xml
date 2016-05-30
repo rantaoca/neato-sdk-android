@@ -43,5 +43,10 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Return to base cleaning"/>
+        <Button
+            android:id="@+id/findMe"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Find me"/>
     </LinearLayout>
 </RelativeLayout>

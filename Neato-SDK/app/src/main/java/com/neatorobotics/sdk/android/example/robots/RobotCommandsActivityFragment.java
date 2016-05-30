@@ -7,6 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.Toast;
 
 import com.neatorobotics.sdk.android.NeatoCallback;
 import com.neatorobotics.sdk.android.NeatoError;
@@ -26,7 +27,8 @@ public class RobotCommandsActivityFragment extends Fragment {
 
     protected NeatoRobot robot;
 
-    private Button houseCleaning, spotCleaning, pauseCleaning, stopCleaning, resumeCleaning, returnToBaseCleaning;
+    private Button houseCleaning, spotCleaning, pauseCleaning,
+                    stopCleaning, resumeCleaning, returnToBaseCleaning, findMe;
 
     public RobotCommandsActivityFragment() {
     }
@@ -58,7 +60,7 @@ public class RobotCommandsActivityFragment extends Fragment {
         stopCleaning = (Button)rootView.findViewById(R.id.stopCleaning);
         resumeCleaning = (Button)rootView.findViewById(R.id.resumeCleaning);
         returnToBaseCleaning = (Button)rootView.findViewById(R.id.returnToBaseCleaning);
-
+        findMe = (Button)rootView.findViewById(R.id.findMe);
 
         spotCleaning.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -99,6 +101,13 @@ public class RobotCommandsActivityFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 executeResumeCleaning();
+            }
+        });
+
+        findMe.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                executeFindMe();
             }
         });
 
@@ -198,6 +207,29 @@ public class RobotCommandsActivityFragment extends Fragment {
                     updateUIButtons();
                 }
             });
+        }
+    }
+
+    private void executeFindMe() {
+        if(robot != null) {
+            //check if the robot support this service
+            if(robot.hasService("findMe")) {
+                robot.findMe(new NeatoCallback<Void>() {
+                    @Override
+                    public void done(Void result) {
+                        super.done(result);
+                        updateUIButtons();
+                    }
+
+                    @Override
+                    public void fail(NeatoError error) {
+                        super.fail(error);
+                        updateUIButtons();
+                    }
+                });
+            }else {
+                Toast.makeText(getContext(),"The robot doesn't support this service.",Toast.LENGTH_SHORT).show();
+            }
         }
     }
 

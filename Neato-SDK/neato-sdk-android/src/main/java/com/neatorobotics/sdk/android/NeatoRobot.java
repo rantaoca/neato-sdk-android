@@ -161,6 +161,27 @@ public class NeatoRobot{
     }
 
     /**
+     * Find the robot (the robot should beep)
+     * @param callback
+     */
+    public void findMe(final NeatoCallback<Void> callback) {
+        JSONObject command = RobotCommands.get(RobotCommands.FIND_ME_COMMAND);
+        asyncCall.executeCall(this,context, baseUrl, robot.serial,command, robot.secret_key, new NeatoCallback<NucleoResponse>(){
+            @Override
+            public void done(NucleoResponse result) {
+                super.done(result);
+                if(result == null) {
+                    callback.fail(NeatoError.GENERIC_ERROR);
+                }else if(result.isHttpOK()) {
+                    callback.done(null);
+                }else {
+                    callback.fail(NeatoError.GENERIC_ERROR);
+                }
+            }
+        });
+    }
+
+    /**
      * Return the robot to is charging base.
      * @param callback
      */
