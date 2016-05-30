@@ -3,12 +3,14 @@ package com.neatorobotics.sdk.android.example.login;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 
-import com.neatorobotics.sdk.android.NeatoUser;
 import com.neatorobotics.sdk.android.authentication.NeatoAuthentication;
 import com.neatorobotics.sdk.android.authentication.NeatoAuthenticationResponse;
 import com.neatorobotics.sdk.android.authentication.NeatoOAuth2Scope;
@@ -38,6 +40,8 @@ public class LoginActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
 
         neatoAuth = NeatoAuthentication.getInstance(this);
     }

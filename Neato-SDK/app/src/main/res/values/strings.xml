@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Neato SDK Sample App</string>
+    <string name="app_name">Neato SDK</string>
     <string name="title_activity_robots">My Robots</string>
 
     <string name="navigation_drawer_open">Open navigation drawer</string>
@@ -7,4 +7,5 @@
 
     <string name="action_settings">Settings</string>
     <string name="title_activity_robot_commands">Robot Commands</string>
+    <string name="large_text">This is the official Android SDK for the Neato API services. Importing the Neato SDK in your projects you can easily implement applications that communicate with Neato robots. We did the hard work for you so you can focus on implementing your apps!</string>
 </resources>
