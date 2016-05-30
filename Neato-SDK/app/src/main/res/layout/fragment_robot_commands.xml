@@ -10,43 +10,44 @@
     tools:showIn="@layout/activity_robot_commands">
 
     <LinearLayout
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical">
         <Button
             android:id="@+id/spotCleaning"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Start spot cleaning"/>
         <Button
             android:id="@+id/houseCleaning"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Start house cleaning"/>
         <Button
             android:id="@+id/pauseCleaning"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Pause cleaning"/>
         <Button
             android:id="@+id/stopCleaning"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Stop cleaning"/>
         <Button
             android:id="@+id/resumeCleaning"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Resume cleaning"/>
         <Button
             android:id="@+id/returnToBaseCleaning"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Return to base cleaning"/>
         <Button
             android:id="@+id/findMe"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Find me"/>
+        
     </LinearLayout>
 </RelativeLayout>

@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android" >
+    <item>
+        <shape
+            android:shape="oval">
+            <stroke android:width="12dp" android:color="@color/colorPrimary" />
+            <solid android:color="@android:color/transparent" />
+            <corners
+                android:radius="0dp"/>
+            <padding
+                android:bottom="@dimen/activity_vertical_margin"
+                android:left="@dimen/activity_vertical_margin"
+                android:right="@dimen/activity_vertical_margin"
+                android:top="@dimen/activity_vertical_margin"/>
+            <size
+                android:width="200dp"
+                android:height="200dp"/>
+        </shape>
+    </item>
+</layer-list>
