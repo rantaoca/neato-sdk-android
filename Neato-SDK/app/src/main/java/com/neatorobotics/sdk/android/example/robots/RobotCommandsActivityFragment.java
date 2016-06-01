@@ -14,6 +14,7 @@ import com.neatorobotics.sdk.android.NeatoError;
 import com.neatorobotics.sdk.android.NeatoRobot;
 import com.neatorobotics.sdk.android.example.R;
 import com.neatorobotics.sdk.android.models.Robot;
+import com.neatorobotics.sdk.android.models.ScheduleEvent;
 import com.neatorobotics.sdk.android.nucleo.RobotConstants;
 
 import java.io.Serializable;
@@ -28,7 +29,8 @@ public class RobotCommandsActivityFragment extends Fragment {
     protected NeatoRobot robot;
 
     private Button houseCleaning, spotCleaning, pauseCleaning,
-                    stopCleaning, resumeCleaning, returnToBaseCleaning, findMe;
+                    stopCleaning, resumeCleaning, returnToBaseCleaning, findMe,
+                    enableDisableScheduling, scheduleEveryWednesday;
 
     public RobotCommandsActivityFragment() {
     }
@@ -62,6 +64,8 @@ public class RobotCommandsActivityFragment extends Fragment {
         resumeCleaning = (Button)rootView.findViewById(R.id.resumeCleaning);
         returnToBaseCleaning = (Button)rootView.findViewById(R.id.returnToBaseCleaning);
         findMe = (Button)rootView.findViewById(R.id.findMe);
+        enableDisableScheduling = (Button)rootView.findViewById(R.id.enableDisableScheduling);
+        scheduleEveryWednesday = (Button)rootView.findViewById(R.id.wednesdayScheduling);
 
         spotCleaning.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -109,6 +113,20 @@ public class RobotCommandsActivityFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 executeFindMe();
+            }
+        });
+
+        enableDisableScheduling.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                enableDisableScheduling();
+            }
+        });
+
+        scheduleEveryWednesday.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                scheduleEveryWednesday();
             }
         });
 
@@ -231,6 +249,71 @@ public class RobotCommandsActivityFragment extends Fragment {
             }else {
                 Toast.makeText(getContext(),"The robot doesn't support this service.",Toast.LENGTH_SHORT).show();
             }
+        }
+    }
+
+    private void enableDisableScheduling() {
+        if(robot != null) {
+            if(robot.getState().isScheduleEnabled()) {
+                robot.disableScheduling(new NeatoCallback<Void>() {
+                    @Override
+                    public void done(Void result) {
+                        super.done(result);
+                        updateUIButtons();
+                        Toast.makeText(getContext(),"Scheduling disabled!",Toast.LENGTH_SHORT).show();
+                    }
+
+                    @Override
+                    public void fail(NeatoError error) {
+                        super.fail(error);
+                        updateUIButtons();
+                        Toast.makeText(getContext(),"Impossible to disable scheduling.",Toast.LENGTH_SHORT).show();
+                    }
+                });
+            }else {
+                robot.enableScheduling(new NeatoCallback<Void>() {
+                    @Override
+                    public void done(Void result) {
+                        super.done(result);
+                        updateUIButtons();
+                        Toast.makeText(getContext(),"Scheduling enabled!",Toast.LENGTH_SHORT).show();
+                    }
+
+                    @Override
+                    public void fail(NeatoError error) {
+                        super.fail(error);
+                        updateUIButtons();
+                        Toast.makeText(getContext(),"Impossible to enable scheduling.",Toast.LENGTH_SHORT).show();
+                    }
+                });
+            }
+        }
+    }
+
+    private void scheduleEveryWednesday() {
+        if(robot != null) {
+            ScheduleEvent everyWednesday = new ScheduleEvent();
+            everyWednesday.mode = RobotConstants.ROBOT_CLEANING_MODE_TURBO;
+            everyWednesday.day = 3;//0 is Sunday, 1 Monday and so on
+            everyWednesday.startTime = "15:00";
+
+            ArrayList<ScheduleEvent> events = new ArrayList<>();
+            events.add(everyWednesday);
+            robot.setSchedule(events,new NeatoCallback<Void>(){
+                @Override
+                public void done(Void result) {
+                    super.done(result);
+                    updateUIButtons();
+                    Toast.makeText(getContext(),"Yay! Schedule programmed.",Toast.LENGTH_SHORT).show();
+                }
+
+                @Override
+                public void fail(NeatoError error) {
+                    super.fail(error);
+                    updateUIButtons();
+                    Toast.makeText(getContext(),"Oops! Impossible to set schedule.",Toast.LENGTH_SHORT).show();
+                }
+            });
         }
     }
 

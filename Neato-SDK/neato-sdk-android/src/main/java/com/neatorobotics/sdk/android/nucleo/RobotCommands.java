@@ -19,7 +19,7 @@ public class RobotCommands {
     public static String ENABLE_SCHEDULE_COMMAND =          "{\"reqId\": \"77\",\"cmd\": \"enableSchedule\"}";
     public static String DISABLE_SCHEDULE_COMMAND =         "{\"reqId\": \"77\",\"cmd\": \"disableSchedule\"}";
     public static String GET_ROBOT_SCHEDULE_COMMAND =       "{\"reqId\": \"77\",\"cmd\": \"getSchedule\"}";
-    public static String SET_SCHEDULE_COMMAND =             "{\"reqId\": \"77\",\"cmd\": \"setSchedule\",\"params\":{\"scheduleId\":\"0\",\"serverId\":0,\"type\":0,\"version\":0,EVENTS_PLACEHOLDER}}";
+    public static String SET_SCHEDULE_COMMAND =             "{\"reqId\": \"77\",\"cmd\": \"setSchedule\",\"params\":{\"type\":1,EVENTS_PLACEHOLDER}}";
     public static String CONNECT_TO_ROBOT_INFO_COMMAND =    "{\"reqId\": \"77\",\"cmd\": \"getRobotManualCleaningInfo\"}";
     public static String START_ROBOT_UPDATE =               "{\"reqId\": \"77\",\"cmd\": \"startSoftwareUpdate\",\"params\": {\"version\": \"VERSION_PLACEHOLDER\",\"url\": \"URL_PLACEHOLDER\",\"filesize\": SIZE_PLACEHOLDER}}";
     public static String GET_ROBOT_UPDATE_STATUS =          "{\"reqId\": \"77\",\"cmd\": \"getSoftwareUpdateState\"}";

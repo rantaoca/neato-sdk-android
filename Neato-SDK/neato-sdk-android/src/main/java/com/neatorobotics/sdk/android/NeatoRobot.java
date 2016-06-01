@@ -7,13 +7,16 @@ import android.support.annotation.VisibleForTesting;
 
 import com.neatorobotics.sdk.android.models.Robot;
 import com.neatorobotics.sdk.android.models.RobotState;
+import com.neatorobotics.sdk.android.models.ScheduleEvent;
 import com.neatorobotics.sdk.android.nucleo.NucleoBaseClient;
 import com.neatorobotics.sdk.android.nucleo.RobotCommands;
 import com.neatorobotics.sdk.android.nucleo.NucleoResponse;
+import com.neatorobotics.sdk.android.utils.SchedulingUtils;
 
 import org.json.JSONObject;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 
 /**
  * Neato-SDK
@@ -182,11 +185,102 @@ public class NeatoRobot{
     }
 
     /**
+     * Enable scheduling on the robot
+     * @param callback
+     */
+    public void enableScheduling(final NeatoCallback<Void> callback) {
+        JSONObject command = RobotCommands.get(RobotCommands.ENABLE_SCHEDULE_COMMAND);
+        asyncCall.executeCall(this,context, baseUrl, robot.serial,command, robot.secret_key, new NeatoCallback<NucleoResponse>(){
+            @Override
+            public void done(NucleoResponse result) {
+                super.done(result);
+                if(result == null) {
+                    callback.fail(NeatoError.GENERIC_ERROR);
+                }else if(result.isHttpOK()) {
+                    updateRobotState(new NeatoCallback<Void>(){
+                        @Override
+                        public void done(Void result) {
+                            super.done(result);
+                            callback.done(null);
+                        }
+
+                        @Override
+                        public void fail(NeatoError error) {
+                            super.fail(error);
+                            callback.fail(NeatoError.GENERIC_ERROR);
+                        }
+                    });
+                }else {
+                    callback.fail(NeatoError.GENERIC_ERROR);
+                }
+            }
+        });
+    }
+
+    /**
+     * Disable scheduling on the robot
+     * @param callback
+     */
+    public void disableScheduling(final NeatoCallback<Void> callback) {
+        JSONObject command = RobotCommands.get(RobotCommands.DISABLE_SCHEDULE_COMMAND);
+        asyncCall.executeCall(this,context, baseUrl, robot.serial,command, robot.secret_key, new NeatoCallback<NucleoResponse>(){
+            @Override
+            public void done(NucleoResponse result) {
+                super.done(result);
+                if(result == null) {
+                    callback.fail(NeatoError.GENERIC_ERROR);
+                }else if(result.isHttpOK()) {
+                    updateRobotState(new NeatoCallback<Void>(){
+                        @Override
+                        public void done(Void result) {
+                            super.done(result);
+                            callback.done(null);
+                        }
+
+                        @Override
+                        public void fail(NeatoError error) {
+                            super.fail(error);
+                            callback.fail(NeatoError.GENERIC_ERROR);
+                        }
+                    });
+                }else {
+                    callback.fail(NeatoError.GENERIC_ERROR);
+                }
+            }
+        });
+    }
+
+    /**
      * Return the robot to is charging base.
      * @param callback
      */
     public void goToBase(final NeatoCallback<Void> callback) {
         JSONObject command = RobotCommands.get(RobotCommands.SEND_TO_BASE_CLEANING_COMMAND);
+        asyncCall.executeCall(this,context, baseUrl, robot.serial,command, robot.secret_key, new NeatoCallback<NucleoResponse>(){
+            @Override
+            public void done(NucleoResponse result) {
+                super.done(result);
+                if(result == null) {
+                    callback.fail(NeatoError.GENERIC_ERROR);
+                }else if(result.isHttpOK()) {
+                    callback.done(null);
+                }else {
+                    callback.fail(NeatoError.GENERIC_ERROR);
+                }
+            }
+        });
+    }
+
+    /**
+     * Return the robot complete scheduling program.
+     * This override the previous scheduling program. You cannot add incremental schedule, but all
+     * the schedule events in one time.
+     * @param events
+     * @param callback
+     */
+    public void setSchedule(ArrayList<ScheduleEvent> events, final NeatoCallback<Void> callback) {
+        String eventsParams = SchedulingUtils.getEventsJSON(events,getState().getAvailableServices().get("schedule"));
+        JSONObject command = RobotCommands.get(RobotCommands.SET_SCHEDULE_COMMAND.replace("EVENTS_PLACEHOLDER","events:"+eventsParams));
         asyncCall.executeCall(this,context, baseUrl, robot.serial,command, robot.secret_key, new NeatoCallback<NucleoResponse>(){
             @Override
             public void done(NucleoResponse result) {

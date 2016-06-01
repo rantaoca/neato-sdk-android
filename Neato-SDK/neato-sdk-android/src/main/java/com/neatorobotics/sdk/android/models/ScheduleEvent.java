@@ -16,6 +16,7 @@ public class ScheduleEvent implements Serializable {
 
     private static final String TAG = "ScheduleEvent";
 
+    //public String eventId = "0";
     public String startTime;//24hours format
     public int mode, day;//0 is sunday
 
@@ -27,19 +28,21 @@ public class ScheduleEvent implements Serializable {
             }
             if(json.has("mode") && !json.isNull("mode")){
                 mode = json.getInt("mode");
-            }
+            }else mode = -1;
             if(json.has("day") && !json.isNull("day")){
                 day = json.getInt("day");
             }
         }catch(JSONException e) {Log.e(TAG, "Exception", e);}
     }
 
-    public JSONObject getJSON() {
+    public JSONObject getJSON(String scheduleVersion) {
         JSONObject json = new JSONObject();
         try {
             //json.put("eventId",eventId);
             json.put("startTime",startTime);
-            json.put("mode", mode);
+            if(!scheduleVersion.equalsIgnoreCase("minimal-1")) {
+                json.put("mode", mode);
+            }
             json.put("day",day);
         }catch(JSONException e) {Log.e(TAG, "Exception", e);return null;}
         return json;
