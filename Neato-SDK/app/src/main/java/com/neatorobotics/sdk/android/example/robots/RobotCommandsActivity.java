@@ -37,7 +37,7 @@ public class RobotCommandsActivity extends AppCompatActivity {
         });
 
         Bundle extras = getIntent().getExtras();
-        if (extras != null) {
+        if (extras != null && savedInstanceState == null) {
             Robot robot = (Robot)extras.getSerializable("ROBOT");
             //Inject robot class into fragment
             RobotCommandsActivityFragment fragment = ((RobotCommandsActivityFragment)getSupportFragmentManager().findFragmentById(R.id.robotCommandFragment));

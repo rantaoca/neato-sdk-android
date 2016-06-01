@@ -13,6 +13,12 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/activity_vertical_margin"
+            android:textSize="16sp"
+            android:text="@string/available_commands_message_text" />
         <Button
             android:id="@+id/spotCleaning"
             android:layout_width="match_parent"
@@ -43,11 +49,39 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Return to base cleaning"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/activity_vertical_margin"
+            android:textSize="16sp"
+            android:text="@string/scheduling_message_text" />
+        <Button
+            android:id="@+id/enableDisableScheduling"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Enable/Disable scheduling"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/activity_vertical_margin"
+            android:textSize="16sp"
+            android:text="@string/scheduling_every_wednesday_message_text" />
+        <Button
+            android:id="@+id/wednesdayScheduling"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Schedule every Wednesday at 3:00 pm"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/activity_vertical_margin"
+            android:textSize="16sp"
+            android:text="@string/find_me_message_text" />
         <Button
             android:id="@+id/findMe"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Find me"/>
-        
+
     </LinearLayout>
 </RelativeLayout>

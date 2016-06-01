@@ -41,6 +41,7 @@ public class RobotCommandsActivityFragment extends Fragment {
 
     private void restoreState(Bundle inState) {
         robot = new NeatoRobot(getContext(),(Robot) inState.getSerializable("ROBOT"));
+        updateUIButtons();
     }
 
     @Override

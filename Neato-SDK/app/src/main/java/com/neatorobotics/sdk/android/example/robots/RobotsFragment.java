@@ -202,7 +202,7 @@ public class RobotsFragment extends Fragment {
             if(robots.get(position).getState() != null) {
                 ((ItemViewHolder) holder).robotCharge.setText(robots.get(position).getState().getCharge() + "%");
                 if(robots.get(position).getState().getState() == RobotConstants.ROBOT_STATE_IDLE) {
-                    ((ItemViewHolder) holder).robotStatus.setTextColor(getResources().getColor(R.color.green));
+                    ((ItemViewHolder) holder).robotStatus.setTextColor(getResources().getColor(R.color.colorAccentSecondary));
                     ((ItemViewHolder) holder).robotStatus.setText("ROBOT IDLE");
                 }else if(robots.get(position).getState().getState() == RobotConstants.ROBOT_STATE_BUSY){
                     ((ItemViewHolder) holder).robotStatus.setTextColor(getResources().getColor(R.color.yellow));

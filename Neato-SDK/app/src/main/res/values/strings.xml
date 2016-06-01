@@ -8,4 +8,8 @@
     <string name="action_settings">Settings</string>
     <string name="title_activity_robot_commands">Robot Commands</string>
     <string name="large_text">This is the official Android SDK for the Neato API services. Importing the Neato SDK in your projects you can easily implement applications that communicate with Neato robots. We did the hard work for you so you can focus on implementing your apps!</string>
+    <string name="available_commands_message_text">These buttons are enabled or disabled on the base of the current robot state.</string>
+    <string name="find_me_message_text">The "find me" feature is available only on some robot models, so before calling it on the robot please check the service availability. In your app you can choose to completely hide this button if the robot doesn\'t support it.</string>
+    <string name="scheduling_message_text">You can enable or disable at all robot scheduling</string>
+    <string name="scheduling_every_wednesday_message_text">This button set the robot scheduling to \"every Wednesday at 3:00 pm\" in Turbo mode.</string>
 </resources>
