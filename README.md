@@ -189,7 +189,9 @@ robot.updateRobotState(new NeatoCallback<Void>(){
 ```
 
 #### Sending commands to a Robot
-An online robot is ready to receives your commands like `start cleaning`. Some commands require parameters others not, see the API doc for details.
+An online robot is ready to receives your commands like `start cleaning`. Some commands require parameters others not, see the API doc for details.  
+
+Pause cleaning doesn't require parameters:
 
 ```java
 robot.pauseCleaning(new NeatoCallback<Void>(){
@@ -204,6 +206,8 @@ robot.pauseCleaning(new NeatoCallback<Void>(){
     }
 });
 ```
+
+Start cleaning requires parameters like the cleaning type (clean all house or spot), the cleaning mode (eco or turbo) and, in case of spot cleaning, the spot cleaning parameters (large or small area, 1x or 2x).
 
 ```java
 String params = String.format(Locale.US,
@@ -224,6 +228,64 @@ robot.startCleaning(params, new NeatoCallback<Void>(){
     }
 });
 ```
+
+#### Working with Robot schedule
+
+To enable or disable at all the robot scheduling (scheduling data are not deleted from the robot):
+
+```java
+if(robot.getState().isScheduleEnabled()) {
+    robot.disableScheduling(new NeatoCallback<Void>() {
+        @Override
+        public void done(Void result) {
+            super.done(result);
+        }
+
+        @Override
+        public void fail(NeatoError error) {
+            super.fail(error);
+        }
+    });
+}else {
+    robot.enableScheduling(new NeatoCallback<Void>() {
+        @Override
+        public void done(Void result) {
+            super.done(result);
+        }
+
+        @Override
+        public void fail(NeatoError error) {
+            super.fail(error);
+    });
+}
+
+```
+
+To schedule house cleaning *every Wednesday at 15:00 in turbo mode*:
+```java
+ScheduleEvent everyWednesday = new ScheduleEvent();
+    everyWednesday.mode = RobotConstants.ROBOT_CLEANING_MODE_TURBO;
+    everyWednesday.day = 3;//0 is Sunday, 1 Monday and so on
+    everyWednesday.startTime = "15:00";
+    
+ArrayList<ScheduleEvent> events = new ArrayList<>();
+events.add(everyWednesday);
+robot.setSchedule(events,new NeatoCallback<Void>(){
+    @Override
+    public void done(Void result) {
+        super.done(result);
+    }
+
+    @Override
+    public void fail(NeatoError error) {
+        super.fail(error);
+    }
+});
+```
+
+*Note: not all robot models support the eco/turbo cleaning mode. You should check the robot available services before sending that parameters.*
+
+
 
 #### Checking robot available services
 
