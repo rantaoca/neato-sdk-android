@@ -119,25 +119,26 @@ public class RobotsFragment extends Fragment {
             @Override
             public void done(ArrayList<NeatoRobot> result) {
                 super.done(result);
+                boolean robotsCountChanged = result.size() != robots.size();
                 robots.clear();
                 robots.addAll(result);
                 swipeContainer.setRefreshing(false);
-                mAdapter.notifyDataSetChanged();
+                if(robotsCountChanged) mAdapter.notifyDataSetChanged();
 
                 //request the robot states
-                for (NeatoRobot robot : result) {
-                        robot.updateRobotState(new NeatoCallback<Void>(){
-                            @Override
-                            public void done(Void result) {
-                                super.done(result);
-                                mAdapter.notifyDataSetChanged();
-                            }
+                for (final NeatoRobot robot : result) {
+                    robot.updateRobotState(new NeatoCallback<Void>(){
+                        @Override
+                        public void done(Void result) {
+                            super.done(result);
+                            robotUpdated(robot);
+                        }
 
-                            @Override
-                            public void fail(NeatoError error) {
-                                super.fail(error);
-                            }
-                        });
+                        @Override
+                        public void fail(NeatoError error) {
+                            super.fail(error);
+                        }
+                    });
                 }
             }
 
@@ -150,6 +151,17 @@ public class RobotsFragment extends Fragment {
                 }
             }
         });
+    }
+
+    private void robotUpdated(NeatoRobot robot) {
+        int position = 0;
+        for(int i=0; i<robots.size();i++) {
+            if(robots.get(i).getSerial().equalsIgnoreCase(robot.getSerial())) {
+                position = i;
+                break;
+            }
+        }
+        mAdapter.notifyItemChanged(position);
     }
 
     public class RobotsListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
@@ -210,7 +222,9 @@ public class RobotsFragment extends Fragment {
                 }else if(robots.get(position).getState().getState() == RobotConstants.ROBOT_STATE_ERROR){
                     ((ItemViewHolder) holder).robotStatus.setTextColor(getResources().getColor(R.color.colorAccent));
                     ((ItemViewHolder) holder).robotStatus.setText("ROBOT ERROR");
-                }else {
+                }
+                //TODO you can handle other robot state here if needed
+                else {
                     ((ItemViewHolder) holder).robotStatus.setTextColor(getResources().getColor(R.color.colorPrimary));
                     ((ItemViewHolder) holder).robotStatus.setText("OTHER ROBOT STATE");
                 }
