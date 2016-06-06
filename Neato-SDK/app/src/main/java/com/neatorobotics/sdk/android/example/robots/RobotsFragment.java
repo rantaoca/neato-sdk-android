@@ -21,6 +21,8 @@ import com.neatorobotics.sdk.android.NeatoRobot;
 import com.neatorobotics.sdk.android.nucleo.RobotCommands;
 import com.neatorobotics.sdk.android.nucleo.RobotConstants;
 
+import org.w3c.dom.Text;
+
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Locale;
@@ -40,6 +42,7 @@ public class RobotsFragment extends Fragment {
     private RecyclerView.Adapter mAdapter;
     private RecyclerView.LayoutManager mLayoutManager;
     private SwipeRefreshLayout swipeContainer;
+    private TextView noRobotsAvailableMessage;
 
     private ArrayList<NeatoRobot> robots = new ArrayList<>();
 
@@ -102,6 +105,8 @@ public class RobotsFragment extends Fragment {
                 R.color.colorPrimaryDark,
                 R.color.colorPrimaryDark);
         //end swipe to refresh
+        noRobotsAvailableMessage = (TextView)rootView.findViewById(R.id.noRobotsAvailableMessage);
+
         return rootView;
     }
 
@@ -123,6 +128,11 @@ public class RobotsFragment extends Fragment {
                 robots.clear();
                 robots.addAll(result);
                 swipeContainer.setRefreshing(false);
+                if(result.size() == 0) {
+                    noRobotsAvailableMessage.setVisibility(View.VISIBLE);
+                }else {
+                    noRobotsAvailableMessage.setVisibility(View.GONE);
+                }
                 if(robotsCountChanged) mAdapter.notifyDataSetChanged();
 
                 //request the robot states
