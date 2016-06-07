@@ -124,7 +124,6 @@ public class RobotsFragment extends Fragment {
             @Override
             public void done(ArrayList<NeatoRobot> result) {
                 super.done(result);
-                boolean robotsCountChanged = result.size() != robots.size();
                 robots.clear();
                 robots.addAll(result);
                 swipeContainer.setRefreshing(false);
@@ -133,20 +132,21 @@ public class RobotsFragment extends Fragment {
                 }else {
                     noRobotsAvailableMessage.setVisibility(View.GONE);
                 }
-                if(robotsCountChanged) mAdapter.notifyDataSetChanged();
+                mAdapter.notifyDataSetChanged();
 
                 //request the robot states
-                for (final NeatoRobot robot : result) {
+                for (NeatoRobot robot : result) {
                     robot.updateRobotState(new NeatoCallback<Void>(){
                         @Override
                         public void done(Void result) {
                             super.done(result);
-                            robotUpdated(robot);
+                            mAdapter.notifyDataSetChanged();
                         }
 
                         @Override
                         public void fail(NeatoError error) {
                             super.fail(error);
+                            mAdapter.notifyDataSetChanged();
                         }
                     });
                 }
@@ -161,17 +161,6 @@ public class RobotsFragment extends Fragment {
                 }
             }
         });
-    }
-
-    private void robotUpdated(NeatoRobot robot) {
-        int position = 0;
-        for(int i=0; i<robots.size();i++) {
-            if(robots.get(i).getSerial().equalsIgnoreCase(robot.getSerial())) {
-                position = i;
-                break;
-            }
-        }
-        mAdapter.notifyItemChanged(position);
     }
 
     public class RobotsListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
