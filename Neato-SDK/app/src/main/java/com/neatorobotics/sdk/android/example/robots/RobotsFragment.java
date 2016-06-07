@@ -64,6 +64,11 @@ public class RobotsFragment extends Fragment {
         for (Object object : serializedRobots) {
             robots.add(NeatoRobot.deserialize(getContext(),(Serializable) object));
         }
+        if(robots.size() == 0) {
+            noRobotsAvailableMessage.setVisibility(View.VISIBLE);
+        }else {
+            noRobotsAvailableMessage.setVisibility(View.GONE);
+        }
     }
 
     @Override
@@ -72,10 +77,6 @@ public class RobotsFragment extends Fragment {
         setRetainInstance(true);
 
         neatoUser = NeatoUser.getInstance(getContext());
-
-        if(savedInstanceState != null) {
-            restoreState(savedInstanceState);
-        }
     }
 
     @Override
@@ -106,6 +107,10 @@ public class RobotsFragment extends Fragment {
                 R.color.colorPrimaryDark);
         //end swipe to refresh
         noRobotsAvailableMessage = (TextView)rootView.findViewById(R.id.noRobotsAvailableMessage);
+
+        if(savedInstanceState != null) {
+            restoreState(savedInstanceState);
+        }
 
         return rootView;
     }
