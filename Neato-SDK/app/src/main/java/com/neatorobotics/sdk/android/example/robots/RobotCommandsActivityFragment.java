@@ -190,10 +190,11 @@ public class RobotCommandsActivityFragment extends Fragment {
     private void executeHouseCleaning() {
         if(robot != null) {
             String params = String.format(Locale.US,
-                            "{\"category\":%d,\"mode\":%d,\"modifier\":%d}",
+                            "{\"category\":%d,\"mode\":%d,\"modifier\":%d,\"navigationMode\":%d}",
                             RobotConstants.ROBOT_CLEANING_CATEGORY_HOUSE,
                             RobotConstants.ROBOT_CLEANING_MODE_ECO,
-                            RobotConstants.ROBOT_CLEANING_MODIFIER_NORMAL);
+                            RobotConstants.ROBOT_CLEANING_MODIFIER_NORMAL,
+                            RobotConstants.ROBOT_EXTRA_CARE_MODE_OFF);
 
             robot.startCleaning(params, new NeatoCallback<Void>(){
                 @Override
@@ -338,10 +339,11 @@ public class RobotCommandsActivityFragment extends Fragment {
     private void executeSpotCleaning() {
         if(robot != null) {
             String params = String.format(Locale.US,
-                    "{\"category\":%d,\"mode\":%d,\"modifier\":%d}",
+                    "{\"category\":%d,\"mode\":%d,\"modifier\":%d,\"navigationMode\":%d}",
                     RobotConstants.ROBOT_CLEANING_CATEGORY_SPOT,
                     RobotConstants.ROBOT_CLEANING_MODE_ECO,
-                    RobotConstants.ROBOT_CLEANING_MODIFIER_NORMAL);
+                    RobotConstants.ROBOT_CLEANING_MODIFIER_NORMAL,
+                    RobotConstants.ROBOT_EXTRA_CARE_MODE_OFF);
 
             robot.startCleaning(params, new NeatoCallback<Void>(){
                 @Override

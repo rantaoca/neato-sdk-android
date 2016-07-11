@@ -34,4 +34,7 @@ public class RobotConstants {
 
     public final static int ROBOT_CLEANING_SPOT_SIZE_200 = 200;
     public final static int ROBOT_CLEANING_SPOT_SIZE_400 = 400;
+
+    public final static int ROBOT_EXTRA_CARE_MODE_OFF = 1;
+    public final static int ROBOT_EXTRA_CARE_MODE_ON = 2;
 }
