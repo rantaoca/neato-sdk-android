@@ -7,6 +7,19 @@ Importing the Neato SDK in your projects you can easily implement applications t
 
 To boost your development you can also check the *sample application*.
 
+## Before you start using the Neato Android SDK
+//TODO  explain the dev he has to create an app on the Neato Developer portar in order to obtain CLIENT ID, roles, redirect url schema....
+
+## What you cannot do with this SDK
+With this SDK you cannot do these things:
+
+ - Create the user Neato account: the user must to already have a Neato account (created from the Neato portal or from the official Neato App).
+ - Link the robot to the user account (this must to be achieved through the official Neato App).
+
+## A note about Manual Cleaning
+The SDK doesn't offer a ready to use way to control manually your robot. 
+//TODO how to do manual cleaning yourself
+
 ## Setup  
 If you are using Gradle add this dependency to your build.gradle file:
 
