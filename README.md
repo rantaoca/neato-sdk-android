@@ -114,6 +114,17 @@ if(neatoAuth.isAuthenticated()) {
 }
 ```
 
+#### 6. Create a custom AccessTokenDatasource
+By default the Neato Android SDK use the *DefaultAccessTokenDatasource* to store and load the OAuth access token. This class store the token into the app shared preferences. Although this preferences are typically visible only by the app itself it is possible that, on rooted device, someone can read these data. So, if you feel the need to secure the token, you can override the default access token datasource implementing the *AccessTokenDatasource* interface and these methods:
+
+```java
+public interface AccessTokenDatasource {
+    void storeToken(String token, Date expires);
+    String loadToken();
+    void clearToken();
+    boolean isTokenValid();
+}
+```
 
 ### Working with Users
 Once the user is authenticated you can retrieve user informations using the NeatoUser class:
