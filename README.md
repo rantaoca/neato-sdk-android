@@ -126,6 +126,24 @@ public interface AccessTokenDatasource {
 }
 ```
 
+Once you have your custom access token datasource you have to retrieve the *NeatoAuthentication* instance using this alternative *getInstance()* method:
+
+``` java
+    /**
+     * Use this method to get the singleton that use a custom 
+     * access token datasource.
+     * @param context
+     * @param accessTokenDatasource
+     * @return the NeatoAuthentication instance
+     */
+    public static NeatoAuthentication getInstance(Context context,
+                        AccessTokenDatasource accessTokenDatasource) {
+        NeatoAuthentication auth = getInstance(context);
+        auth.accessTokenDatasource = accessTokenDatasource;
+        return auth;
+    }
+```
+
 ### Working with Users
 Once the user is authenticated you can retrieve user informations using the NeatoUser class:
 
