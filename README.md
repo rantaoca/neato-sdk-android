@@ -7,8 +7,6 @@ Importing the Neato SDK in your projects you can easily implement applications t
 
 To boost your development you can also check the *sample application*.
 
-## Before you start using the Neato Android SDK
-//TODO  explain the dev he has to create an app on the Neato Developer portar in order to obtain CLIENT ID, roles, redirect url schema....
 
 ## What you cannot do with this SDK
 With this SDK you cannot do these things:
@@ -17,8 +15,7 @@ With this SDK you cannot do these things:
  - Link the robot to the user account (this must to be achieved through the official Neato App).
 
 ## A note about Manual Cleaning
-The SDK doesn't offer a ready to use way to control manually your robot. 
-//TODO how to do manual cleaning yourself
+This version of the SDK doesn't offer a ready to use way to manually control your robot. 
 
 ## Setup  
 If you are using Gradle add this dependency to your build.gradle file:
@@ -74,7 +71,7 @@ NeatoAuthentication neatoAuth = NeatoAuthentication.getInstance(this);
 You can now start the authentication flow invoking the `openLoginInBrowser` method:
 
 ```java
-String REDIRECT_URI = "marco-app://neato";
+String REDIRECT_URI = "my-neato-app://neato";
 String CLIENT_ID = "your_secret_client_id";
 NeatoOAuth2Scope[] scopes = new NeatoOAuth2Scope[]{NeatoOAuth2Scope.CONTROL_ROBOTS};
 
@@ -371,13 +368,3 @@ if (extras != null) {
 ```
 
 In the same way you can save and restore your activities and fragments state when needed.
-
-
-
-
-
-
-
-
-
-
