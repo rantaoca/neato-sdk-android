@@ -2,46 +2,43 @@
 
 #Neato SDK - Android
 
-This is the official Android SDK for the Neato API services.
-Importing the Neato SDK in your projects you can easily implement applications that communicate with Neato robots. We did the hard work for you so you can focus on implementing your apps!
+This is the official Android SDK (Beta release) for the Neato API services.
+The Neato Android SDK enables Android apps to easily communicate with Neato connected robots and use its various features.
 
-To boost your development you can also check the *sample application*.
+To boost your development, you can also check the *sample application*.
 
+> This is a beta version. It is subject to change without prior notice.
 
-## What you cannot do with this SDK
-With this SDK you cannot do these things:
+## Preconditions
 
- - Create the user Neato account: the user must to already have a Neato account (created from the Neato portal or from the official Neato App).
- - Link the robot to the user account (this must to be achieved through the official Neato App).
-
-## A note about Manual Cleaning
-This version of the SDK doesn't offer a ready to use way to manually control your robot. 
+ - Create the Neato user account via the Neato portal or from the official Neato App
+ - Link the robot to the user account via the official Neato App
 
 ## Setup  
-If you are using Gradle add this dependency to your build.gradle file:
+If you are using Gradle, add this dependency to your build.gradle file:
 
 ``` groovy
 compile 'com.neatorobotics.sdk.android:sdk:1.0.0'
 ```
 
-It is required this permission to be added in your AndroidManifest.xml file:
+This permission is required to be added in your AndroidManifest.xml file:
 ``` xml
 <uses-permission android:name="android.permission.INTERNET" />
 ```
 
 ## Usage
 The Neato SDK has 3 main roles:
-1. Handling OAuth authentications.
-2. Simplifying users info interactions.
-3. Managing communication with Robots.
+1. Handling OAuth authentications
+2. Simplifying users info interactions
+3. Managing communication with Robots
 
 These tasks are handled by different classes; You’ll mainly work with 3 of them: `NeatoAuthentication`, `NeatoRobot` and `NeatoUser`
 
 ### Authentication
-The Neato SDK leverages on OAuth 2 to perform user authentication. The `NeatoAuthentication` class gives you all the needed means to easily perform a login through your apps. Let’s go through the steps needed to setup an app and perform  the authentication.
+The Neato SDK leverages on OAuth 2 to perform user authentication. The `NeatoAuthentication` class gives you all the needed means to easily perform a login through your apps. Let’s go through the steps needed to setup an app and perform the authentication.
 
 #### 1. Creating a Schema URL
-During the registration of your app on Neato Servers you have defined a `Redirect URI`. This is the URL where we redirect a user that completes a login with your app Client ID. You application must be able to handle this Redirect URI thanks to a dedicated `Schema URL`. This is tipically done declaring an Activity in your AndroidManifest.xml that can handle requests coming from this URI. For example, your login activity can be declared like this:
+During the registration of your app on the Neato Developer Portal you have defined a `Redirect URI`. This is the URL where we redirect a user that completes a login with your Neato App Client ID. Your Android app must be able to handle this Redirect URI using a dedicated `Schema URL`. This is typically done declaring an Activity in your AndroidManifest.xml that can handle requests coming from this URI. For example, your login activity can be declared like this:
 
 ```xml
 <activity
@@ -79,10 +76,10 @@ NeatoOAuth2Scope[] scopes = new NeatoOAuth2Scope[]{NeatoOAuth2Scope.CONTROL_ROBO
 //later we'll receive the result in the onNewIntent activity method
 neatoAuth.openLoginInBrowser(this,CLIENT_ID,REDIRECT_URI,scopes);
 ```
-The user will be presented with a login page (on Chrome or another external browser) and when it completes the login it will be redirect to your App thanks to the `URL Schema` previously defined.
+The user will be presented with a login page (on Chrome or another external browser) and when it completes the login it will be redirected to your App thanks to the `URL Schema` previously defined.
 
 #### 4. Handling the Redirect URI
-When the user finishes the login he is redirected to the previously configured login activity and the method onNewIntent is invoked. Here you can grab the OAuth access token is the login succeded otherwise you can show an error message.
+When the user finishes the login he is redirected to the previously configured login activity and the method onNewIntent is invoked. Here you can grab the OAuth access token if the login succeeded, otherwise you can show an error message.
 
 ```java
 @Override
@@ -111,7 +108,7 @@ protected void onNewIntent(Intent intent) {
 ```
 
 #### 5. How to check if the user is already logged in
-Sometimes you need to check if the user is already logged in, for example to skip directly to your robots page instead of pass throught the login page. To check simply do this:
+Sometimes you need to check if the user is already logged in, for example to skip directly to your robots page instead of passing through the login page. To check, simply do this:
 
 ```java
 //here we're checking the access token
@@ -125,7 +122,7 @@ if(neatoAuth.isAuthenticated()) {
 ```
 
 #### 6. Create a custom AccessTokenDatasource
-By default the Neato Android SDK use the *DefaultAccessTokenDatasource* to store and load the OAuth access token. This class store the token into the app shared preferences. Although this preferences are typically visible only by the app itself it is possible that, on rooted device, someone can read these data. So, if you feel the need to secure the token, you can override the default access token datasource implementing the *AccessTokenDatasource* interface and these methods:
+By default the Neato Android SDK use the *DefaultAccessTokenDatasource* to store and load the OAuth access token. This class stores the token into the app shared preferences. Although these preferences are typically known only by the app itself, it is possible that on rooted device someone can read these data. So, if you feel the need to secure the token, you can override the default access token datasource implementing the *AccessTokenDatasource* interface and these methods:
 
 ```java
 public interface AccessTokenDatasource {
@@ -155,7 +152,7 @@ Once you have your custom access token datasource you have to retrieve the *Neat
 ```
 
 ### Working with Users
-Once the user is authenticated you can retrieve user informations using the NeatoUser class:
+Once the user is authenticated you can retrieve user information using the `NeatoUser` class:
 
 ```java
 NeatoUser neatoUser = NeatoUser.getInstance(context);
@@ -180,7 +177,7 @@ neatoUser.loadRobots(new NeatoCallback<ArrayList<NeatoRobot>>(){
 });
 ```
 
-*NeatoRobot* is a special class we have developed for you that can be used to directly invoke commands on the robot, see next paragraphs.
+*NeatoRobot* is a special class we have developed for you that can be used to directly invoke commands on the robot.
 
 #### Get user info
 If you want to retrieve the logged user email you can do this:
@@ -203,11 +200,11 @@ neatoUser.getUserInfo(new NeatoCallback<JSONObject>(){
 ```
 
 ### Communicating with Robots
-Now that you have the robots for an authenticated user it’s time to communicate with them.
+Now that you have the robots for an authenticated user, it’s time to communicate with them.
 In the previous call you've seen how easy is to retrieve `NeatoRobot` instances for your current user. Those instances are ready to receive messages from your app (if the robots are online obviously).
 
 #### The robot status
-Before we saw how to retrieve the robots list from the NeatoUser class. Is a best practice to check the robot state before sending commands to it otherwise the robot maybe in the situation he cannot accepts the command and returns an error code. To update/get the robot state do this:
+Before, we saw how to retrieve the robot list from the `NeatoUser` class. It is best practice to check the robot state before sending commands, otherwise the robot may be in a state that cannot accept the command and return an error code. To update/get the robot state do this:
 
 ```java
 robot.updateRobotState(new NeatoCallback<Void>(){
@@ -228,7 +225,7 @@ robot.updateRobotState(new NeatoCallback<Void>(){
 ```
 
 #### Sending commands to a Robot
-An online robot is ready to receives your commands like `start cleaning`. Some commands require parameters others not, see the API doc for details.  
+An online robot is ready to receive your commands like `startCleaning`. Some commands require parameters while others don't, see the API doc for details.  
 
 Pause cleaning doesn't require parameters:
 
@@ -270,7 +267,7 @@ robot.startCleaning(params, new NeatoCallback<Void>(){
 
 #### Working with Robot schedule
 
-To enable or disable at all the robot scheduling (scheduling data are not deleted from the robot):
+To enable or disable all the robot schedule (note that schedule data are not deleted from the robot):
 
 ```java
 if(robot.getState().isScheduleEnabled()) {
@@ -322,7 +319,7 @@ robot.setSchedule(events,new NeatoCallback<Void>(){
 });
 ```
 
-*Note: not all robot models support the eco/turbo cleaning mode. You should check the robot available services before sending that parameters.*
+*Note: not all robot models support the eco/turbo cleaning mode. You should check the robot available services before sending those parameters.*
 
 
 
@@ -334,7 +331,7 @@ Different robot models and versions have different features. So before sending c
 HashMap<String, String> services = robot.getState().getAvailableServices();
 ```
 
-In addition there are some utility methods you can use to check if the robot support the services.
+In addition there are some utility methods you can use to check if the robot supports the services.
 
 ```java
 //any version
@@ -346,8 +343,8 @@ boolean supportFindMe = robot.hasService("findMe");
 boolean supportManualCleaning = robot.hasService("manualCleaning","basic-1");
 ```
 
-#### How to pass the NeatoRobot class throught activities
-*NeatoRobot* has two useful methods, *serialize()* and *deserialize()* that can be used in order to pass the robot throught different activities.  For example in the first activity, say the robots list, we can click on the robot and pass it to the robot commands activity:
+#### How to pass the NeatoRobot class through activities
+*NeatoRobot* has two useful methods, *serialize()* and *deserialize()* that can be used in order to pass the robot through different activities.  For example in the first activity, say the robot list, we can click on the robot and pass it to the robot commands activity:
 
 ```java
 public void onRobotClick(NeatoRobot robot) {
