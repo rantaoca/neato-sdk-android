@@ -11,6 +11,7 @@ import com.neatorobotics.sdk.android.beehive.BeehiveJSONParser;
 import com.neatorobotics.sdk.android.beehive.BeehiveResponse;
 import com.neatorobotics.sdk.android.models.Robot;
 
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
@@ -71,14 +72,20 @@ public class NeatoUser {
      * @param callback
      */
     public void logout(final NeatoCallback<Boolean> callback) {
-        asyncCall.executeCall(neatoAuthentication.getOauth2AccessToken(), "POST", baseUrl+"/oauth2/revoke", null, new NeatoCallback<BeehiveResponse>(){
-            @Override
-            public void done(BeehiveResponse result) {
-                super.done(result);
-                neatoAuthentication.clearAccessToken();
-                callback.done(true);
-            }
-        });
+        JSONObject params = null;
+        try {
+            params = new JSONObject("{\"token\":\""+neatoAuthentication.getOauth2AccessToken()+"\"}");
+            asyncCall.executeCall(neatoAuthentication.getOauth2AccessToken(), "POST", baseUrl+"/oauth2/revoke", params, new NeatoCallback<BeehiveResponse>(){
+                @Override
+                public void done(BeehiveResponse result) {
+                    super.done(result);
+                    neatoAuthentication.clearAccessToken();
+                    callback.done(true);
+                }
+            });
+        } catch (JSONException e) {
+            callback.fail(NeatoError.GENERIC_ERROR);
+        }
     }
 
     /**
