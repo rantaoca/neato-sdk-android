@@ -2,7 +2,8 @@
 
 #Neato SDK - Android
 
-This is the official Android SDK (Beta release) for the Neato API services.
+The official Android SDK (Beta release) for the Neato API services can be found at this [link](https://github.com/NeatoRobotics/neato-sdk-android).  
+
 The Neato Android SDK enables Android apps to easily communicate with Neato connected robots and use its various features.
 
 To boost your development, you can also check the *sample application*.
