@@ -20,7 +20,6 @@ import com.neatorobotics.sdk.android.example.login.LoginActivity;
 
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.w3c.dom.Text;
 
 /**
  * Neato-SDK
@@ -33,17 +32,17 @@ public class RobotsActivity extends AppCompatActivity
     private NeatoUser neatoUser;
     private NavigationView navigationView;
 
-    private String userEmail;
+    private String userFirstName;
 
     private void restoreState(Bundle inState) {
-        userEmail = inState.getString("EMAIL");
+        userFirstName = inState.getString("USER_FIRST_NAME");
     }
 
     @Override
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
 
-        outState.putString("EMAIL", userEmail);
+        outState.putString("USER_FIRST_NAME", userFirstName);
     }
 
     @Override
@@ -77,7 +76,7 @@ public class RobotsActivity extends AppCompatActivity
                 public void done(JSONObject result) {
                     super.done(result);
                     try {
-                        userEmail = result.getString("email");
+                        userFirstName = result.getString("first_name");
                     } catch (JSONException e) {e.printStackTrace();}
                     fillUserInfo();
                 }
@@ -94,8 +93,8 @@ public class RobotsActivity extends AppCompatActivity
     }
 
     private void fillUserInfo() {
-        if(userEmail!= null) {
-            ((TextView)(navigationView.getHeaderView(0).findViewById(R.id.emailText))).setText(userEmail);
+        if(userFirstName != null) {
+            ((TextView)(navigationView.getHeaderView(0).findViewById(R.id.firstNameText))).setText(userFirstName);
         }
     }
 
