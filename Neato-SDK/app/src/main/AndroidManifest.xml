@@ -22,7 +22,7 @@
 
                 <data
                     android:host="neato"
-                    android:scheme="marco-app" />
+                    android:scheme="my-neato-app" />
             </intent-filter>
         </activity>
         <activity android:name=".SplashActivity">
