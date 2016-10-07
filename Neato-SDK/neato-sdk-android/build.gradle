@@ -47,7 +47,7 @@ dependencies {
 
 //BINTRAY - JCENTER
 group = 'com.neatorobotics.sdk.android'
-version = '0.0.1'
+version = '0.7.0'
 
 def siteUrl = 'https://github.com/NeatoRobotics/neato-sdk-android'
 def gitUrl = 'https://github.com/NeatoRobotics/neato-sdk-android.git'
@@ -72,7 +72,7 @@ bintray {
         websiteUrl = siteUrl
         issueTrackerUrl = 'https://github.com/NeatoRobotics/neato-sdk-android'
         vcsUrl = gitUrl
-        licenses = ['Apache-2.0']
+        licenses = ['MIT']
         labels = ['neato', 'android', 'sdk', 'java']
         publicDownloadNumbers = true
     }
@@ -87,8 +87,8 @@ install {
                 url siteUrl
                 licenses {
                     license {
-                        name 'The Apache Software License, Version 2.0'
-                        url 'http://www.apache.org/licenses/LICENSE-2.0.txt'
+                        name 'The MIT License (MIT)'
+                        url 'https://opensource.org/licenses/MIT'
                     }
                 }
                 developers {
