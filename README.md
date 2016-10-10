@@ -1,8 +1,6 @@
-[![Build Status](https://magnum.travis-ci.com/NeatoRobotics/neato-sdk-android.svg?token=Y4dRpXzLka6jmXX14Lfr&branch=master)](https://magnum.travis-ci.com/NeatoRobotics/neato-sdk-android)
-
 #Neato SDK - Android
 
-The official Android SDK (Beta release) for the Neato API services can be found at this [link](https://github.com/NeatoRobotics/neato-sdk-android).  
+The official Android SDK (Beta release) for the Neato API services can be found at this [link](https://github.com/NeatoRobotics/neato-sdk-android).
 
 The Neato Android SDK enables Android apps to easily communicate with Neato connected robots and use its various features.
 
@@ -15,7 +13,7 @@ To boost your development, you can also check the *sample application*.
  - Create the Neato user account via the Neato portal or from the official Neato App
  - Link the robot to the user account via the official Neato App
 
-## Setup  
+## Setup
 If you are using Gradle, add this dependency to your build.gradle file:
 
 ``` groovy
@@ -89,7 +87,7 @@ protected void onNewIntent(Intent intent) {
 
     Uri uri = intent.getData();
     if (uri != null) {
-        NeatoAuthenticationResponse response = 
+        NeatoAuthenticationResponse response =
         neatoAuth.getOAuth2AuthResponseFromUri(uri);
 
         switch (response.getType()) {
@@ -138,7 +136,7 @@ Once you have your custom access token datasource you have to retrieve the *Neat
 
 ``` java
     /**
-     * Use this method to get the singleton that use a custom 
+     * Use this method to get the singleton that use a custom
      * access token datasource.
      * @param context
      * @param accessTokenDatasource
@@ -226,7 +224,7 @@ robot.updateRobotState(new NeatoCallback<Void>(){
 ```
 
 #### Sending commands to a Robot
-An online robot is ready to receive your commands like `startCleaning`. Some commands require parameters while others don't, see the API doc for details.  
+An online robot is ready to receive your commands like `startCleaning`. Some commands require parameters while others don't, see the API doc for details.
 
 Pause cleaning doesn't require parameters:
 
@@ -304,7 +302,7 @@ ScheduleEvent everyWednesday = new ScheduleEvent();
     everyWednesday.mode = RobotConstants.ROBOT_CLEANING_MODE_TURBO;
     everyWednesday.day = 3;//0 is Sunday, 1 Monday and so on
     everyWednesday.startTime = "15:00";
-    
+
 ArrayList<ScheduleEvent> events = new ArrayList<>();
 events.add(everyWednesday);
 robot.setSchedule(events,new NeatoCallback<Void>(){
