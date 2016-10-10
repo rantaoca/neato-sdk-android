@@ -6,6 +6,7 @@ import android.support.annotation.VisibleForTesting;
 
 import com.neatorobotics.sdk.android.authentication.AccessTokenDatasource;
 import com.neatorobotics.sdk.android.authentication.NeatoAuthentication;
+import com.neatorobotics.sdk.android.beehive.Beehive;
 import com.neatorobotics.sdk.android.beehive.BeehiveBaseClient;
 import com.neatorobotics.sdk.android.beehive.BeehiveJSONParser;
 import com.neatorobotics.sdk.android.beehive.BeehiveResponse;
@@ -63,7 +64,7 @@ public class NeatoUser {
     private NeatoUser(Context context) {
         this.context = context;
         neatoAuthentication = NeatoAuthentication.getInstance(context);
-        this.baseUrl = context.getString(R.string.beehive_endpoint);
+        this.baseUrl = Beehive.URL;
         this.asyncCall = new AsyncCall();
     }
 

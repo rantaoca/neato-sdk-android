@@ -4,8 +4,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 
-import com.neatorobotics.sdk.android.R;
-
 import java.util.Date;
 
 /**
@@ -14,6 +12,8 @@ import java.util.Date;
  * Copyright © 2016 Neato Robotics. All rights reserved.
  */
 public class NeatoAuthentication {
+
+    private static final String OAUTH_AUTH_URL = "https://apps.neatorobotics.com/oauth2/authorize?client_id=%1$s&amp;scope=%2$s&amp;response_type=token&amp;redirect_uri=%3$s";
 
     private static NeatoAuthentication instance = null;
     private AccessTokenDatasource accessTokenDatasource;
@@ -54,7 +54,7 @@ public class NeatoAuthentication {
      * Start the OAuth 2 authentication flow
      */
     public void openLoginInBrowser(Context context,String clientId, String redirectUri, NeatoOAuth2Scope[] scopes) {
-        String authUrl = buildOAuthAuthenticationUrl(context.getString(R.string.oauth2_authentication_url),clientId,buildScopesParameter(scopes), redirectUri);
+        String authUrl = buildOAuthAuthenticationUrl(OAUTH_AUTH_URL,clientId,buildScopesParameter(scopes), redirectUri);
         Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(authUrl));
         context.startActivity(intent);
 

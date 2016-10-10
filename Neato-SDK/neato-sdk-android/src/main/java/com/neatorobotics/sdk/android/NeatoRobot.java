@@ -8,6 +8,7 @@ import android.support.annotation.VisibleForTesting;
 import com.neatorobotics.sdk.android.models.Robot;
 import com.neatorobotics.sdk.android.models.RobotState;
 import com.neatorobotics.sdk.android.models.ScheduleEvent;
+import com.neatorobotics.sdk.android.nucleo.Nucleo;
 import com.neatorobotics.sdk.android.nucleo.NucleoBaseClient;
 import com.neatorobotics.sdk.android.nucleo.RobotCommands;
 import com.neatorobotics.sdk.android.nucleo.NucleoResponse;
@@ -42,7 +43,7 @@ public class NeatoRobot{
     //constructor
     public NeatoRobot(Context context, Robot robot){
         this.context = context;
-        this.baseUrl = context.getString(R.string.nucleo_endpoint);
+        this.baseUrl = Nucleo.URL;
         this.asyncCall = new AsyncCall();
         this.robot = robot;
     }
