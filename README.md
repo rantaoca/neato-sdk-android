@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/NeatoRobotics/neato-sdk-android.svg?branch=master)](https://travis-ci.org/NeatoRobotics/neato-sdk-android)
+
 #Neato SDK - Android
 
 The official Android SDK (Beta release) for the Neato API services can be found at this [link](https://github.com/NeatoRobotics/neato-sdk-android).
