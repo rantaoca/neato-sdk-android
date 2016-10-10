@@ -16,10 +16,22 @@ To boost your development, you can also check the *sample application*.
  - Link the robot to the user account via the official Neato App
 
 ## Setup
-If you are using Gradle, add this dependency to your build.gradle file:
+If you are using Gradle, add this dependency to your app build.gradle file:
 
 ``` groovy
-compile 'com.neatorobotics.sdk.android:sdk:1.0.0'
+compile 'com.neatorobotics.sdk.android:neato-sdk-android:0.7.0@aar'
+```
+
+and this repo reference to your project .gradle file:
+``` groovy
+allprojects {
+    repositories {
+        //other repos
+        maven {
+            url  "http://dl.bintray.com/neato/maven"
+        }
+    }
+}
 ```
 
 This permission is required to be added in your AndroidManifest.xml file:
