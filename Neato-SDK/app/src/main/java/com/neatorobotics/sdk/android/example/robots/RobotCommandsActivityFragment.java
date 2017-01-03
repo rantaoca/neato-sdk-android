@@ -17,6 +17,8 @@ import com.neatorobotics.sdk.android.models.Robot;
 import com.neatorobotics.sdk.android.models.ScheduleEvent;
 import com.neatorobotics.sdk.android.nucleo.RobotConstants;
 
+import org.json.JSONObject;
+
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Locale;
@@ -30,7 +32,8 @@ public class RobotCommandsActivityFragment extends Fragment {
 
     private Button houseCleaning, spotCleaning, pauseCleaning,
                     stopCleaning, resumeCleaning, returnToBaseCleaning, findMe,
-                    enableDisableScheduling, scheduleEveryWednesday, getScheduling;
+                    enableDisableScheduling, scheduleEveryWednesday, getScheduling,
+                    maps;
 
     public RobotCommandsActivityFragment() {
     }
@@ -67,6 +70,7 @@ public class RobotCommandsActivityFragment extends Fragment {
         enableDisableScheduling = (Button)rootView.findViewById(R.id.enableDisableScheduling);
         scheduleEveryWednesday = (Button)rootView.findViewById(R.id.wednesdayScheduling);
         getScheduling = (Button)rootView.findViewById(R.id.getScheduling);
+        maps = (Button) rootView.findViewById(R.id.maps);
 
         spotCleaning.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -135,6 +139,13 @@ public class RobotCommandsActivityFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 getScheduling();
+            }
+        });
+
+        maps.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                getMaps();
             }
         });
 
@@ -345,6 +356,37 @@ public class RobotCommandsActivityFragment extends Fragment {
                     Toast.makeText(getContext(),"Oops! Impossible to get schedule.",Toast.LENGTH_SHORT).show();
                 }
             });
+        }
+    }
+
+    private void getMaps() {
+        if(robot != null) {
+            //check if the robot support this service
+            if (robot.hasService("maps")) {
+                robot.getMaps(new NeatoCallback<JSONObject>() {
+                    @Override
+                    public void done(JSONObject result) {
+                        super.done(result);
+                        updateUIButtons();
+                        if (result != null) {
+                            Toast.makeText(getContext(), "Robot maps " + result.toString() + ".", Toast.LENGTH_SHORT).show();
+
+                            // now you can get a map id and retrieve the map details
+                            // to download the map image use the map "url" property
+                            //robot.getMapDetails(mapId, robot.getSerial(), new NeatoCallback<JSONObject>(){});
+                        }
+                    }
+
+                    @Override
+                    public void fail(NeatoError error) {
+                        super.fail(error);
+                        updateUIButtons();
+                        Toast.makeText(getContext(), "Oops! Impossible to get robot maps.", Toast.LENGTH_SHORT).show();
+                    }
+                });
+            }else {
+                Toast.makeText(getContext(),"The robot doesn't support this service.",Toast.LENGTH_SHORT).show();
+            }
         }
     }
 

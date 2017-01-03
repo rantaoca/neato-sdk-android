@@ -321,6 +321,47 @@ public class NeatoRobot{
     }
 
     /**
+     * Return the robot maps list.
+     * @param callback
+     */
+    public void getMaps(final NeatoCallback<JSONObject> callback) {
+        NeatoUser.getInstance(context).getMaps(robot.serial, new NeatoCallback<JSONObject>() {
+            @Override
+            public void done(JSONObject result) {
+                super.done(result);
+                callback.done(result);
+            }
+
+            @Override
+            public void fail(NeatoError error) {
+                super.fail(error);
+                callback.fail(error);
+            }
+        });
+    }
+
+    /**
+     * Return the robot map details.
+     * @param mapId the ID of the map to retrieve the details
+     * @param callback
+     */
+    public void getMapDetails(final String mapId, final NeatoCallback<JSONObject> callback) {
+        NeatoUser.getInstance(context).getMap(robot.serial, mapId, new NeatoCallback<JSONObject>() {
+            @Override
+            public void done(JSONObject result) {
+                super.done(result);
+                callback.done(result);
+            }
+
+            @Override
+            public void fail(NeatoError error) {
+                super.fail(error);
+                callback.fail(error);
+            }
+        });
+    }
+
+    /**
      * Execute a raw robot call
      *
      * This method exists if the developer need to invoke commands not yet implemented into the SDK.

@@ -13,4 +13,5 @@
     <string name="scheduling_message_text">You can enable or disable at all robot scheduling</string>
     <string name="scheduling_every_wednesday_message_text">This button set the robot scheduling to \"every Wednesday at 3:00 pm\" in Turbo mode.</string>
     <string name="scheduling_get_events">This button retrieves the robot schedule</string>
+    <string name="maps_message_text">This button retrieves the robot available maps and then the details of the first map</string>
 </resources>

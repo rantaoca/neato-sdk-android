@@ -133,6 +133,46 @@ public class NeatoUser {
         });
     }
 
+    /**
+     * Get robot available maps/stats.
+     * @param callback
+     */
+    protected void getMaps(final String robotSerial, final NeatoCallback<JSONObject> callback) {
+        asyncCall.executeCall(neatoAuthentication.getOauth2AccessToken(), "GET", baseUrl+"/users/me/robots/"+robotSerial+"/maps", null, new NeatoCallback<BeehiveResponse>(){
+            @Override
+            public void done(BeehiveResponse result) {
+                super.done(result);
+                callback.done(result.getJSON());
+            }
+
+            @Override
+            public void fail(NeatoError error) {
+                super.fail(error);
+                callback.fail(error);
+            }
+        });
+    }
+
+    /**
+     * Get robot available maps/stats.
+     * @param callback
+     */
+    protected void getMap(final String robotSerial, final String mapId, final NeatoCallback<JSONObject> callback) {
+        asyncCall.executeCall(neatoAuthentication.getOauth2AccessToken(), "GET", baseUrl+"/users/me/robots/"+robotSerial+"/maps/"+mapId, null, new NeatoCallback<BeehiveResponse>(){
+            @Override
+            public void done(BeehiveResponse result) {
+                super.done(result);
+                callback.done(result.getJSON());
+            }
+
+            @Override
+            public void fail(NeatoError error) {
+                super.fail(error);
+                callback.fail(error);
+            }
+        });
+    }
+
     //region async call
     protected class AsyncCall {
 
