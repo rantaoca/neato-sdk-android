@@ -83,8 +83,11 @@ You can now start the authentication flow invoking the `openLoginInBrowser` meth
 ```java
 String REDIRECT_URI = "my-neato-app://neato";
 String CLIENT_ID = "your_secret_client_id";
-NeatoOAuth2Scope[] scopes = new NeatoOAuth2Scope[]{NeatoOAuth2Scope.CONTROL_ROBOTS};
-
+NeatoOAuth2Scope[] scopes = new NeatoOAuth2Scope[]{
+    NeatoOAuth2Scope.CONTROL_ROBOTS,
+    NeatoOAuth2Scope.PUBLIC_PROFILE,
+    NeatoOAuth2Scope.MAPS
+};
 //we start the auth flow here
 //later we'll receive the result in the onNewIntent activity method
 neatoAuth.openLoginInBrowser(this,CLIENT_ID,REDIRECT_URI,scopes);
