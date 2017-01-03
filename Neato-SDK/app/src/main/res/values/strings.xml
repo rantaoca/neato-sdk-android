@@ -12,4 +12,5 @@
     <string name="find_me_message_text">The "find me" feature is available only on some robot models, so before calling it on the robot please check the service availability. In your app you can choose to completely hide this button if the robot doesn\'t support it.</string>
     <string name="scheduling_message_text">You can enable or disable at all robot scheduling</string>
     <string name="scheduling_every_wednesday_message_text">This button set the robot scheduling to \"every Wednesday at 3:00 pm\" in Turbo mode.</string>
+    <string name="scheduling_get_events">This button retrieves the robot schedule</string>
 </resources>

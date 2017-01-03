@@ -76,6 +76,17 @@
             android:layout_height="wrap_content"
             android:layout_margin="@dimen/activity_vertical_margin"
             android:textSize="16sp"
+            android:text="@string/scheduling_get_events" />
+        <Button
+            android:id="@+id/getScheduling"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Show robot schedule"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/activity_vertical_margin"
+            android:textSize="16sp"
             android:text="@string/find_me_message_text" />
         <Button
             android:id="@+id/findMe"

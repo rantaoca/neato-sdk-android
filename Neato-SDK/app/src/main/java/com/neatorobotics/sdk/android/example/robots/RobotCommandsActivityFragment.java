@@ -30,7 +30,7 @@ public class RobotCommandsActivityFragment extends Fragment {
 
     private Button houseCleaning, spotCleaning, pauseCleaning,
                     stopCleaning, resumeCleaning, returnToBaseCleaning, findMe,
-                    enableDisableScheduling, scheduleEveryWednesday;
+                    enableDisableScheduling, scheduleEveryWednesday, getScheduling;
 
     public RobotCommandsActivityFragment() {
     }
@@ -66,6 +66,7 @@ public class RobotCommandsActivityFragment extends Fragment {
         findMe = (Button)rootView.findViewById(R.id.findMe);
         enableDisableScheduling = (Button)rootView.findViewById(R.id.enableDisableScheduling);
         scheduleEveryWednesday = (Button)rootView.findViewById(R.id.wednesdayScheduling);
+        getScheduling = (Button)rootView.findViewById(R.id.getScheduling);
 
         spotCleaning.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -127,6 +128,13 @@ public class RobotCommandsActivityFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 scheduleEveryWednesday();
+            }
+        });
+
+        getScheduling.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                getScheduling();
             }
         });
 
@@ -313,6 +321,28 @@ public class RobotCommandsActivityFragment extends Fragment {
                     super.fail(error);
                     updateUIButtons();
                     Toast.makeText(getContext(),"Oops! Impossible to set schedule.",Toast.LENGTH_SHORT).show();
+                }
+            });
+        }
+    }
+
+    private void getScheduling() {
+        if(robot != null) {
+            robot.getSchedule(new NeatoCallback<ArrayList<ScheduleEvent>>(){
+                @Override
+                public void done(ArrayList<ScheduleEvent> result) {
+                    super.done(result);
+                    updateUIButtons();
+                    if(result != null) {
+                        Toast.makeText(getContext(), "The robot has " + result.size() + " scheduled events.", Toast.LENGTH_SHORT).show();
+                    }
+                }
+
+                @Override
+                public void fail(NeatoError error) {
+                    super.fail(error);
+                    updateUIButtons();
+                    Toast.makeText(getContext(),"Oops! Impossible to get schedule.",Toast.LENGTH_SHORT).show();
                 }
             });
         }

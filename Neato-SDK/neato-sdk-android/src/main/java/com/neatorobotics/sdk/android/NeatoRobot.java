@@ -273,7 +273,7 @@ public class NeatoRobot{
     }
 
     /**
-     * Return the robot complete scheduling program.
+     * Set the robot complete scheduling program.
      * This override the previous scheduling program. You cannot add incremental schedule, but all
      * the schedule events in one time.
      * @param events
@@ -290,6 +290,29 @@ public class NeatoRobot{
                     callback.fail(NeatoError.GENERIC_ERROR);
                 }else if(result.isHttpOK()) {
                     callback.done(null);
+                }else {
+                    callback.fail(NeatoError.GENERIC_ERROR);
+                }
+            }
+        });
+    }
+
+    /**
+     * Return the robot complete scheduling program.
+     * @param callback
+     */
+    public void getSchedule(final NeatoCallback<ArrayList<ScheduleEvent>> callback) {
+        JSONObject command = RobotCommands.get(RobotCommands.GET_ROBOT_SCHEDULE_COMMAND);
+        asyncCall.executeCall(this,context, baseUrl, robot.serial,command, robot.secret_key, new NeatoCallback<NucleoResponse>(){
+            @Override
+            public void done(NucleoResponse result) {
+                super.done(result);
+                if(result == null) {
+                    callback.fail(NeatoError.GENERIC_ERROR);
+                }else if(result.isHttpOK()) {
+                    RobotState state = new RobotState(result.getJSON());
+                    ArrayList<ScheduleEvent> events = state.getScheduleEvents();
+                    callback.done(events);
                 }else {
                     callback.fail(NeatoError.GENERIC_ERROR);
                 }
