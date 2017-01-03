@@ -7,7 +7,8 @@ package com.neatorobotics.sdk.android.authentication;
  */
 public enum NeatoOAuth2Scope {
     PUBLIC_PROFILE("public_profile"),
-    CONTROL_ROBOTS("control_robots");
+    CONTROL_ROBOTS("control_robots"),
+    MAPS("maps");
 
     private final String permission;
 

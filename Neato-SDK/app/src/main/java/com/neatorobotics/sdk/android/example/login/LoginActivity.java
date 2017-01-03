@@ -34,7 +34,11 @@ public class LoginActivity extends AppCompatActivity {
 
     String REDIRECT_URI = "my-neato-app://neato";
     String CLIENT_ID = "32547b00f17b08e408d93a5b922fa97a23ff5e6d953427a6f3f9a98122c16c17";
-    NeatoOAuth2Scope[] scopes = new NeatoOAuth2Scope[]{NeatoOAuth2Scope.CONTROL_ROBOTS,NeatoOAuth2Scope.PUBLIC_PROFILE};
+    NeatoOAuth2Scope[] scopes = new NeatoOAuth2Scope[]{
+            NeatoOAuth2Scope.CONTROL_ROBOTS,
+            NeatoOAuth2Scope.PUBLIC_PROFILE,
+            NeatoOAuth2Scope.MAPS
+    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
