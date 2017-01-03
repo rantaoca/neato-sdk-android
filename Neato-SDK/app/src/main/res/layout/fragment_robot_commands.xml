@@ -99,10 +99,17 @@
             android:layout_margin="@dimen/activity_vertical_margin"
             android:textSize="16sp"
             android:text="@string/maps_message_text" />
+
+        <ImageView
+            android:id="@+id/mapImage"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+        
         <Button
             android:id="@+id/maps"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Get robot maps"/>
+
     </LinearLayout>
 </RelativeLayout>
