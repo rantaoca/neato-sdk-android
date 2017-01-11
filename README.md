@@ -19,7 +19,7 @@ To boost your development, you can also check the *sample application*.
 If you are using Gradle, add this dependency to your app build.gradle file:
 
 ``` groovy
-compile 'com.neatorobotics.sdk.android:neato-sdk-android:0.7.0@aar'
+compile 'com.neatorobotics.sdk.android:neato-sdk-android:0.8.0@aar'
 ```
 
 and this repo reference to your project .gradle file:
@@ -337,7 +337,57 @@ robot.setSchedule(events,new NeatoCallback<Void>(){
 
 *Note: not all robot models support the eco/turbo cleaning mode. You should check the robot available services before sending those parameters.*
 
+#### Getting robot coverage maps
 
+To retrieve the list of robot cleaning coverage maps:
+
+```java
+// check if the robot support this service
+if (robot.hasService("maps")) {
+    robot.getMaps(new NeatoCallback<JSONObject>() {
+        @Override
+        public void done(JSONObject result) {
+            super.done(result);
+            // now you can get a map id and retrieve the map details
+            // to download the map image use the map "url" property
+            // this second call is needed because 
+            // the map urls expire after a while
+            
+            JSONArray maps = result.getJSONArray("maps");
+            if (maps != null && maps.length() > 0) {
+                String mapId = maps.getJSONObject(0).getString("id");
+                getMapDetails(mapId);
+            } else {
+             // no maps available yet...
+            }
+        }
+    });
+}else {
+    // the robot doesn't support this service...
+}
+```
+
+To retrieve a specific map details:
+
+```java
+private void getMapDetails(String mapId) {
+    robot.getMapDetails(mapId, new NeatoCallback<JSONObject>(){
+        @Override
+        public void done(JSONObject result) {
+            super.done(result);
+            String url = result.getString("url");
+            showMapImage(url);
+        }
+    });   
+}
+```
+
+You can now show the map image, for example using the very convenient Glide library:
+```java
+private void showMapImage(String url) {
+    Glide.with(this).load(url).into(mapImageView);
+}
+```
 
 #### Checking robot available services
 
