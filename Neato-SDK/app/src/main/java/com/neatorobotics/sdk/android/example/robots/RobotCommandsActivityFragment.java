@@ -16,6 +16,7 @@ import com.neatorobotics.sdk.android.NeatoError;
 import com.neatorobotics.sdk.android.NeatoRobot;
 import com.neatorobotics.sdk.android.example.R;
 import com.neatorobotics.sdk.android.models.Robot;
+import com.neatorobotics.sdk.android.models.RobotState;
 import com.neatorobotics.sdk.android.models.ScheduleEvent;
 import com.neatorobotics.sdk.android.nucleo.RobotConstants;
 
@@ -25,6 +26,7 @@ import org.json.JSONObject;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Locale;
 
 /**
@@ -179,9 +181,9 @@ public class RobotCommandsActivityFragment extends Fragment {
 
     private void executePause() {
         if(robot != null) {
-            robot.pauseCleaning(new NeatoCallback<Void>(){
+            robot.pauseCleaning(new NeatoCallback<RobotState>(){
                 @Override
-                public void done(Void result) {
+                public void done(RobotState result) {
                     super.done(result);
                     updateUIButtons();
                 }
@@ -197,9 +199,9 @@ public class RobotCommandsActivityFragment extends Fragment {
 
     private void executeResumeCleaning() {
         if(robot != null) {
-            robot.resumeCleaning(new NeatoCallback<Void>(){
+            robot.resumeCleaning(new NeatoCallback<RobotState>(){
                 @Override
-                public void done(Void result) {
+                public void done(RobotState result) {
                     super.done(result);
                     updateUIButtons();
                 }
@@ -215,16 +217,12 @@ public class RobotCommandsActivityFragment extends Fragment {
 
     private void executeHouseCleaning() {
         if(robot != null) {
-            String params = String.format(Locale.US,
-                            "{\"category\":%d,\"mode\":%d,\"modifier\":%d,\"navigationMode\":%d}",
-                            RobotConstants.ROBOT_CLEANING_CATEGORY_HOUSE,
-                            RobotConstants.ROBOT_CLEANING_MODE_ECO,
-                            RobotConstants.ROBOT_CLEANING_MODIFIER_NORMAL,
-                            RobotConstants.ROBOT_EXTRA_CARE_MODE_OFF);
+            HashMap<String, String> params = new HashMap<>();
+                params.put(RobotConstants.CLEANING_MODE_KEY, RobotConstants.ROBOT_CLEANING_MODE_TURBO+"");
 
-            robot.startCleaning(params, new NeatoCallback<Void>(){
+            robot.startHouseCleaning(params, new NeatoCallback<RobotState>(){
                 @Override
-                public void done(Void result) {
+                public void done(RobotState result) {
                     super.done(result);
                     updateUIButtons();
                 }
@@ -240,9 +238,9 @@ public class RobotCommandsActivityFragment extends Fragment {
 
     private void executeReturnToBase() {
         if(robot != null) {
-            robot.goToBase(new NeatoCallback<Void>(){
+            robot.goToBase(new NeatoCallback<RobotState>(){
                 @Override
-                public void done(Void result) {
+                public void done(RobotState result) {
                     super.done(result);
                     updateUIButtons();
                 }
@@ -434,9 +432,9 @@ public class RobotCommandsActivityFragment extends Fragment {
 
     private void executeStop() {
         if(robot != null) {
-            robot.stopCleaning(new NeatoCallback<Void>(){
+            robot.stopCleaning(new NeatoCallback<RobotState>(){
                 @Override
-                public void done(Void result) {
+                public void done(RobotState result) {
                     super.done(result);
                     updateUIButtons();
                 }
@@ -452,16 +450,14 @@ public class RobotCommandsActivityFragment extends Fragment {
 
     private void executeSpotCleaning() {
         if(robot != null) {
-            String params = String.format(Locale.US,
-                    "{\"category\":%d,\"mode\":%d,\"modifier\":%d,\"navigationMode\":%d}",
-                    RobotConstants.ROBOT_CLEANING_CATEGORY_SPOT,
-                    RobotConstants.ROBOT_CLEANING_MODE_ECO,
-                    RobotConstants.ROBOT_CLEANING_MODIFIER_NORMAL,
-                    RobotConstants.ROBOT_EXTRA_CARE_MODE_OFF);
+            HashMap<String, String> params = new HashMap<>();
+            params.put(RobotConstants.CLEANING_MODE_KEY, RobotConstants.ROBOT_CLEANING_MODE_ECO+"");
+            params.put(RobotConstants.CLEANING_AREA_SPOT_HEIGHT_KEY, RobotConstants.ROBOT_CLEANING_SPOT_SIZE_LARGE+"");
+            params.put(RobotConstants.CLEANING_AREA_SPOT_WIDTH_KEY, RobotConstants.ROBOT_CLEANING_SPOT_SIZE_LARGE+"");
 
-            robot.startCleaning(params, new NeatoCallback<Void>(){
+            robot.startSpotCleaning(params, new NeatoCallback<RobotState>(){
                 @Override
-                public void done(Void result) {
+                public void done(RobotState result) {
                     super.done(result);
                     updateUIButtons();
                 }

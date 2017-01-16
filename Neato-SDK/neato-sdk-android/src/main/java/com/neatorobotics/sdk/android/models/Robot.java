@@ -65,6 +65,16 @@ public class Robot implements Serializable{
         }
         else return false;
     }
+
+    public String getServiceVersion(String serviceName) {
+        if(this.state == null) return null;
+        if(this.state.availableServices == null) return null;
+        if(this.state.availableServices.containsKey(serviceName)) {
+            String version = this.state.availableServices.get(serviceName);
+            return version;
+        }
+        else return null;
+    }
     //endregion
 
     //region robot update stuff

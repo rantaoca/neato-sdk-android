@@ -12,12 +12,21 @@ import com.neatorobotics.sdk.android.nucleo.Nucleo;
 import com.neatorobotics.sdk.android.nucleo.NucleoBaseClient;
 import com.neatorobotics.sdk.android.nucleo.RobotCommands;
 import com.neatorobotics.sdk.android.nucleo.NucleoResponse;
+import com.neatorobotics.sdk.android.robotservices.cleaning.CleaningService;
+import com.neatorobotics.sdk.android.robotservices.housecleaning.HouseCleaningService;
+import com.neatorobotics.sdk.android.robotservices.housecleaning.HouseCleaningServiceFactory;
+import com.neatorobotics.sdk.android.robotservices.scheduling.SchedulingService;
+import com.neatorobotics.sdk.android.robotservices.scheduling.SchedulingServiceFactory;
+import com.neatorobotics.sdk.android.robotservices.spotcleaning.SpotCleaningService;
+import com.neatorobotics.sdk.android.robotservices.spotcleaning.SpotCleaningServiceFactory;
 import com.neatorobotics.sdk.android.utils.SchedulingUtils;
 
 import org.json.JSONObject;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
 
 /**
  * Neato-SDK
@@ -76,92 +85,71 @@ public class NeatoRobot{
     }
 
     /**
-     * Start the robot cleaning.
-     * @param params the JSON "params" property of the input commands.
+     * Start House Cleaning
+     * @param params
      * @param callback
      */
-    public void startCleaning(String params, final NeatoCallback<Void> callback) {
-        JSONObject command = RobotCommands.get(RobotCommands.START_CLEANING_COMMAND, params);
-        if(command == null) {
-            callback.fail(NeatoError.INVALID_JSON);
-            return;
-        }
-        asyncCall.executeCall(this,context, baseUrl, robot.serial,command, robot.secret_key, new NeatoCallback<NucleoResponse>(){
-            @Override
-            public void done(NucleoResponse result) {
-                super.done(result);
-                if(result == null) {
-                    callback.fail(NeatoError.GENERIC_ERROR);
-                }else if(result.isHttpOK()) {
-                    callback.done(null);
-                }else {
-                    callback.fail(NeatoError.GENERIC_ERROR);
-                }
-            }
-        });
+    public void startHouseCleaning(HashMap<String, String> params, NeatoCallback<RobotState> callback){
+        HouseCleaningService hcs = getHouseCleaningService();
+        if(hcs != null) {
+            hcs.startCleaning(this.robot, params, callback);
+        }else callback.fail(NeatoError.GENERIC_ERROR);
+    }
+
+    /**
+     * Start Spot Cleaning
+     * @param params
+     * @param callback
+     */
+    public void startSpotCleaning(HashMap<String, String> params, NeatoCallback<RobotState> callback){
+        SpotCleaningService hcs = getSpotCleaningService();
+        if(hcs != null) {
+            hcs.startCleaning(this.robot, params, callback);
+        }else callback.fail(NeatoError.GENERIC_ERROR);
     }
 
     /**
      * Pause the robot cleaning.
      * @param callback
      */
-    public void pauseCleaning(final NeatoCallback<Void> callback) {
-        JSONObject command = RobotCommands.get(RobotCommands.PAUSE_CLEANING_COMMAND);
-        asyncCall.executeCall(this,context, baseUrl, robot.serial,command, robot.secret_key, new NeatoCallback<NucleoResponse>(){
-            @Override
-            public void done(NucleoResponse result) {
-                super.done(result);
-                if(result == null) {
-                    callback.fail(NeatoError.GENERIC_ERROR);
-                }else if(result.isHttpOK()) {
-                    callback.done(null);
-                }else {
-                    callback.fail(NeatoError.GENERIC_ERROR);
-                }
-            }
-        });
+    public void pauseCleaning(final NeatoCallback<RobotState> callback) {
+        CleaningService hcs = getCleaningService();
+        if(hcs != null) {
+            hcs.pauseCleaning(this.robot, null, callback);
+        }else callback.fail(NeatoError.GENERIC_ERROR);
     }
 
     /**
      * Stop the robot cleaning.
      * @param callback
      */
-    public void stopCleaning(final NeatoCallback<Void> callback) {
-        JSONObject command = RobotCommands.get(RobotCommands.STOP_CLEANING_COMMAND);
-        asyncCall.executeCall(this,context, baseUrl, robot.serial,command, robot.secret_key, new NeatoCallback<NucleoResponse>(){
-            @Override
-            public void done(NucleoResponse result) {
-                super.done(result);
-                if(result == null) {
-                    callback.fail(NeatoError.GENERIC_ERROR);
-                }else if(result.isHttpOK()) {
-                    callback.done(null);
-                }else {
-                    callback.fail(NeatoError.GENERIC_ERROR);
-                }
-            }
-        });
+    public void stopCleaning(final NeatoCallback<RobotState> callback) {
+        CleaningService hcs = getCleaningService();
+        if(hcs != null) {
+            hcs.stopCleaning(this.robot, null, callback);
+        }else callback.fail(NeatoError.GENERIC_ERROR);
     }
 
     /**
      * Resume the robot cleaning.
      * @param callback
      */
-    public void resumeCleaning(final NeatoCallback<Void> callback) {
-        JSONObject command = RobotCommands.get(RobotCommands.RESUME_CLEANING_COMMAND);
-        asyncCall.executeCall(this,context, baseUrl, robot.serial,command, robot.secret_key, new NeatoCallback<NucleoResponse>(){
-            @Override
-            public void done(NucleoResponse result) {
-                super.done(result);
-                if(result == null) {
-                    callback.fail(NeatoError.GENERIC_ERROR);
-                }else if(result.isHttpOK()) {
-                    callback.done(null);
-                }else {
-                    callback.fail(NeatoError.GENERIC_ERROR);
-                }
-            }
-        });
+    public void resumeCleaning(final NeatoCallback<RobotState> callback) {
+        CleaningService hcs = getCleaningService();
+        if(hcs != null) {
+            hcs.resumeCleaning(this.robot, null, callback);
+        }else callback.fail(NeatoError.GENERIC_ERROR);
+    }
+
+    /**
+     * Return the robot to is charging base.
+     * @param callback
+     */
+    public void goToBase(final NeatoCallback<RobotState> callback) {
+        CleaningService hcs = getCleaningService();
+        if(hcs != null) {
+            hcs.returnToBase(this.robot, null, callback);
+        }else callback.fail(NeatoError.GENERIC_ERROR);
     }
 
     /**
@@ -244,27 +232,6 @@ public class NeatoRobot{
                             callback.fail(NeatoError.GENERIC_ERROR);
                         }
                     });
-                }else {
-                    callback.fail(NeatoError.GENERIC_ERROR);
-                }
-            }
-        });
-    }
-
-    /**
-     * Return the robot to is charging base.
-     * @param callback
-     */
-    public void goToBase(final NeatoCallback<Void> callback) {
-        JSONObject command = RobotCommands.get(RobotCommands.SEND_TO_BASE_CLEANING_COMMAND);
-        asyncCall.executeCall(this,context, baseUrl, robot.serial,command, robot.secret_key, new NeatoCallback<NucleoResponse>(){
-            @Override
-            public void done(NucleoResponse result) {
-                super.done(result);
-                if(result == null) {
-                    callback.fail(NeatoError.GENERIC_ERROR);
-                }else if(result.isHttpOK()) {
-                    callback.done(null);
                 }else {
                     callback.fail(NeatoError.GENERIC_ERROR);
                 }
@@ -424,6 +391,15 @@ public class NeatoRobot{
     public boolean hasService(String serviceName, String serviceVersion) {
         return robot.hasService(serviceName,serviceVersion);
     }
+
+    /**
+     *
+     * @param serviceName
+     * @return serviceVersion if exists otherwise null
+     */
+    public String getServiceVersion(String serviceName) {
+        return robot.getServiceVersion(serviceName);
+    }
     //endregion
 
     //region robot getters and setters
@@ -484,4 +460,56 @@ public class NeatoRobot{
         }
     }
     //endregion
+
+    // region supported services
+    public CleaningService getCleaningService() {
+        return new CleaningService() {
+            @Override
+            public boolean isEcoModeSupported() {
+                return false;
+            }
+
+            @Override
+            public boolean isTurboModeSupported() {
+                return false;
+            }
+
+            @Override
+            public boolean isExtraCareModeSupported() {
+                return false;
+            }
+
+            @Override
+            public boolean isCleaningAreaSupported() {
+                return false;
+            }
+
+            @Override
+            public boolean isCleaningFrequencySupported() {
+                return false;
+            }
+        };
+    }
+
+    public HouseCleaningService getHouseCleaningService() {
+        if(this.robot.state == null) return null;//offline or no state available yet
+        if(this.hasService("houseCleaning")) {
+            return HouseCleaningServiceFactory.get(this.robot.getServiceVersion("houseCleaning"));
+        }else return null;//service not supported
+    }
+
+    public SpotCleaningService getSpotCleaningService() {
+        if(this.robot.state == null) return null;//offline or no state available yet
+        if(this.hasService("spotCleaning")) {
+            return SpotCleaningServiceFactory.get(this.robot.getServiceVersion("spotCleaning"));
+        }else return null;//service not supported
+    }
+
+    public SchedulingService getSchedulingService() {
+        if(this.robot.state == null) return null;//offline or no state available yet
+        if(this.hasService("schedule")) {
+            return SchedulingServiceFactory.get(this.robot.getServiceVersion("schedule"));
+        }else return null;//service not supported
+    }
+    // endregion
 }

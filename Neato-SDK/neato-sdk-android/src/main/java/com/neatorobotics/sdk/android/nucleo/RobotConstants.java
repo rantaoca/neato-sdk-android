@@ -6,6 +6,18 @@ package com.neatorobotics.sdk.android.nucleo;
  * Copyright © 2016 Neato Robotics. All rights reserved.
  */
 public class RobotConstants {
+
+    //keys
+
+    public static String CLEANING_MODE_KEY = "mode";
+    public static String CLEANING_CATEGORY_KEY = "category";
+    public static String CLEANING_MODIFIER_KEY = "modifier";
+    public static String CLEANING_NAVIGATION_MODE_KEY = "navigationMode";
+    public static String CLEANING_AREA_SPOT_WIDTH_KEY = "spotWidth";
+    public static String CLEANING_AREA_SPOT_HEIGHT_KEY = "spotHeight";
+
+    // values
+
     public final static int ROBOT_STATE_IDLE = 1;
     public final static int ROBOT_STATE_BUSY = 2;
     public final static int ROBOT_STATE_PAUSED = 3;
@@ -32,8 +44,8 @@ public class RobotConstants {
     public final static int ROBOT_CLEANING_MODIFIER_NORMAL = 1;
     public final static int ROBOT_CLEANING_MODIFIER_DOUBLE = 2;
 
-    public final static int ROBOT_CLEANING_SPOT_SIZE_200 = 200;
-    public final static int ROBOT_CLEANING_SPOT_SIZE_400 = 400;
+    public final static int ROBOT_CLEANING_SPOT_SIZE_SMALL = 200;
+    public final static int ROBOT_CLEANING_SPOT_SIZE_LARGE = 400;
 
     public final static int ROBOT_EXTRA_CARE_MODE_OFF = 1;
     public final static int ROBOT_EXTRA_CARE_MODE_ON = 2;
