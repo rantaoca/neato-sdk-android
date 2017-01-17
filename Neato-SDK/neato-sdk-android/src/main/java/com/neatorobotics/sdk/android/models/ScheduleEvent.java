@@ -34,17 +34,4 @@ public class ScheduleEvent implements Serializable {
             }
         }catch(JSONException e) {Log.e(TAG, "Exception", e);}
     }
-
-    public JSONObject getJSON(String scheduleVersion) {
-        JSONObject json = new JSONObject();
-        try {
-            //json.put("eventId",eventId);
-            json.put("startTime",startTime);
-            if(!scheduleVersion.equalsIgnoreCase("minimal-1")) {
-                json.put("mode", mode);
-            }
-            json.put("day",day);
-        }catch(JSONException e) {Log.e(TAG, "Exception", e);return null;}
-        return json;
-    }
 }

@@ -19,7 +19,6 @@ import com.neatorobotics.sdk.android.robotservices.scheduling.SchedulingService;
 import com.neatorobotics.sdk.android.robotservices.scheduling.SchedulingServiceFactory;
 import com.neatorobotics.sdk.android.robotservices.spotcleaning.SpotCleaningService;
 import com.neatorobotics.sdk.android.robotservices.spotcleaning.SpotCleaningServiceFactory;
-import com.neatorobotics.sdk.android.utils.SchedulingUtils;
 
 import org.json.JSONObject;
 
@@ -142,6 +141,17 @@ public class NeatoRobot{
     }
 
     /**
+     * Get the robot schedule program.
+     * @param callback
+     */
+    public void getSchedule(NeatoCallback<ArrayList<ScheduleEvent>> callback) {
+        SchedulingService service = getSchedulingService();
+        if(service != null) {
+            service.getSchedule(this.robot, null, callback);
+        }else callback.fail(NeatoError.GENERIC_ERROR);
+    }
+
+    /**
      * Return the robot to is charging base.
      * @param callback
      */
@@ -178,32 +188,22 @@ public class NeatoRobot{
      * @param callback
      */
     public void enableScheduling(final NeatoCallback<Void> callback) {
-        JSONObject command = RobotCommands.get(RobotCommands.ENABLE_SCHEDULE_COMMAND);
-        asyncCall.executeCall(this,context, baseUrl, robot.serial,command, robot.secret_key, new NeatoCallback<NucleoResponse>(){
-            @Override
-            public void done(NucleoResponse result) {
-                super.done(result);
-                if(result == null) {
-                    callback.fail(NeatoError.GENERIC_ERROR);
-                }else if(result.isHttpOK()) {
-                    updateRobotState(new NeatoCallback<Void>(){
-                        @Override
-                        public void done(Void result) {
-                            super.done(result);
-                            callback.done(null);
-                        }
+        SchedulingService service = getSchedulingService();
+        if(service != null) {
+            service.enableScheduling(this.robot, null, new NeatoCallback<Void>() {
+                @Override
+                public void done(Void result) {
+                    super.done(result);
+                    updateRobotState(callback);
+                }
 
-                        @Override
-                        public void fail(NeatoError error) {
-                            super.fail(error);
-                            callback.fail(NeatoError.GENERIC_ERROR);
-                        }
-                    });
-                }else {
+                @Override
+                public void fail(NeatoError error) {
+                    super.fail(error);
                     callback.fail(NeatoError.GENERIC_ERROR);
                 }
-            }
-        });
+            });
+        }else callback.fail(NeatoError.GENERIC_ERROR);
     }
 
     /**
@@ -211,32 +211,22 @@ public class NeatoRobot{
      * @param callback
      */
     public void disableScheduling(final NeatoCallback<Void> callback) {
-        JSONObject command = RobotCommands.get(RobotCommands.DISABLE_SCHEDULE_COMMAND);
-        asyncCall.executeCall(this,context, baseUrl, robot.serial,command, robot.secret_key, new NeatoCallback<NucleoResponse>(){
-            @Override
-            public void done(NucleoResponse result) {
-                super.done(result);
-                if(result == null) {
-                    callback.fail(NeatoError.GENERIC_ERROR);
-                }else if(result.isHttpOK()) {
-                    updateRobotState(new NeatoCallback<Void>(){
-                        @Override
-                        public void done(Void result) {
-                            super.done(result);
-                            callback.done(null);
-                        }
+        SchedulingService service = getSchedulingService();
+        if(service != null) {
+            service.disableScheduling(this.robot, null, new NeatoCallback<Void>() {
+                @Override
+                public void done(Void result) {
+                    super.done(result);
+                    updateRobotState(callback);
+                }
 
-                        @Override
-                        public void fail(NeatoError error) {
-                            super.fail(error);
-                            callback.fail(NeatoError.GENERIC_ERROR);
-                        }
-                    });
-                }else {
+                @Override
+                public void fail(NeatoError error) {
+                    super.fail(error);
                     callback.fail(NeatoError.GENERIC_ERROR);
                 }
-            }
-        });
+            });
+        }else callback.fail(NeatoError.GENERIC_ERROR);
     }
 
     /**
@@ -247,44 +237,10 @@ public class NeatoRobot{
      * @param callback
      */
     public void setSchedule(ArrayList<ScheduleEvent> events, final NeatoCallback<Void> callback) {
-        String eventsParams = SchedulingUtils.getEventsJSON(events,getState().getAvailableServices().get("schedule"));
-        JSONObject command = RobotCommands.get(RobotCommands.SET_SCHEDULE_COMMAND.replace("EVENTS_PLACEHOLDER","events:"+eventsParams));
-        asyncCall.executeCall(this,context, baseUrl, robot.serial,command, robot.secret_key, new NeatoCallback<NucleoResponse>(){
-            @Override
-            public void done(NucleoResponse result) {
-                super.done(result);
-                if(result == null) {
-                    callback.fail(NeatoError.GENERIC_ERROR);
-                }else if(result.isHttpOK()) {
-                    callback.done(null);
-                }else {
-                    callback.fail(NeatoError.GENERIC_ERROR);
-                }
-            }
-        });
-    }
-
-    /**
-     * Return the robot complete scheduling program.
-     * @param callback
-     */
-    public void getSchedule(final NeatoCallback<ArrayList<ScheduleEvent>> callback) {
-        JSONObject command = RobotCommands.get(RobotCommands.GET_ROBOT_SCHEDULE_COMMAND);
-        asyncCall.executeCall(this,context, baseUrl, robot.serial,command, robot.secret_key, new NeatoCallback<NucleoResponse>(){
-            @Override
-            public void done(NucleoResponse result) {
-                super.done(result);
-                if(result == null) {
-                    callback.fail(NeatoError.GENERIC_ERROR);
-                }else if(result.isHttpOK()) {
-                    RobotState state = new RobotState(result.getJSON());
-                    ArrayList<ScheduleEvent> events = state.getScheduleEvents();
-                    callback.done(events);
-                }else {
-                    callback.fail(NeatoError.GENERIC_ERROR);
-                }
-            }
-        });
+        SchedulingService service = getSchedulingService();
+        if(service != null) {
+            service.setSchedule(this.robot, events, callback);
+        }else callback.fail(NeatoError.GENERIC_ERROR);
     }
 
     /**
