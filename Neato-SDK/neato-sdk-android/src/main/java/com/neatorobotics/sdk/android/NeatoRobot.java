@@ -80,6 +80,12 @@ public class NeatoRobot{
                     callback.fail(NeatoError.GENERIC_ERROR);
                 }
             }
+
+            @Override
+            public void fail(NeatoError error) {
+                super.fail(error);
+                callback.fail(NeatoError.GENERIC_ERROR);
+            }
         });
     }
 
