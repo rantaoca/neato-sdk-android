@@ -19,7 +19,7 @@ To boost your development, you can also check the *sample application*.
 If you are using Gradle, add this dependency to your app build.gradle file:
 
 ``` groovy
-compile 'com.neatorobotics.sdk.android:neato-sdk-android:0.8.0@aar'
+compile 'com.neatorobotics.sdk.android:neato-sdk-android:0.8.1@aar'
 ```
 
 and this repo reference to your project .gradle file:
