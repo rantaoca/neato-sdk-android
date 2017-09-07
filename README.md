@@ -24,6 +24,7 @@ compile 'com.neatorobotics.sdk.android:neato-sdk-android:0.8.1@aar'
 ```
 
 and this repo reference to your project .gradle file:
+
 ``` groovy
 allprojects {
     repositories {
@@ -36,6 +37,7 @@ allprojects {
 ```
 
 This permission is required to be added in your AndroidManifest.xml file:
+
 ``` xml
 <uses-permission android:name="android.permission.INTERNET" />
 ```
@@ -315,6 +317,7 @@ if(robot.getState().isScheduleEnabled()) {
 ```
 
 To schedule house cleaning *every Wednesday at 15:00 in turbo mode*:
+
 ```java
 ScheduleEvent everyWednesday = new ScheduleEvent();
     everyWednesday.mode = RobotConstants.ROBOT_CLEANING_MODE_TURBO;
