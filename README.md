@@ -1,6 +1,6 @@
 [![Build Status](https://travis-ci.org/NeatoRobotics/neato-sdk-android.svg?branch=master)](https://travis-ci.org/NeatoRobotics/neato-sdk-android)
 
-#Neato SDK - Android
+# Neato SDK - Android
 
 This is the [Neato Developer Network's](http://developers.neatorobotics.com) official Android SDK (Beta release).
 
