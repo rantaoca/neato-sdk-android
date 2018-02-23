@@ -36,7 +36,7 @@ public abstract class CleaningService extends RobotService {
     public void stopCleaning(final Robot robot, HashMap<String,String> params, final NeatoCallback<RobotState> callback) {
         JSONObject command = new JSONObject();
         try {
-            command.put("reqId", 77);
+            command.put("reqId", "77");
             command.put("cmd", "stopCleaning");
         }catch (JSONException e) {
             Log.e(TAG, "Exception", e);
@@ -61,7 +61,7 @@ public abstract class CleaningService extends RobotService {
     public void pauseCleaning(final Robot robot, HashMap<String,String> params, final NeatoCallback<RobotState> callback) {
         JSONObject command = new JSONObject();
         try {
-            command.put("reqId", 77);
+            command.put("reqId", "77");
             command.put("cmd", "pauseCleaning");
         }catch (JSONException e) {
             Log.e(TAG, "Exception", e);
@@ -86,7 +86,7 @@ public abstract class CleaningService extends RobotService {
     public void resumeCleaning(final Robot robot, HashMap<String,String> params, final NeatoCallback<RobotState> callback) {
         JSONObject command = new JSONObject();
         try {
-            command.put("reqId", 77);
+            command.put("reqId", "77");
             command.put("cmd", "resumeCleaning");
         }catch (JSONException e) {
             Log.e(TAG, "Exception", e);
@@ -111,7 +111,7 @@ public abstract class CleaningService extends RobotService {
     public void returnToBase(final Robot robot, HashMap<String,String> params, final NeatoCallback<RobotState> callback) {
         JSONObject command = new JSONObject();
         try {
-            command.put("reqId", 77);
+            command.put("reqId", "77");
             command.put("cmd", "sendToBase");
         }catch (JSONException e) {
             Log.e(TAG, "Exception", e);
@@ -164,7 +164,7 @@ public abstract class CleaningService extends RobotService {
 
         JSONObject command = new JSONObject();
         try {
-            command.put("reqId", 77);
+            command.put("reqId", "77");
             command.put("cmd", "startCleaning");
 
             JSONObject commandParams = new JSONObject();
