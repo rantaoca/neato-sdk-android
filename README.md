@@ -1,10 +1,11 @@
 [![Build Status](https://travis-ci.org/NeatoRobotics/neato-sdk-android.svg?branch=master)](https://travis-ci.org/NeatoRobotics/neato-sdk-android)
 
-#Neato SDK - Android
+# Neato SDK - Android
 
 This is the [Neato Developer Network's](http://developers.neatorobotics.com) official Android SDK (Beta release).
 
 The Neato Android SDK enables Android apps to easily communicate with Neato connected robots and use its various features.
+The official Github repository can be found [here](https://github.com/NeatoRobotics/neato-sdk-android).
 
 To boost your development, you can also check the *sample application*.
 
@@ -23,6 +24,7 @@ compile 'com.neatorobotics.sdk.android:neato-sdk-android:0.8.1@aar'
 ```
 
 and this repo reference to your project .gradle file:
+
 ``` groovy
 allprojects {
     repositories {
@@ -35,6 +37,7 @@ allprojects {
 ```
 
 This permission is required to be added in your AndroidManifest.xml file:
+
 ``` xml
 <uses-permission android:name="android.permission.INTERNET" />
 ```
@@ -314,6 +317,7 @@ if(robot.getState().isScheduleEnabled()) {
 ```
 
 To schedule house cleaning *every Wednesday at 15:00 in turbo mode*:
+
 ```java
 ScheduleEvent everyWednesday = new ScheduleEvent();
     everyWednesday.mode = RobotConstants.ROBOT_CLEANING_MODE_TURBO;
