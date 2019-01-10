@@ -1,5 +1,7 @@
 package com.neatorobotics.sdk.android.nucleo;
 
+import com.neatorobotics.sdk.android.NeatoError;
+
 import org.json.JSONObject;
 
 import java.net.HttpURLConnection;
@@ -51,5 +53,36 @@ public class NucleoResponse {
     public boolean isStateResponse() {
         if(resultJson != null && resultJson.has("state")) return true;
         return false;
+    }
+
+    public NeatoError getError() {
+        if(getJSON() != null && getJSON().has("result") && getJSON().optString("result") != null) {
+            NeatoError error;
+            switch (getJSON().optString("result")) {
+                case "ko": error = NeatoError.KO;
+                    break;
+                case "not_found": error = NeatoError.NOT_FOUND;
+                    break;
+                case "command_rejected": error = NeatoError.COMMAND_REJECTED;
+                    break;
+                case "invalid_entry": error = NeatoError.INVALID_ENTRY;
+                    break;
+                case "max_boundaries_exceeded": error = NeatoError.MAX_BOUNDARIES_EXCEEDED;
+                    break;
+                case "not_on_charge_base": error = NeatoError.NOT_ON_CHARGE_BASE;
+                    break;
+                case "not_idle": error = NeatoError.NOT_IDLE;
+                    break;
+                case "command_not_found": error = NeatoError.COMMAND_NOT_FOUND;
+                    break;
+                case "bad_request": error = NeatoError.BAD_REQUEST;
+                    break;
+                case "invalid_json": error = NeatoError.INVALID_JSON;
+                    break;
+                default: error = NeatoError.GENERIC_ERROR;
+                    break;
+            }
+            return error;
+        }else return NeatoError.GENERIC_ERROR;
     }
 }

@@ -35,4 +35,14 @@ public class SpotCleaningMicro2Service extends SpotCleaningService {
         return false;
     }
 
+    @Override
+    public boolean isFloorPlanSupported() {
+        return false;
+    }
+
+    @Override
+    public boolean areZonesSupported() {
+        return false;
+    }
+
 }

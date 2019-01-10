@@ -20,4 +20,9 @@ public class SchedulingMinimal1Service extends SchedulingService {
         return false;
     }
 
+    @Override
+    public boolean areZonesSupported() {
+        return false;
+    }
+
 }

@@ -39,7 +39,10 @@ public class NucleoClient {
                     if(result.isStateResponse()) robot.state = new RobotState(result.getJSON());
                     callback.done(result);
                 }
-                else callback.fail(NeatoError.GENERIC_ERROR);
+                else {
+                    NeatoError error = result != null ? result.getError() : NeatoError.GENERIC_ERROR;
+                    callback.fail(error);
+                }
             }
         };
         if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.HONEYCOMB) {

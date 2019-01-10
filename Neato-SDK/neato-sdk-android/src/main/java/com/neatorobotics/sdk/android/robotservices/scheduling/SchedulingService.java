@@ -30,6 +30,7 @@ public abstract class SchedulingService extends RobotService{
 
     public abstract boolean isEcoModeSupported();
     public abstract boolean isTurboModeSupported();
+    public abstract boolean areZonesSupported();
 
     public void disableScheduling(Robot robot, HashMap<String, String> params, final NeatoCallback<Void> callback) {
         JSONObject command = RobotCommands.get(RobotCommands.DISABLE_SCHEDULE_COMMAND);
@@ -75,6 +76,9 @@ public abstract class SchedulingService extends RobotService{
                 jEvent.put("startTime", event.startTime);
                 if (isEcoModeSupported() && isTurboModeSupported()) {
                     jEvent.put("mode", event.mode);
+                }
+                if(areZonesSupported() && event.boundaryId != null) {
+                    jEvent.put("boundaryId", event.boundaryId);
                 }
                 jEvent.put("day", event.day);
                 array.put(jEvent);

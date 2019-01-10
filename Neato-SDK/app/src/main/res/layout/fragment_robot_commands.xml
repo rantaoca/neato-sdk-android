@@ -30,6 +30,11 @@
             android:layout_height="wrap_content"
             android:text="Start house cleaning"/>
         <Button
+            android:id="@+id/mapCleaning"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Start Floor Plan cleaning"/>
+        <Button
             android:id="@+id/pauseCleaning"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

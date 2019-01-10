@@ -35,4 +35,14 @@ public class SpotCleaningBasic1Service extends SpotCleaningService {
         return true;
     }
 
+    @Override
+    public boolean isFloorPlanSupported() {
+        return false;
+    }
+
+    @Override
+    public boolean areZonesSupported() {
+        return false;
+    }
+
 }

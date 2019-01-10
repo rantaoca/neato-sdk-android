@@ -6,9 +6,9 @@ package com.neatorobotics.sdk.android.robotservices.scheduling;
  * Copyright © 2016 Neato Robotics. All rights reserved.
  */
 
-public class SchedulingBasic1Service extends SchedulingService {
+public class SchedulingBasic2Service extends SchedulingService {
 
-    private static final String TAG = "SchedulingBasic1";
+    private static final String TAG = "SchedulingBasic2";
 
     @Override
     public boolean isEcoModeSupported() {
@@ -22,6 +22,6 @@ public class SchedulingBasic1Service extends SchedulingService {
 
     @Override
     public boolean areZonesSupported() {
-        return false;
+        return true;
     }
 }

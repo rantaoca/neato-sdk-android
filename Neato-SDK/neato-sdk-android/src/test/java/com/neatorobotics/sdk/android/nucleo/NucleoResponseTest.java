@@ -1,7 +1,5 @@
 package com.neatorobotics.sdk.android.nucleo;
 
-import android.test.suitebuilder.annotation.SmallTest;
-
 import org.json.JSONObject;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -14,7 +12,6 @@ import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.assertEquals;
 
 @RunWith(MockitoJUnitRunner.class)
-@SmallTest
 public class NucleoResponseTest {
     @Test
     public void isResponseOK() throws Exception {

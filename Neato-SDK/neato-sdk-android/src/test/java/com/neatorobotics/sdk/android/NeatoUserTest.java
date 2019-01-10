@@ -1,8 +1,6 @@
 package com.neatorobotics.sdk.android;
 
 import android.content.Context;
-import android.test.suitebuilder.annotation.SmallTest;
-
 import com.neatorobotics.sdk.android.authentication.DefaultAccessTokenDatasource;
 import com.neatorobotics.sdk.android.authentication.NeatoAuthentication;
 import com.neatorobotics.sdk.android.beehive.BeehiveResponse;
@@ -33,7 +31,6 @@ import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 
 @RunWith(MockitoJUnitRunner.class)
-@SmallTest
 public class NeatoUserTest {
 
     //class under test

@@ -1,7 +1,5 @@
 package com.neatorobotics.sdk.android.authentication;
 
-import android.test.suitebuilder.annotation.SmallTest;
-
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.runners.MockitoJUnitRunner;
@@ -9,7 +7,6 @@ import org.mockito.runners.MockitoJUnitRunner;
 import static org.junit.Assert.*;
 
 @RunWith(MockitoJUnitRunner.class)
-@SmallTest
 public class NeatoAuthenticationTest {
 
     private final String FORMATTED_AUTH_URL = "https://beehive.neatocloud.com/oauth2/authorize?client_id=%1$s&scope=%2$s&response_type=token&redirect_uri=%3$s";

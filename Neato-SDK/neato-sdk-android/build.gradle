@@ -3,14 +3,14 @@ apply plugin: 'com.github.dcendents.android-maven'
 apply plugin: 'com.jfrog.bintray'
 
 android {
-    compileSdkVersion 27
-    buildToolsVersion "27.0.3"
+    compileSdkVersion 28
+    buildToolsVersion "28.0.3"
 
     defaultConfig {
         minSdkVersion 9
-        targetSdkVersion 27
-        versionCode 2
-        versionName "0.8.1"
+        targetSdkVersion 28
+        versionCode 3
+        versionName "0.10.0"
     }
     buildTypes {
         release {
@@ -37,17 +37,17 @@ android {
 }
 
 dependencies {
-    compile fileTree(dir: 'libs', include: ['*.jar'])
-    testCompile 'junit:junit:4.12'
-    testCompile 'org.mockito:mockito-core:1.10.19'
-    testCompile 'org.json:json:20141113'
-    compile 'com.android.support:support-annotations:27.0.2'
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+    testImplementation 'junit:junit:4.12'
+    testImplementation 'org.mockito:mockito-core:1.10.19'
+    testImplementation 'org.json:json:20141113'
+    implementation 'com.android.support:support-annotations:28.0.0'
     //compile 'com.android.support:appcompat-v7:23.2.0'
 }
 
 //BINTRAY - JCENTER
 group = 'com.neatorobotics.sdk.android'
-version = '0.8.1'
+version = '0.10.0'
 
 def siteUrl = 'https://github.com/NeatoRobotics/neato-sdk-android'
 def gitUrl = 'https://github.com/NeatoRobotics/neato-sdk-android.git'

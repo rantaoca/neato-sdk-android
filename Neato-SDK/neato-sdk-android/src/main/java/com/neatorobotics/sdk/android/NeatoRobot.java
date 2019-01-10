@@ -1,10 +1,12 @@
 package com.neatorobotics.sdk.android;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.os.AsyncTask;
 import android.support.annotation.Nullable;
 import android.support.annotation.VisibleForTesting;
 
+import com.neatorobotics.sdk.android.models.CleaningMap;
 import com.neatorobotics.sdk.android.models.Robot;
 import com.neatorobotics.sdk.android.models.RobotState;
 import com.neatorobotics.sdk.android.models.ScheduleEvent;
@@ -12,9 +14,12 @@ import com.neatorobotics.sdk.android.nucleo.Nucleo;
 import com.neatorobotics.sdk.android.nucleo.NucleoBaseClient;
 import com.neatorobotics.sdk.android.nucleo.RobotCommands;
 import com.neatorobotics.sdk.android.nucleo.NucleoResponse;
+import com.neatorobotics.sdk.android.nucleo.RobotConstants;
 import com.neatorobotics.sdk.android.robotservices.cleaning.CleaningService;
 import com.neatorobotics.sdk.android.robotservices.housecleaning.HouseCleaningService;
 import com.neatorobotics.sdk.android.robotservices.housecleaning.HouseCleaningServiceFactory;
+import com.neatorobotics.sdk.android.robotservices.maps.MapsService;
+import com.neatorobotics.sdk.android.robotservices.maps.MapsServiceFactory;
 import com.neatorobotics.sdk.android.robotservices.scheduling.SchedulingService;
 import com.neatorobotics.sdk.android.robotservices.scheduling.SchedulingServiceFactory;
 import com.neatorobotics.sdk.android.robotservices.spotcleaning.SpotCleaningService;
@@ -25,7 +30,7 @@ import org.json.JSONObject;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.HashSet;
+import java.util.List;
 
 /**
  * Neato-SDK
@@ -90,6 +95,37 @@ public class NeatoRobot{
     }
 
     /**
+     * Start Floor Plan Cleaning
+     * @param params
+     * @param callback
+     */
+    public void startFloorPlanCleaning(HashMap<String, String> params, NeatoCallback<RobotState> callback){
+        HouseCleaningService hcs = getHouseCleaningService();
+        if(hcs != null && hcs.isFloorPlanSupported()) {
+            // set cleaning type to floor plan cleaning
+            if(params == null) params = new HashMap<>();
+            params.put(RobotConstants.CLEANING_TYPE_KEY, RobotConstants.ROBOT_CLEANING_CATEGORY_FLOOR_PLAN+"");
+            hcs.startCleaning(this.robot, params, callback);
+        }else callback.fail(NeatoError.SERVICE_NOT_SUPPORTED);
+    }
+
+    /**
+     * Start Zone Cleaning
+     * @param params
+     * @param callback
+     */
+    /*
+    public void startZoneCleaning(HashMap<String, String> params, NeatoCallback<RobotState> callback){
+        HouseCleaningService hcs = getHouseCleaningService();
+        if(hcs != null && hcs.areZonesSupported()) {
+            // set cleaning type to floor plan cleaning
+            if(params == null) params = new HashMap<>();
+            params.put(RobotConstants.CLEANING_TYPE_KEY, RobotConstants.ROBOT_CLEANING_CATEGORY_FLOOR_PLAN+"");
+            hcs.startCleaning(this.robot, params, callback);
+        }else callback.fail(NeatoError.SERVICE_NOT_SUPPORTED);
+    }*/
+
+    /**
      * Start House Cleaning
      * @param params
      * @param callback
@@ -98,7 +134,7 @@ public class NeatoRobot{
         HouseCleaningService hcs = getHouseCleaningService();
         if(hcs != null) {
             hcs.startCleaning(this.robot, params, callback);
-        }else callback.fail(NeatoError.GENERIC_ERROR);
+        }else callback.fail(NeatoError.SERVICE_NOT_SUPPORTED);
     }
 
     /**
@@ -110,7 +146,7 @@ public class NeatoRobot{
         SpotCleaningService hcs = getSpotCleaningService();
         if(hcs != null) {
             hcs.startCleaning(this.robot, params, callback);
-        }else callback.fail(NeatoError.GENERIC_ERROR);
+        }else callback.fail(NeatoError.SERVICE_NOT_SUPPORTED);
     }
 
     /**
@@ -121,7 +157,7 @@ public class NeatoRobot{
         CleaningService hcs = getCleaningService();
         if(hcs != null) {
             hcs.pauseCleaning(this.robot, null, callback);
-        }else callback.fail(NeatoError.GENERIC_ERROR);
+        }else callback.fail(NeatoError.SERVICE_NOT_SUPPORTED);
     }
 
     /**
@@ -132,7 +168,7 @@ public class NeatoRobot{
         CleaningService hcs = getCleaningService();
         if(hcs != null) {
             hcs.stopCleaning(this.robot, null, callback);
-        }else callback.fail(NeatoError.GENERIC_ERROR);
+        }else callback.fail(NeatoError.SERVICE_NOT_SUPPORTED);
     }
 
     /**
@@ -143,7 +179,7 @@ public class NeatoRobot{
         CleaningService hcs = getCleaningService();
         if(hcs != null) {
             hcs.resumeCleaning(this.robot, null, callback);
-        }else callback.fail(NeatoError.GENERIC_ERROR);
+        }else callback.fail(NeatoError.SERVICE_NOT_SUPPORTED);
     }
 
     /**
@@ -154,7 +190,7 @@ public class NeatoRobot{
         SchedulingService service = getSchedulingService();
         if(service != null) {
             service.getSchedule(this.robot, null, callback);
-        }else callback.fail(NeatoError.GENERIC_ERROR);
+        }else callback.fail(NeatoError.SERVICE_NOT_SUPPORTED);
     }
 
     /**
@@ -165,7 +201,7 @@ public class NeatoRobot{
         CleaningService hcs = getCleaningService();
         if(hcs != null) {
             hcs.returnToBase(this.robot, null, callback);
-        }else callback.fail(NeatoError.GENERIC_ERROR);
+        }else callback.fail(NeatoError.SERVICE_NOT_SUPPORTED);
     }
 
     /**
@@ -246,27 +282,18 @@ public class NeatoRobot{
         SchedulingService service = getSchedulingService();
         if(service != null) {
             service.setSchedule(this.robot, events, callback);
-        }else callback.fail(NeatoError.GENERIC_ERROR);
+        }else callback.fail(NeatoError.SERVICE_NOT_SUPPORTED);
     }
 
     /**
-     * Return the robot maps list.
+     * Return the robot cleaning maps list.
      * @param callback
      */
-    public void getMaps(final NeatoCallback<JSONObject> callback) {
-        NeatoUser.getInstance(context).getMaps(robot.serial, new NeatoCallback<JSONObject>() {
-            @Override
-            public void done(JSONObject result) {
-                super.done(result);
-                callback.done(result);
-            }
-
-            @Override
-            public void fail(NeatoError error) {
-                super.fail(error);
-                callback.fail(error);
-            }
-        });
+    public void getMaps(final NeatoCallback<List<CleaningMap>> callback) {
+        MapsService ms = getMapsService();
+        if(ms != null) {
+            ms.getCleaningMaps(NeatoUser.getInstance(context), this.robot, callback);
+        }else callback.fail(NeatoError.SERVICE_NOT_SUPPORTED);
     }
 
     /**
@@ -274,20 +301,11 @@ public class NeatoRobot{
      * @param mapId the ID of the map to retrieve the details
      * @param callback
      */
-    public void getMapDetails(final String mapId, final NeatoCallback<JSONObject> callback) {
-        NeatoUser.getInstance(context).getMap(robot.serial, mapId, new NeatoCallback<JSONObject>() {
-            @Override
-            public void done(JSONObject result) {
-                super.done(result);
-                callback.done(result);
-            }
-
-            @Override
-            public void fail(NeatoError error) {
-                super.fail(error);
-                callback.fail(error);
-            }
-        });
+    public void getMapDetails(final String mapId, final NeatoCallback<CleaningMap> callback) {
+        MapsService ms = getMapsService();
+        if(ms != null) {
+            ms.getCleaningMapDetails(NeatoUser.getInstance(context), this.robot, mapId, callback);
+        }else callback.fail(NeatoError.SERVICE_NOT_SUPPORTED);
     }
 
     /**
@@ -395,7 +413,7 @@ public class NeatoRobot{
     //region async call
     private class AsyncCall {
         public void executeCall(final NeatoRobot neatoRobot, final Context context, final String url, final String robot_serial, final JSONObject command, final String robotSecretKey, final NeatoCallback<NucleoResponse> callback) {
-            final AsyncTask<Void, Void, NucleoResponse> task = new AsyncTask<Void, Void, NucleoResponse>() {
+            @SuppressLint("StaticFieldLeak") final AsyncTask<Void, Void, NucleoResponse> task = new AsyncTask<Void, Void, NucleoResponse>() {
                 protected void onPreExecute() {}
                 protected NucleoResponse doInBackground(Void... unused) {
                     return NucleoBaseClient.executeNucleoCall(url,robot_serial,command,robotSecretKey);
@@ -450,6 +468,16 @@ public class NeatoRobot{
             public boolean isCleaningFrequencySupported() {
                 return false;
             }
+
+            @Override
+            public boolean isFloorPlanSupported() {
+                return false;
+            }
+
+            @Override
+            public boolean areZonesSupported() {
+                return false;
+            }
         };
     }
 
@@ -471,6 +499,13 @@ public class NeatoRobot{
         if(this.robot.state == null) return null;//offline or no state available yet
         if(this.hasService("schedule")) {
             return SchedulingServiceFactory.get(this.robot.getServiceVersion("schedule"));
+        }else return null;//service not supported
+    }
+
+    public MapsService getMapsService() {
+        if(this.robot.state == null) return null;//offline or no state available yet
+        if(this.hasService("maps")) {
+            return MapsServiceFactory.get(this.robot.getServiceVersion("maps"));
         }else return null;//service not supported
     }
     // endregion

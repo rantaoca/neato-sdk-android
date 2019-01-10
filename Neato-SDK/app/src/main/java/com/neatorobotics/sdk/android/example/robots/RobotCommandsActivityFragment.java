@@ -15,6 +15,7 @@ import com.neatorobotics.sdk.android.NeatoCallback;
 import com.neatorobotics.sdk.android.NeatoError;
 import com.neatorobotics.sdk.android.NeatoRobot;
 import com.neatorobotics.sdk.android.example.R;
+import com.neatorobotics.sdk.android.models.CleaningMap;
 import com.neatorobotics.sdk.android.models.Robot;
 import com.neatorobotics.sdk.android.models.RobotState;
 import com.neatorobotics.sdk.android.models.ScheduleEvent;
@@ -27,6 +28,7 @@ import org.json.JSONObject;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Locale;
 
 /**
@@ -36,7 +38,7 @@ public class RobotCommandsActivityFragment extends Fragment {
 
     protected NeatoRobot robot;
 
-    private Button houseCleaning, spotCleaning, pauseCleaning,
+    private Button houseCleaning, mapCleaning, spotCleaning, pauseCleaning,
                     stopCleaning, resumeCleaning, returnToBaseCleaning, findMe,
                     enableDisableScheduling, scheduleEveryWednesday, getScheduling,
                     maps;
@@ -70,6 +72,7 @@ public class RobotCommandsActivityFragment extends Fragment {
 
         houseCleaning = (Button)rootView.findViewById(R.id.houseCleaning);
         spotCleaning = (Button)rootView.findViewById(R.id.spotCleaning);
+        mapCleaning = (Button)rootView.findViewById(R.id.mapCleaning);
         pauseCleaning = (Button)rootView.findViewById(R.id.pauseCleaning);
         stopCleaning = (Button)rootView.findViewById(R.id.stopCleaning);
         resumeCleaning = (Button)rootView.findViewById(R.id.resumeCleaning);
@@ -92,6 +95,13 @@ public class RobotCommandsActivityFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 executeHouseCleaning();
+            }
+        });
+
+        mapCleaning.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                executeMapCleaning();
             }
         });
 
@@ -161,6 +171,15 @@ public class RobotCommandsActivityFragment extends Fragment {
         return rootView;
     }
 
+    private void updateUIButtons(NeatoError error) {
+
+        if(error != null) {
+            Toast.makeText(getContext(), error.name(), Toast.LENGTH_SHORT).show();
+        }
+
+        updateUIButtons();
+    }
+
     private void updateUIButtons() {
         if(robot != null && robot.getState() != null) {
             houseCleaning.setEnabled(robot.getState().isStartAvailable());
@@ -191,7 +210,7 @@ public class RobotCommandsActivityFragment extends Fragment {
                 @Override
                 public void fail(NeatoError error) {
                     super.fail(error);
-                    updateUIButtons();
+                    updateUIButtons(error);
                 }
             });
         }
@@ -209,7 +228,7 @@ public class RobotCommandsActivityFragment extends Fragment {
                 @Override
                 public void fail(NeatoError error) {
                     super.fail(error);
-                    updateUIButtons();
+                    updateUIButtons(error);
                 }
             });
         }
@@ -230,7 +249,28 @@ public class RobotCommandsActivityFragment extends Fragment {
                 @Override
                 public void fail(NeatoError error) {
                     super.fail(error);
+                    updateUIButtons(error);
+                }
+            });
+        }
+    }
+
+    private void executeMapCleaning() {
+        if(robot != null) {
+            HashMap<String, String> params = new HashMap<>();
+            params.put(RobotConstants.CLEANING_MODE_KEY, RobotConstants.ROBOT_CLEANING_MODE_TURBO+"");
+
+            robot.startFloorPlanCleaning(params, new NeatoCallback<RobotState>(){
+                @Override
+                public void done(RobotState result) {
+                    super.done(result);
                     updateUIButtons();
+                }
+
+                @Override
+                public void fail(NeatoError error) {
+                    super.fail(error);
+                    updateUIButtons(error);
                 }
             });
         }
@@ -248,7 +288,7 @@ public class RobotCommandsActivityFragment extends Fragment {
                 @Override
                 public void fail(NeatoError error) {
                     super.fail(error);
-                    updateUIButtons();
+                    updateUIButtons(error);
                 }
             });
         }
@@ -268,7 +308,7 @@ public class RobotCommandsActivityFragment extends Fragment {
                     @Override
                     public void fail(NeatoError error) {
                         super.fail(error);
-                        updateUIButtons();
+                        updateUIButtons(error);
                     }
                 });
             }else {
@@ -291,7 +331,7 @@ public class RobotCommandsActivityFragment extends Fragment {
                     @Override
                     public void fail(NeatoError error) {
                         super.fail(error);
-                        updateUIButtons();
+                        updateUIButtons(error);
                         Toast.makeText(getContext(),"Impossible to disable scheduling.",Toast.LENGTH_SHORT).show();
                     }
                 });
@@ -307,7 +347,7 @@ public class RobotCommandsActivityFragment extends Fragment {
                     @Override
                     public void fail(NeatoError error) {
                         super.fail(error);
-                        updateUIButtons();
+                        updateUIButtons(error);
                         Toast.makeText(getContext(),"Impossible to enable scheduling.",Toast.LENGTH_SHORT).show();
                     }
                 });
@@ -335,7 +375,7 @@ public class RobotCommandsActivityFragment extends Fragment {
                 @Override
                 public void fail(NeatoError error) {
                     super.fail(error);
-                    updateUIButtons();
+                    updateUIButtons(error);
                     Toast.makeText(getContext(),"Oops! Impossible to set schedule.",Toast.LENGTH_SHORT).show();
                 }
             });
@@ -357,7 +397,7 @@ public class RobotCommandsActivityFragment extends Fragment {
                 @Override
                 public void fail(NeatoError error) {
                     super.fail(error);
-                    updateUIButtons();
+                    updateUIButtons(error);
                     Toast.makeText(getContext(),"Oops! Impossible to get schedule.",Toast.LENGTH_SHORT).show();
                 }
             });
@@ -366,16 +406,11 @@ public class RobotCommandsActivityFragment extends Fragment {
 
     private void getMapDetails(String mapId) {
         if(robot != null) {
-            robot.getMapDetails(mapId, new NeatoCallback<JSONObject>(){
+            robot.getMapDetails(mapId, new NeatoCallback<CleaningMap>(){
                 @Override
-                public void done(JSONObject result) {
-                    super.done(result);
-                    try {
-                        String url = result.getString("url");
-                        showMapImage(url);
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    }
+                public void done(CleaningMap map) {
+                    super.done(map);
+                    showMapImage(map.getUrl());
                 }
 
                 @Override
@@ -395,25 +430,19 @@ public class RobotCommandsActivityFragment extends Fragment {
         if(robot != null) {
             //check if the robot support this service
             if (robot.hasService("maps")) {
-                robot.getMaps(new NeatoCallback<JSONObject>() {
+                robot.getMaps(new NeatoCallback<List<CleaningMap>>() {
                     @Override
-                    public void done(JSONObject result) {
-                        super.done(result);
+                    public void done(List<CleaningMap> maps) {
+                        super.done(maps);
                         updateUIButtons();
-                        if (result != null) {
+                        if (maps != null && maps.size() > 0) {
                             // now you can get a map id and retrieve the map details
                             // to download the map image use the map "url" property
                             // this second call is needed because the map urls expire after a while
-                            try {
-                                JSONArray maps = result.getJSONArray("maps");
-                                if (maps != null && maps.length() > 0) {
-                                    String mapId = maps.getJSONObject(0).getString("id");
-                                    getMapDetails(mapId);
-                                } else Toast.makeText(getContext(), "No maps available yet. Complete at least one house cleaning to view maps.", Toast.LENGTH_SHORT).show();
+                            getMapDetails(maps.get(0).getId());
 
-                            } catch (JSONException e) {
-                                e.printStackTrace();
-                            }
+                        }else {
+                            Toast.makeText(getContext(), "No maps available yet. Complete at least one house cleaning to view maps.", Toast.LENGTH_SHORT).show();
                         }
                     }
 
@@ -442,7 +471,7 @@ public class RobotCommandsActivityFragment extends Fragment {
                 @Override
                 public void fail(NeatoError error) {
                     super.fail(error);
-                    updateUIButtons();
+                    updateUIButtons(error);
                 }
             });
         }
@@ -465,7 +494,7 @@ public class RobotCommandsActivityFragment extends Fragment {
                 @Override
                 public void fail(NeatoError error) {
                     super.fail(error);
-                    updateUIButtons();
+                    updateUIButtons(error);
                 }
             });
         }

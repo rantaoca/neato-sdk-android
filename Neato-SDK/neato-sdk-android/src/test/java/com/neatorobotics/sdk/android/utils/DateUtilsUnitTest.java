@@ -1,7 +1,5 @@
 package com.neatorobotics.sdk.android.utils;
 
-import android.test.suitebuilder.annotation.SmallTest;
-
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.runners.MockitoJUnitRunner;
@@ -12,7 +10,6 @@ import java.util.TimeZone;
 import static org.junit.Assert.*;
 
 @RunWith(MockitoJUnitRunner.class)
-@SmallTest
 public class DateUtilsUnitTest {
     @Test
     public void testGetHTTP11DateStringHeader() throws Exception{

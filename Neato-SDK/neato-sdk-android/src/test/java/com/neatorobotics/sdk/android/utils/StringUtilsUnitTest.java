@@ -1,7 +1,5 @@
 package com.neatorobotics.sdk.android.utils;
 
-import android.test.suitebuilder.annotation.SmallTest;
-
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.runners.MockitoJUnitRunner;
@@ -13,7 +11,6 @@ import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.assertEquals;
 
 @RunWith(MockitoJUnitRunner.class)
-@SmallTest
 public class StringUtilsUnitTest {
     @Test
     public void testStringToHex() throws Exception{

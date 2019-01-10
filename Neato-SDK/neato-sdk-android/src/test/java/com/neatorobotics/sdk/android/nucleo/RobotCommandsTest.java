@@ -1,7 +1,5 @@
 package com.neatorobotics.sdk.android.nucleo;
 
-import android.test.suitebuilder.annotation.SmallTest;
-
 import org.json.JSONObject;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -16,7 +14,6 @@ import static org.junit.Assert.assertEquals;
  * Copyright © 2016 Neato Robotics. All rights reserved.
  */
 @RunWith(MockitoJUnitRunner.class)
-@SmallTest
 public class RobotCommandsTest {
     @Test
     public void getCommandTest() throws Exception {

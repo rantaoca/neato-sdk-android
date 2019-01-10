@@ -1,4 +1,4 @@
-package com.neatorobotics.sdk.android.robotservices.housecleaning;
+package com.neatorobotics.sdk.android.robotservices.spotcleaning;
 
 /**
  * Neato
@@ -6,18 +6,18 @@ package com.neatorobotics.sdk.android.robotservices.housecleaning;
  * Copyright © 2016 Neato Robotics. All rights reserved.
  */
 
-public class HouseCleaningBasic1Service extends HouseCleaningService {
+public class SpotCleaningBasic3Service extends SpotCleaningService {
 
-    private static final String TAG = "HouseCleaningBasic1";
+    private static final String TAG = "SpotCleaningBasic2";
 
     @Override
     public boolean isEcoModeSupported() {
-        return true;
+        return false;
     }
 
     @Override
     public boolean isTurboModeSupported() {
-        return true;
+        return false;
     }
 
     @Override
@@ -27,12 +27,12 @@ public class HouseCleaningBasic1Service extends HouseCleaningService {
 
     @Override
     public boolean isCleaningAreaSupported() {
-        return false;
+        return true;
     }
 
     @Override
     public boolean isCleaningFrequencySupported() {
-        return true;
+        return false;
     }
 
     @Override
@@ -44,4 +44,5 @@ public class HouseCleaningBasic1Service extends HouseCleaningService {
     public boolean areZonesSupported() {
         return false;
     }
+
 }

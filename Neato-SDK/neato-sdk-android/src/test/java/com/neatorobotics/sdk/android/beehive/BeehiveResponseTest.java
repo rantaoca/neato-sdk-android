@@ -1,7 +1,5 @@
 package com.neatorobotics.sdk.android.beehive;
 
-import android.test.suitebuilder.annotation.SmallTest;
-
 import org.json.JSONObject;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -13,7 +11,6 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
 @RunWith(MockitoJUnitRunner.class)
-@SmallTest
 public class BeehiveResponseTest {
     @Test
     public void isUnauthorized() throws Exception {

@@ -1,7 +1,6 @@
 package com.neatorobotics.sdk.android.beehive;
 
 import android.content.Context;
-import android.test.suitebuilder.annotation.SmallTest;
 
 import com.neatorobotics.sdk.android.MockJSON;
 import com.neatorobotics.sdk.android.models.Robot;
@@ -22,7 +21,6 @@ import static org.mockito.Mockito.verify;
 import static org.junit.Assert.*;
 
 @RunWith(MockitoJUnitRunner.class)
-@SmallTest
 public class BeehiveJSONParserTest {
 
     @Mock

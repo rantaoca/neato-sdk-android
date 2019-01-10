@@ -9,12 +9,14 @@ public class RobotConstants {
 
     //keys
 
+    public static String CLEANING_TYPE_KEY = "type";
     public static String CLEANING_MODE_KEY = "mode";
     public static String CLEANING_CATEGORY_KEY = "category";
     public static String CLEANING_MODIFIER_KEY = "modifier";
     public static String CLEANING_NAVIGATION_MODE_KEY = "navigationMode";
     public static String CLEANING_AREA_SPOT_WIDTH_KEY = "spotWidth";
     public static String CLEANING_AREA_SPOT_HEIGHT_KEY = "spotHeight";
+    public static String CLEANING_ZONE_KEY = "boundaryId";
 
     // values
 
@@ -37,6 +39,7 @@ public class RobotConstants {
     public final static int ROBOT_CLEANING_CATEGORY_HOUSE = 2;
     public final static int ROBOT_CLEANING_CATEGORY_SPOT = 3;
     public final static int ROBOT_CLEANING_CATEGORY_MANUAL = 1;
+    public final static int ROBOT_CLEANING_CATEGORY_FLOOR_PLAN = 4;
 
     public final static int ROBOT_CLEANING_MODE_ECO = 1;
     public final static int ROBOT_CLEANING_MODE_TURBO = 2;

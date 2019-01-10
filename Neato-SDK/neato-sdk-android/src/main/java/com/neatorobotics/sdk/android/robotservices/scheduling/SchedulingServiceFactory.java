@@ -9,6 +9,7 @@ package com.neatorobotics.sdk.android.robotservices.scheduling;
 public class SchedulingServiceFactory {
     public static SchedulingService get(String serviceVersion) {
         if("basic-1".equalsIgnoreCase(serviceVersion)) return new SchedulingBasic1Service();
+        else if("basic-2".equalsIgnoreCase(serviceVersion)) return new SchedulingBasic2Service();
         else if("minimal-1".equalsIgnoreCase(serviceVersion)) return new SchedulingMinimal1Service();
         else return null;
     }

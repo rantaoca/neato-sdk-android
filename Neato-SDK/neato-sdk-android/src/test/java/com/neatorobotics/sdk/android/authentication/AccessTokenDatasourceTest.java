@@ -1,9 +1,6 @@
 package com.neatorobotics.sdk.android.authentication;
 
 import android.content.Context;
-import android.test.suitebuilder.annotation.SmallTest;
-
-import com.neatorobotics.sdk.android.NeatoUser;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -19,7 +16,6 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
 @RunWith(MockitoJUnitRunner.class)
-@SmallTest
 public class AccessTokenDatasourceTest {
 
     @Mock

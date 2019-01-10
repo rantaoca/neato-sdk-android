@@ -12,7 +12,6 @@
         android:theme="@style/AppTheme">
         <activity
             android:name=".login.LoginActivity"
-            android:theme="@style/AppTheme.NoActionBar"
             android:launchMode="singleInstance">
             <intent-filter>
                 <category android:name="android.intent.category.DEFAULT" />
@@ -34,12 +33,10 @@
         </activity>
         <activity
             android:name=".robots.RobotsActivity"
-            android:label="@string/title_activity_robots"
-            android:theme="@style/AppTheme.NoActionBar" />
+            android:label="@string/title_activity_robots"/>
         <activity
             android:name=".robots.RobotCommandsActivity"
-            android:label="@string/title_activity_robot_commands"
-            android:theme="@style/AppTheme.NoActionBar" />
+            android:label="@string/title_activity_robot_commands" />
     </application>
 
 </manifest>

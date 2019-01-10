@@ -2,8 +2,6 @@ package com.neatorobotics.sdk.android.authentication;
 
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.net.Uri;
-import android.test.suitebuilder.annotation.SmallTest;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -25,7 +23,6 @@ import static org.mockito.Matchers.anyString;
 import static org.mockito.Mockito.when;
 
 @RunWith(MockitoJUnitRunner.class)
-@SmallTest
 public class DefaultAccessTokenDatasourceTest {
 
     @Mock

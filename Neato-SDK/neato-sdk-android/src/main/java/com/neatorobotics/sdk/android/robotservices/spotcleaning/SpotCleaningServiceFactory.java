@@ -10,6 +10,7 @@ public class SpotCleaningServiceFactory {
     public static SpotCleaningService get(String serviceVersion) {
         if("basic-1".equalsIgnoreCase(serviceVersion)) return new SpotCleaningBasic1Service();
         else if("basic-2".equalsIgnoreCase(serviceVersion)) return new SpotCleaningBasic2Service();
+        else if("basic-3".equalsIgnoreCase(serviceVersion)) return new SpotCleaningBasic3Service();
         else if("minimal-2".equalsIgnoreCase(serviceVersion)) return new SpotCleaningMinimal2Service();
         else if("micro-2".equalsIgnoreCase(serviceVersion)) return new SpotCleaningMicro2Service();
         else return null;

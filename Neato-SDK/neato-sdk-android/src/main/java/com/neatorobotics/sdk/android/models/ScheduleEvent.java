@@ -19,6 +19,8 @@ public class ScheduleEvent implements Serializable {
     //public String eventId = "0";
     public String startTime;//24hours format
     public int mode, day;//0 is sunday
+    public String boundaryId; //Optional. If provided, the ID of the zone to clean.
+    public String boundaryName; //Optional. If provided, the name of the zone to clean.
 
     public void loadData(JSONObject json) {
         if(json == null) return;
@@ -31,6 +33,15 @@ public class ScheduleEvent implements Serializable {
             }else mode = -1;
             if(json.has("day") && !json.isNull("day")){
                 day = json.getInt("day");
+            }
+            if(json.has("boundary")){
+                JSONObject boundary = json.getJSONObject("boundary");
+                if(boundary != null && boundary.has("id")) {
+                    boundaryId = boundary.getString("id");
+                }
+                if(boundary != null && boundary.has("name")) {
+                    boundaryName = boundary.getString("name");
+                }
             }
         }catch(JSONException e) {Log.e(TAG, "Exception", e);}
     }

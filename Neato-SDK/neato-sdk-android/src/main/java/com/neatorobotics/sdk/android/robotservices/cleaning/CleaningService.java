@@ -32,6 +32,8 @@ public abstract class CleaningService extends RobotService {
     public abstract boolean isExtraCareModeSupported();
     public abstract boolean isCleaningAreaSupported();
     public abstract boolean isCleaningFrequencySupported();
+    public abstract boolean isFloorPlanSupported();
+    public abstract boolean areZonesSupported();
 
     public void stopCleaning(final Robot robot, HashMap<String,String> params, final NeatoCallback<RobotState> callback) {
         JSONObject command = new JSONObject();
@@ -181,6 +183,20 @@ public abstract class CleaningService extends RobotService {
             if(isCleaningAreaSupported()) {
                 commandParams.put(RobotConstants.CLEANING_AREA_SPOT_HEIGHT_KEY, cleaningAreaHeight);
                 commandParams.put(RobotConstants.CLEANING_AREA_SPOT_WIDTH_KEY, cleaningAreaWidth);
+            }
+            // check if floor plan cleaning is supported
+            // and if we have some floor plan or zones related params
+            if(isFloorPlanSupported()) {
+                if(params.containsKey(RobotConstants.CLEANING_TYPE_KEY)) {
+                    cleaningType = Integer.parseInt(params.get(RobotConstants.CLEANING_TYPE_KEY));
+                    commandParams.put(RobotConstants.CLEANING_CATEGORY_KEY, cleaningType);// override house with floor plan if the case
+                }
+            }
+            if(areZonesSupported()) {
+                if(params.containsKey(RobotConstants.CLEANING_ZONE_KEY)) {
+                    String boundaryId = params.get(RobotConstants.CLEANING_ZONE_KEY);
+                    commandParams.put(RobotConstants.CLEANING_ZONE_KEY, boundaryId);
+                }
             }
             command.put("params", commandParams);
         }catch (JSONException e) {

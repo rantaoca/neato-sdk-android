@@ -35,4 +35,14 @@ public class HouseCleaningBasic2Service extends HouseCleaningService {
         return true;
     }
 
+    @Override
+    public boolean isFloorPlanSupported() {
+        return false;
+    }
+
+    @Override
+    public boolean areZonesSupported() {
+        return false;
+    }
+
 }

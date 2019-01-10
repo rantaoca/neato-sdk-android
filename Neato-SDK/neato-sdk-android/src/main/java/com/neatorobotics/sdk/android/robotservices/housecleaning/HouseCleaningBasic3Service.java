@@ -2,13 +2,13 @@ package com.neatorobotics.sdk.android.robotservices.housecleaning;
 
 /**
  * Neato
- * Created by Marco on 04/01/2017.
- * Copyright © 2016 Neato Robotics. All rights reserved.
+ * Created by Marco on 08/01/2019.
+ * Copyright © 2019 Neato Robotics. All rights reserved.
  */
 
-public class HouseCleaningBasic1Service extends HouseCleaningService {
+public class HouseCleaningBasic3Service extends HouseCleaningService {
 
-    private static final String TAG = "HouseCleaningBasic1";
+    private static final String TAG = "HouseCleaningBasic3";
 
     @Override
     public boolean isEcoModeSupported() {
@@ -22,7 +22,7 @@ public class HouseCleaningBasic1Service extends HouseCleaningService {
 
     @Override
     public boolean isExtraCareModeSupported() {
-        return false;
+        return true;
     }
 
     @Override
@@ -32,16 +32,17 @@ public class HouseCleaningBasic1Service extends HouseCleaningService {
 
     @Override
     public boolean isCleaningFrequencySupported() {
-        return true;
+        return false;
     }
 
     @Override
     public boolean isFloorPlanSupported() {
-        return false;
+        return true;
     }
 
     @Override
     public boolean areZonesSupported() {
         return false;
     }
+
 }

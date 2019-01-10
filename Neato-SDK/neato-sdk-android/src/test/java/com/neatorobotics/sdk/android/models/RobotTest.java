@@ -1,7 +1,5 @@
 package com.neatorobotics.sdk.android.models;
 
-import android.test.suitebuilder.annotation.SmallTest;
-
 import org.json.JSONObject;
 import org.junit.Assert;
 import org.junit.Test;
@@ -14,7 +12,6 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
 @RunWith(MockitoJUnitRunner.class)
-@SmallTest
 public class RobotTest {
 
     @Test
