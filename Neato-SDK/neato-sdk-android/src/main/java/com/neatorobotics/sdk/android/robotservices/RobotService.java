@@ -1,6 +1,6 @@
 package com.neatorobotics.sdk.android.robotservices;
 
-import android.support.annotation.VisibleForTesting;
+import androidx.annotation.VisibleForTesting;
 
 import com.neatorobotics.sdk.android.nucleo.NucleoClient;
 

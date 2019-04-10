@@ -3,8 +3,8 @@ package com.neatorobotics.sdk.android;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.os.AsyncTask;
-import android.support.annotation.Nullable;
-import android.support.annotation.VisibleForTesting;
+import androidx.annotation.Nullable;
+import androidx.annotation.VisibleForTesting;
 
 import com.neatorobotics.sdk.android.models.CleaningMap;
 import com.neatorobotics.sdk.android.models.Robot;

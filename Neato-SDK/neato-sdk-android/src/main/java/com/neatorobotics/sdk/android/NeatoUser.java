@@ -2,7 +2,7 @@ package com.neatorobotics.sdk.android;
 
 import android.content.Context;
 import android.os.AsyncTask;
-import android.support.annotation.VisibleForTesting;
+import androidx.annotation.VisibleForTesting;
 
 import com.neatorobotics.sdk.android.authentication.AccessTokenDatasource;
 import com.neatorobotics.sdk.android.authentication.NeatoAuthentication;

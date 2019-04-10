@@ -1,7 +1,7 @@
 package com.neatorobotics.sdk.android.example.robots;
 
-import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -21,15 +21,9 @@ import com.neatorobotics.sdk.android.models.RobotState;
 import com.neatorobotics.sdk.android.models.ScheduleEvent;
 import com.neatorobotics.sdk.android.nucleo.RobotConstants;
 
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Locale;
 
 /**
  * A placeholder fragment containing a simple view.

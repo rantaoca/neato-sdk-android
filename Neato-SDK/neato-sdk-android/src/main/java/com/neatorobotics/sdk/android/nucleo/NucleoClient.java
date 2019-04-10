@@ -1,7 +1,7 @@
 package com.neatorobotics.sdk.android.nucleo;
 
 import android.os.AsyncTask;
-import android.support.annotation.VisibleForTesting;
+import androidx.annotation.VisibleForTesting;
 
 import com.neatorobotics.sdk.android.NeatoCallback;
 import com.neatorobotics.sdk.android.NeatoError;
