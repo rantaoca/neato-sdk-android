@@ -1,0 +1,49 @@
+/*
+ * Copyright (c) 2019.
+ * Neato Robotics Inc.
+ */
+
+package com.neatorobotics.sdk.android.clients
+
+enum class ResourceState {
+
+    // robot "result"
+    OK,
+    KO,
+    INVALID,
+    UNKNOWN,
+    NOT_FOUND,
+    COMMAND_REJECTED,
+    INVALID_ENTRY,
+    MAX_BOUNDARIES_EXCEDEED,
+    NOT_ON_CHARGE_BASE,
+    NOT_IDLE,
+    COMMAND_NOT_FOUND,
+    BAD_REQUEST,
+    INVALID_JSON,
+    ALREADY_ADDED,
+
+    // http codes
+    HTTP_OK,
+    HTTP_NOT_FOUND,
+    HTTP_TIMEOUT,
+    HTTP_UNAUTHORIZED,
+    HTTP_BAD_GATEWAY,
+    HTTP_FORBIDDEN,
+    HTTP_UNPROCESSABLE_ENTITY,
+    HTTP_INTERNAL_SERVER_ERROR,
+    HTTP_OTHER_ERROR,
+    HTTP_UNAVAILABLE,
+    HTTP_ACCEPTED,
+
+    // exceptions
+    EXCEPTION,
+    SSL_EXCEPTION,
+    NO_SUCH_ALGORITHM_EXCEPTION,
+    JSON_EXCEPTION,
+    INVALID_KEY_EXCEPTION,
+    MALFORMED_URL_EXCEPTION,
+    UNSUPPORTED_ENCODING_EXCEPTION,
+    NET_PROTOCOL_EXCEPTION,
+    NO_INTERNET;
+}

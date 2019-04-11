@@ -1,4 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<manifest package="com.neatorobotics.sdk.android">
-    <application/>
+<manifest
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        package="com.neatorobotics.sdk.android">
+    <application>
+        <provider
+                android:name=".NeatoSDKInitProvider"
+                android:authorities="${applicationId}.InitProvider" />
+    </application>
 </manifest>

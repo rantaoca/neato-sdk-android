@@ -1,0 +1,149 @@
+package com.neatorobotics.sdk.android.authentication
+
+import android.content.Context
+import android.content.Intent
+import android.net.Uri
+import java.io.InvalidObjectException
+
+import java.util.Date
+
+/**
+ * Neato-SDK
+ * Created by Marco on 06/05/16.
+ * Copyright © 2016 Neato Robotics. All rights reserved.
+ */
+class NeatoAuthentication
+/**
+ *
+ * @param context
+ */
+private constructor(context: Context) {
+    private var accessTokenDatasource: AccessTokenDatasource? = null
+
+    /**
+     * Use this method to check if the current user is authenticated
+     * @return true if the client has a stored access token
+     */
+    val isAuthenticated: Boolean
+        get() = accessTokenDatasource!!.isTokenValid
+
+    /**
+     * Use this method to get the current OAuth2 access token
+     * @return
+     */
+    val oauth2AccessToken: String?
+        get() = accessTokenDatasource!!.loadToken()
+
+    init {
+        this.accessTokenDatasource = DefaultAccessTokenDatasource(context)
+    }
+
+    /**
+     * Start the OAuth 2 authentication flow
+     */
+    fun openLoginInBrowser(context: Context, clientId: String, redirectUri: String, scopes: Array<NeatoOAuth2Scope>) {
+        val authUrl = buildOAuthAuthenticationUrl(OAUTH_AUTH_URL, clientId, buildScopesParameter(scopes), redirectUri)
+        val intent = Intent(Intent.ACTION_VIEW, Uri.parse(authUrl))
+        context.startActivity(intent)
+
+        clearAccessToken()
+    }
+
+    /**
+     * Parse the OAuth2 response starting from the response URI
+     * @param uri
+     * @return the NeatoAuthenticationResponse type
+     */
+    fun getOAuth2AuthResponseFromUri(uri: Uri): NeatoAuthenticationResponse {
+        val response = NeatoAuthenticationResponse.fromUri(uri)
+        when (response.type) {
+            // Response was successful and contains auth token
+            NeatoAuthenticationResponse.Response.TOKEN -> setOauth2AccessToken(
+                response.token?:"",
+                response.tokenExpirationDate?:Date()
+            )
+            NeatoAuthenticationResponse.Response.ERROR -> clearAccessToken()
+        }// Most likely auth flow was cancelled
+        //You can do nothing
+        return response
+    }
+
+    /**
+     *
+     * @return the OAuth 2 authentication string URL
+     */
+    fun buildOAuthAuthenticationUrl(
+        formattedUrl: String,
+        clientId: String?,
+        scopes: String,
+        redirectUri: String?
+    ): String {
+        return String.format(formattedUrl, clientId, scopes, redirectUri)
+    }
+
+    /**
+     *
+     * @param scopes
+     * @return the comma separated string of scopes
+     */
+    fun buildScopesParameter(scopes: Array<NeatoOAuth2Scope>?): String {
+        val scopesBuffer = StringBuffer("")
+        if (scopes != null && scopes.size > 0) {
+            for (scope in scopes) {
+                scopesBuffer.append(scope)
+                scopesBuffer.append("+")
+            }
+            scopesBuffer.deleteCharAt(scopesBuffer.length - 1)
+        }
+        return scopesBuffer.toString()
+    }
+
+    /**
+     * Clear the current OAuth2 access token
+     */
+    fun clearAccessToken() {
+        accessTokenDatasource!!.clearToken()
+    }
+
+    /**
+     * Call this method after the end of a successful OAuth2.0 authentication flow. This method setup
+     * the NeatoClient with the obtained access token.
+     * @param token
+     * @param tokenExpirationDate
+     */
+    fun setOauth2AccessToken(token: String, tokenExpirationDate: Date) {
+        accessTokenDatasource?.storeToken(token, tokenExpirationDate)
+    }
+
+    companion object {
+
+        private val OAUTH_AUTH_URL =
+            "https://apps.neatorobotics.com/oauth2/authorize?client_id=%1\$s&amp;scope=%2\$s&amp;response_type=token&amp;redirect_uri=%3\$s"
+
+        private var instance: NeatoAuthentication? = null
+
+        /**
+         * Use this method to get the singleton that use the default access token datasource.
+         * @param context
+         * @return
+         */
+        fun getInstance(context: Context): NeatoAuthentication {
+            if (instance == null) {
+                instance = NeatoAuthentication(context)
+            }
+            return instance!!
+        }
+
+        /**
+         * Use this method to get the singleton that use a custom access token datasource.
+         * @param context
+         * @param accessTokenDatasource
+         * @return
+         */
+        fun getInstance(context: Context, accessTokenDatasource: AccessTokenDatasource): NeatoAuthentication {
+            val auth = getInstance(context)
+            auth.accessTokenDatasource = accessTokenDatasource
+            return auth
+        }
+    }
+}
