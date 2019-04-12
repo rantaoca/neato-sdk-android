@@ -18,15 +18,12 @@ import com.neatorobotics.sdk.android.example.robots.RobotsActivity
  */
 class SplashActivity : AppCompatActivity() {
 
-    private var neatoAuth: NeatoAuthentication? = null
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_splash)
 
         //here we're checking the access token
-        neatoAuth = NeatoAuthentication.getInstance(this)
-        if (neatoAuth!!.isAuthenticated) {
+        if (NeatoAuthentication.isAuthenticated) {
             openRobotsActivity()
         } else {
             //need to sign in first

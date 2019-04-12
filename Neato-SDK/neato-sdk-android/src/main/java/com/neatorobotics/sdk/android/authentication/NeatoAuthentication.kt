@@ -12,13 +12,11 @@ import java.util.Date
  * Created by Marco on 06/05/16.
  * Copyright © 2016 Neato Robotics. All rights reserved.
  */
-class NeatoAuthentication
-/**
- *
- * @param context
- */
-private constructor(context: Context) {
-    private var accessTokenDatasource: AccessTokenDatasource? = null
+object NeatoAuthentication {
+
+    private val OAUTH_AUTH_URL = "https://apps.neatorobotics.com/oauth2/authorize?client_id=%1\$s&amp;scope=%2\$s&amp;response_type=token&amp;redirect_uri=%3\$s"
+
+    var accessTokenDatasource: AccessTokenDatasource? = null
 
     /**
      * Use this method to check if the current user is authenticated
@@ -35,7 +33,7 @@ private constructor(context: Context) {
         get() = accessTokenDatasource!!.loadToken()
 
     init {
-        this.accessTokenDatasource = DefaultAccessTokenDatasource(context)
+        this.accessTokenDatasource = DefaultAccessTokenDatasource()
     }
 
     /**
@@ -88,7 +86,7 @@ private constructor(context: Context) {
      */
     fun buildScopesParameter(scopes: Array<NeatoOAuth2Scope>?): String {
         val scopesBuffer = StringBuffer("")
-        if (scopes != null && scopes.size > 0) {
+        if (scopes != null && scopes.isNotEmpty()) {
             for (scope in scopes) {
                 scopesBuffer.append(scope)
                 scopesBuffer.append("+")
@@ -113,37 +111,5 @@ private constructor(context: Context) {
      */
     fun setOauth2AccessToken(token: String, tokenExpirationDate: Date) {
         accessTokenDatasource?.storeToken(token, tokenExpirationDate)
-    }
-
-    companion object {
-
-        private val OAUTH_AUTH_URL =
-            "https://apps.neatorobotics.com/oauth2/authorize?client_id=%1\$s&amp;scope=%2\$s&amp;response_type=token&amp;redirect_uri=%3\$s"
-
-        private var instance: NeatoAuthentication? = null
-
-        /**
-         * Use this method to get the singleton that use the default access token datasource.
-         * @param context
-         * @return
-         */
-        fun getInstance(context: Context): NeatoAuthentication {
-            if (instance == null) {
-                instance = NeatoAuthentication(context)
-            }
-            return instance!!
-        }
-
-        /**
-         * Use this method to get the singleton that use a custom access token datasource.
-         * @param context
-         * @param accessTokenDatasource
-         * @return
-         */
-        fun getInstance(context: Context, accessTokenDatasource: AccessTokenDatasource): NeatoAuthentication {
-            val auth = getInstance(context)
-            auth.accessTokenDatasource = accessTokenDatasource
-            return auth
-        }
     }
 }

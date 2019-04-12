@@ -1,11 +1,9 @@
 package com.neatorobotics.sdk.android.example.login
 
 import android.content.Intent
-import android.net.Uri
 import android.os.Bundle
 
 import androidx.appcompat.app.AppCompatActivity
-import androidx.appcompat.widget.Toolbar
 import android.util.Log
 import android.view.View
 import android.widget.Toast
@@ -15,6 +13,7 @@ import com.neatorobotics.sdk.android.authentication.NeatoAuthenticationResponse
 import com.neatorobotics.sdk.android.authentication.NeatoOAuth2Scope
 import com.neatorobotics.sdk.android.example.R
 import com.neatorobotics.sdk.android.example.robots.RobotsActivity
+import kotlinx.android.synthetic.main.activity_login.*
 
 /**
  * Neato-SDK
@@ -27,20 +26,16 @@ import com.neatorobotics.sdk.android.example.robots.RobotsActivity
  */
 class LoginActivity : AppCompatActivity() {
 
-    private lateinit var neatoAuth: NeatoAuthentication
-
     private var REDIRECT_URI = "my-neato-app://neato"
     private var CLIENT_ID = "32547b00f17b08e408d93a5b922fa97a23ff5e6d953427a6f3f9a98122c16c17"
-    private var scopes =
-        arrayOf(NeatoOAuth2Scope.CONTROL_ROBOTS, NeatoOAuth2Scope.PUBLIC_PROFILE, NeatoOAuth2Scope.MAPS)
+    private var scopes = arrayOf(NeatoOAuth2Scope.CONTROL_ROBOTS,
+                                                        NeatoOAuth2Scope.PUBLIC_PROFILE,
+                                                        NeatoOAuth2Scope.MAPS)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_login)
-        val toolbar = findViewById<View>(R.id.toolbar) as Toolbar
         setSupportActionBar(toolbar)
-
-        neatoAuth = NeatoAuthentication.getInstance(this)
     }
 
     override fun onNewIntent(intent: Intent) {
@@ -48,7 +43,7 @@ class LoginActivity : AppCompatActivity() {
 
         val uri = intent.data
         if (uri != null) {
-            val response = neatoAuth.getOAuth2AuthResponseFromUri(uri)
+            val response = NeatoAuthentication.getOAuth2AuthResponseFromUri(uri)
 
             when (response.type) {
                 NeatoAuthenticationResponse.Response.TOKEN -> {
@@ -61,7 +56,7 @@ class LoginActivity : AppCompatActivity() {
                     Toast.LENGTH_SHORT
                 ).show()
                 else -> {}
-            }//Nothing to do here
+            }
         }
     }
 
@@ -70,8 +65,9 @@ class LoginActivity : AppCompatActivity() {
     }
 
     private fun openRobotsActivity() {
-        val intent = Intent(this, RobotsActivity::class.java)
-        intent.flags = Intent.FLAG_ACTIVITY_SINGLE_TOP
+        val intent = Intent(this, RobotsActivity::class.java).apply {
+            flags = Intent.FLAG_ACTIVITY_SINGLE_TOP
+        }
         startActivity(intent)
         finish()
     }
@@ -79,7 +75,7 @@ class LoginActivity : AppCompatActivity() {
     fun loginClick(view: View) {
         //we start the auth flow here
         //later we'll receive the result in the onNewIntent method above
-        neatoAuth.openLoginInBrowser(this, CLIENT_ID, REDIRECT_URI, scopes)
+        NeatoAuthentication.openLoginInBrowser(this, CLIENT_ID, REDIRECT_URI, scopes)
     }
 
     companion object {

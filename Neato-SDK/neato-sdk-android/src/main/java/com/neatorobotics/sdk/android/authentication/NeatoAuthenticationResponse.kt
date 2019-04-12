@@ -60,7 +60,7 @@ class NeatoAuthenticationResponse private constructor(uri: Uri?) {
      * @param uri
      * @return set the NeatoAuthenticationResponse instace fields
      */
-    protected fun parseUriResponse(uri: Uri?) {
+    private fun parseUriResponse(uri: Uri?) {
         if (uri?.toString() == null) {
             type = Response.INVALID
             return

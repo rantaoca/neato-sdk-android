@@ -5,7 +5,14 @@ import android.content.ContentValues
 import android.database.Cursor
 import android.net.Uri
 
-
+/**
+ * Neato-SDK
+ * Created by Marco on 06/05/16.
+ * Copyright © 2019 Neato Robotics. All rights reserved.
+ *
+ * The only purpose of this content provider is to self-initialize the library with a Context.
+ * In that way you don't have to ask the developers to init the library into the Application onCreate() method.
+ */
 class NeatoSDKInitProvider : ContentProvider() {
 
     override fun onCreate(): Boolean {
@@ -14,7 +21,7 @@ class NeatoSDKInitProvider : ContentProvider() {
     }
 
     override fun insert(uri: Uri, values: ContentValues?): Uri? {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        return null
     }
 
     override fun query(
@@ -24,18 +31,18 @@ class NeatoSDKInitProvider : ContentProvider() {
         selectionArgs: Array<String>?,
         sortOrder: String?
     ): Cursor? {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        return null
     }
 
     override fun update(uri: Uri, values: ContentValues?, selection: String?, selectionArgs: Array<String>?): Int {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        return 0
     }
 
     override fun delete(uri: Uri, selection: String?, selectionArgs: Array<String>?): Int {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        return 0
     }
 
     override fun getType(uri: Uri): String? {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        return null
     }
 }

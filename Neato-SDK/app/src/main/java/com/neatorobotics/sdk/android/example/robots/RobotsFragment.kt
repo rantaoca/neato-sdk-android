@@ -3,7 +3,6 @@ package com.neatorobotics.sdk.android.example.robots
 import android.content.Intent
 import android.os.Bundle
 import androidx.fragment.app.Fragment
-import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import android.view.LayoutInflater
@@ -17,6 +16,7 @@ import com.neatorobotics.sdk.android.clients.Resource
 import com.neatorobotics.sdk.android.clients.ResourceState
 import com.neatorobotics.sdk.android.example.R
 import com.neatorobotics.sdk.android.models.*
+import kotlinx.android.synthetic.main.fragment_robots.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
@@ -35,13 +35,8 @@ class RobotsFragment : Fragment() {
     private var myJob: Job = Job()
     private var uiScope: CoroutineScope = CoroutineScope(Dispatchers.Main + myJob)
 
-    private lateinit var neatoUser: NeatoUser
-
-    private var mRecyclerView: RecyclerView? = null
     private var mAdapter: RecyclerView.Adapter<*>? = null
     private var mLayoutManager: RecyclerView.LayoutManager? = null
-    private var swipeContainer: SwipeRefreshLayout? = null
-    private var noRobotsAvailableMessage: TextView? = null
 
     private var robots = ArrayList<Robot>()
 
@@ -54,51 +49,46 @@ class RobotsFragment : Fragment() {
         robots = inState.getParcelableArrayList("ROBOT_LIST")?: arrayListOf()
 
         if (robots.size == 0) {
-            noRobotsAvailableMessage!!.visibility = View.VISIBLE
+            noRobotsAvailableMessage.visibility = View.VISIBLE
         } else {
-            noRobotsAvailableMessage!!.visibility = View.GONE
+            noRobotsAvailableMessage.visibility = View.GONE
         }
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         retainInstance = true
-
-        neatoUser = NeatoUser.getInstance(context!!)
     }
 
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
 
-        val rootView = inflater.inflate(R.layout.fragment_robots, container, false)
+        return inflater.inflate(R.layout.fragment_robots, container, false)
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
         //recycler view
-        mRecyclerView = rootView.findViewById<View>(R.id.robot_recycler_view) as RecyclerView
-        mRecyclerView!!.setHasFixedSize(true)
+        robot_recycler_view.setHasFixedSize(true)
         mLayoutManager = LinearLayoutManager(activity)
-        mRecyclerView!!.layoutManager = mLayoutManager
+        robot_recycler_view.layoutManager = mLayoutManager
         mAdapter = RobotsListAdapter()
-        mRecyclerView!!.adapter = mAdapter
+        robot_recycler_view.adapter = mAdapter
 
         //swipe to refresh
-        swipeContainer = rootView.findViewById<View>(R.id.swipeContainer) as SwipeRefreshLayout
         // Setup refresh listener which triggers new data loading
-        swipeContainer!!.setOnRefreshListener { loadRobots() }
+        swipeContainer.setOnRefreshListener { loadRobots() }
         // Configure the refreshing colors
-        swipeContainer!!.setColorSchemeResources(
+        swipeContainer.setColorSchemeResources(
             R.color.colorPrimary,
             R.color.colorPrimaryDark,
             R.color.colorPrimaryDark
         )
         //end swipe to refresh
-        noRobotsAvailableMessage = rootView.findViewById<View>(R.id.noRobotsAvailableMessage) as TextView
 
         if (savedInstanceState != null) {
             restoreState(savedInstanceState)
         }
-
-        return rootView
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
@@ -112,15 +102,15 @@ class RobotsFragment : Fragment() {
     private fun loadRobots() {
 
         uiScope.launch {
-            val result = neatoUser.loadRobots()
+            val result = NeatoUser.loadRobots()
             when(result.status) {
                 Resource.Status.SUCCESS -> {
                     robots.addAll(result.data as List<Robot>)
                     swipeContainer?.isRefreshing = false
                     if (robots.size == 0) {
-                        noRobotsAvailableMessage!!.visibility = View.VISIBLE
+                        noRobotsAvailableMessage.visibility = View.VISIBLE
                     } else {
-                        noRobotsAvailableMessage!!.visibility = View.GONE
+                        noRobotsAvailableMessage.visibility = View.GONE
                     }
                     mAdapter!!.notifyDataSetChanged()
 
@@ -160,9 +150,11 @@ class RobotsFragment : Fragment() {
                 if (robot.state == null || robot.state?.isNotAvailableOrOffline() == true) {
                     Toast.makeText(context, "No robot state available yet...", Toast.LENGTH_SHORT).show()
                 } else {
-                    val intent = Intent(context, RobotCommandsActivity::class.java)
-                    intent.flags = Intent.FLAG_ACTIVITY_SINGLE_TOP
-                    intent.putExtra("ROBOT", robot)
+                    val intent = Intent(context, RobotCommandsActivity::class.java).apply {
+                        flags = Intent.FLAG_ACTIVITY_SINGLE_TOP
+                        putExtra("ROBOT", robot)
+                    }
+
                     startActivity(intent)
                 }
             }
@@ -187,35 +179,47 @@ class RobotsFragment : Fragment() {
                 holder.robotCharge.text = "${robotState.charge}%"
                 when {
                     robotState.isNotAvailableOrOffline() -> {
-                        holder.robotStatus.text = "Not available or offline"
-                        holder.robotCharge.text = "Battery status not available"
-                        holder.robotStatus.setTextColor(resources.getColor(R.color.colorAccent))
-                        holder.robotCharge.setTextColor(resources.getColor(R.color.colorAccent))
+                        holder.apply {
+                            robotStatus.text = "Not available or offline"
+                            robotCharge.text = "Battery status not available"
+                            robotStatus.setTextColor(resources.getColor(R.color.colorAccent))
+                            robotCharge.setTextColor(resources.getColor(R.color.colorAccent))
+                        }
                     }
                     robotState.iscleaning -> {
-                        holder.robotStatus.setTextColor(resources.getColor(R.color.colorAccentSecondary))
-                        holder.robotStatus.text = "CLEANING"
+                        holder.apply {
+                            robotStatus.setTextColor(resources.getColor(R.color.colorAccentSecondary))
+                            robotStatus.text = "CLEANING"
+                        }
                     }
                     robotState.state == State.IDLE -> {
-                        holder.robotStatus.setTextColor(resources.getColor(R.color.colorAccentSecondary))
-                        holder.robotStatus.text = "ROBOT IDLE"
+                        holder.apply {
+                            robotStatus.setTextColor(resources.getColor(R.color.colorAccentSecondary))
+                            robotStatus.text = "ROBOT IDLE"
+                        }
                     }
                     robotState.state == State.BUSY -> {
-                        holder.robotStatus.setTextColor(resources.getColor(R.color.yellow))
-                        holder.robotStatus.text = "ROBOT BUSY"
+                        holder.apply {
+                            robotStatus.setTextColor(resources.getColor(R.color.yellow))
+                            robotStatus.text = "ROBOT BUSY"
+                        }
                     }
                     robotState.state == State.ERROR -> {
-                        holder.robotStatus.setTextColor(resources.getColor(R.color.colorAccent))
-                        holder.robotStatus.text = "ROBOT ERROR"
+                        holder.apply {
+                            robotStatus.setTextColor(resources.getColor(R.color.colorAccent))
+                            robotStatus.text = "ROBOT ERROR"
+                        }
                     }
                 }//TODO you can handle other robot state here if needed
 
                 holder.robotCharge.setTextColor(resources.getColor(R.color.colorPrimary))
             } else {
-                holder.robotStatus.text = "Not available or offline"
-                holder.robotCharge.text = "Battery status not available"
-                holder.robotStatus.setTextColor(resources.getColor(R.color.colorAccent))
-                holder.robotCharge.setTextColor(resources.getColor(R.color.colorAccent))
+                holder.apply {
+                    robotStatus.text = "Not available or offline"
+                    robotCharge.text = "Battery status not available"
+                    robotStatus.setTextColor(resources.getColor(R.color.colorAccent))
+                    robotCharge.setTextColor(resources.getColor(R.color.colorAccent))
+                }
             }
         }
 
@@ -231,6 +235,6 @@ class RobotsFragment : Fragment() {
 
     companion object {
 
-        private val TAG = "RobotsFragment"
+        private const val TAG = "RobotsFragment"
     }
 }

@@ -1,7 +1,5 @@
 package com.neatorobotics.sdk.android.authentication
 
-import android.content.Context
-import com.nhaarman.mockitokotlin2.mock
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.mockito.junit.MockitoJUnitRunner
@@ -20,7 +18,7 @@ class NeatoAuthenticationTest {
         val redirectUri = "myapp://neato"
         val scopes = arrayOf(NeatoOAuth2Scope.CONTROL_ROBOTS)
 
-        val neatoAuthentication = NeatoAuthentication.getInstance(mock())
+        val neatoAuthentication = NeatoAuthentication
 
         assertTrue(
             neatoAuthentication.buildOAuthAuthenticationUrl(
@@ -38,7 +36,7 @@ class NeatoAuthenticationTest {
         val redirectUri: String? = null
         val scopes: Array<NeatoOAuth2Scope>? = null
 
-        val neatoAuthentication = NeatoAuthentication.getInstance(mock())
+        val neatoAuthentication = NeatoAuthentication
 
         assertTrue(
             neatoAuthentication.buildOAuthAuthenticationUrl(
@@ -52,7 +50,7 @@ class NeatoAuthenticationTest {
 
     @Test
     fun buildScopesParameter() {
-        val neatoAuthentication = NeatoAuthentication.getInstance(mock())
+        val neatoAuthentication = NeatoAuthentication
 
         var scopes: Array<NeatoOAuth2Scope>? = arrayOf(NeatoOAuth2Scope.CONTROL_ROBOTS)
         assertTrue(neatoAuthentication.buildScopesParameter(scopes) == "control_robots")

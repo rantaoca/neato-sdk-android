@@ -2,6 +2,7 @@ package com.neatorobotics.sdk.android.authentication
 
 import android.content.Context
 import android.content.SharedPreferences
+import com.neatorobotics.sdk.android.NeatoSDK
 
 import java.text.ParseException
 import java.text.SimpleDateFormat
@@ -14,16 +15,18 @@ import java.util.Locale
  * Created by Marco on 06/05/16.
  * Copyright © 2016 Neato Robotics. All rights reserved.
  */
-class DefaultAccessTokenDatasource(private val context: Context) : AccessTokenDatasource {
+class DefaultAccessTokenDatasource : AccessTokenDatasource {
 
     private val TOKEN_KEY = "TOKEN_KEY"
     private val DATE_EXPIRES_TOKEN_KEY = "DATE_EXPIRES_TOKEN_KEY"
 
+    val context = NeatoSDK.applicationContext
+
     override val isTokenValid: Boolean
         get() {
             if (loadToken() == null) return false
-            val settings = context.getSharedPreferences(TAG, Context.MODE_PRIVATE)
-            val expirationDateStr = settings.getString(DATE_EXPIRES_TOKEN_KEY, null)
+            val settings = context?.getSharedPreferences(TAG, Context.MODE_PRIVATE)
+            val expirationDateStr = settings?.getString(DATE_EXPIRES_TOKEN_KEY, null)
             if (expirationDateStr != null) {
                 try {
                     val date = deserializeDate(expirationDateStr)
@@ -43,23 +46,23 @@ class DefaultAccessTokenDatasource(private val context: Context) : AccessTokenDa
         }
 
     override fun storeToken(token: String, expires: Date) {
-        val sharedPref = context.getSharedPreferences(TAG, Context.MODE_PRIVATE)
-        val editor = sharedPref.edit()
-        editor.putString(TOKEN_KEY, token)
-        editor.putString(DATE_EXPIRES_TOKEN_KEY, serializeDate(expires))
-        editor.commit()
+        val sharedPref = context?.getSharedPreferences(TAG, Context.MODE_PRIVATE)
+        val editor = sharedPref?.edit()
+        editor?.putString(TOKEN_KEY, token)
+        editor?.putString(DATE_EXPIRES_TOKEN_KEY, serializeDate(expires))
+        editor?.apply()
     }
 
     override fun loadToken(): String? {
-        val settings = context.getSharedPreferences(TAG, Context.MODE_PRIVATE)
-        return settings.getString(TOKEN_KEY, null)
+        val settings = context?.getSharedPreferences(TAG, Context.MODE_PRIVATE)
+        return settings?.getString(TOKEN_KEY, null)
     }
 
     override fun clearToken() {
-        val sharedPref = context.getSharedPreferences(TAG, Context.MODE_PRIVATE)
-        val editor = sharedPref.edit()
-        editor.clear()
-        editor.commit()
+        val sharedPref = context?.getSharedPreferences(TAG, Context.MODE_PRIVATE)
+        val editor = sharedPref?.edit()
+        editor?.clear()
+        editor?.apply()
     }
 
     companion object {

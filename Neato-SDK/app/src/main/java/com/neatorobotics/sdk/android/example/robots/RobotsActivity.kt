@@ -2,20 +2,20 @@ package com.neatorobotics.sdk.android.example.robots
 
 import android.content.Intent
 import android.os.Bundle
-import com.google.android.material.navigation.NavigationView
 import androidx.core.view.GravityCompat
-import androidx.drawerlayout.widget.DrawerLayout
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
-import androidx.appcompat.widget.Toolbar
 import android.view.MenuItem
 import android.widget.TextView
 import android.widget.Toast
+import com.google.android.material.navigation.NavigationView
 
 import com.neatorobotics.sdk.android.NeatoUser
 import com.neatorobotics.sdk.android.clients.Resource
 import com.neatorobotics.sdk.android.example.R
 import com.neatorobotics.sdk.android.example.login.LoginActivity
+import kotlinx.android.synthetic.main.activity_robots.*
+import kotlinx.android.synthetic.main.app_bar_robots.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
@@ -31,9 +31,6 @@ class RobotsActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelec
     // coroutines
     private var myJob: Job = Job()
     private var uiScope: CoroutineScope = CoroutineScope(Dispatchers.Main + myJob)
-
-    private lateinit var neatoUser: NeatoUser
-    private lateinit var navigationView: NavigationView
 
     private var userFirstName: String? = null
 
@@ -51,31 +48,24 @@ class RobotsActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelec
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_robots)
 
-        neatoUser = NeatoUser.getInstance(this)
-
-        navigationView = findViewById(R.id.nav_view)
-
         //Toolbar
-        val toolbar = findViewById<Toolbar>(R.id.toolbar)
         setSupportActionBar(toolbar)
 
         //Drawer layout
-        val drawer = findViewById<DrawerLayout>(R.id.drawer_layout)
         val toggle = ActionBarDrawerToggle(
-            this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close
+            this, drawer_layout, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close
         )
-        drawer.addDrawerListener(toggle)
+        drawer_layout.addDrawerListener(toggle)
         toggle.syncState()
 
         //Navigation view
-        val navigationView = findViewById<NavigationView>(R.id.nav_view)
-        navigationView.setNavigationItemSelectedListener(this)
+        nav_view.setNavigationItemSelectedListener(this)
 
         //Retrieve user email
         if (savedInstanceState == null) {
 
             uiScope.launch {
-                val result = neatoUser.getUserInfo()
+                val result = NeatoUser.getUserInfo()
                 when(result.status) {
                     Resource.Status.SUCCESS -> {
                         userFirstName = result.data?.first_name?:""
@@ -94,14 +84,13 @@ class RobotsActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelec
 
     private fun fillUserInfo() {
         if (userFirstName != null) {
-            (navigationView.getHeaderView(0).findViewById<TextView>(R.id.firstNameText)).text = userFirstName
+            (nav_view.getHeaderView(0).findViewById<TextView>(R.id.firstNameText)).text = userFirstName
         }
     }
 
     override fun onBackPressed() {
-        val drawer = findViewById<DrawerLayout>(R.id.drawer_layout)
-        if (drawer.isDrawerOpen(GravityCompat.START)) {
-            drawer.closeDrawer(GravityCompat.START)
+        if (drawer_layout.isDrawerOpen(GravityCompat.START)) {
+            drawer_layout.closeDrawer(GravityCompat.START)
         } else {
             super.onBackPressed()
         }
@@ -115,14 +104,13 @@ class RobotsActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelec
             logout()
         }
 
-        val drawer = findViewById<DrawerLayout>(R.id.drawer_layout)
-        drawer.closeDrawer(GravityCompat.START)
+        drawer_layout.closeDrawer(GravityCompat.START)
         return true
     }
 
     private fun logout() {
         uiScope.launch {
-            val result = neatoUser.logout()
+            val result = NeatoUser.logout()
             when (result.status) {
                 Resource.Status.SUCCESS -> {
                     val intent = Intent(applicationContext, LoginActivity::class.java)

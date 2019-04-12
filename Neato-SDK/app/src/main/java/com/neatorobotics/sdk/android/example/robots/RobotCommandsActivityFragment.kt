@@ -14,12 +14,14 @@ import com.neatorobotics.sdk.android.clients.Resource
 import com.neatorobotics.sdk.android.clients.nucleo.Nucleo
 import com.neatorobotics.sdk.android.example.R
 import com.neatorobotics.sdk.android.models.*
+import com.neatorobotics.sdk.android.robotservices.cleaning.CleaningParams
 import com.neatorobotics.sdk.android.robotservices.cleaning.cleaningService
 import com.neatorobotics.sdk.android.robotservices.findme.findMeService
 import com.neatorobotics.sdk.android.robotservices.housecleaning.houseCleaningService
 import com.neatorobotics.sdk.android.robotservices.maps.mapService
 import com.neatorobotics.sdk.android.robotservices.scheduling.schedulingService
 import com.neatorobotics.sdk.android.robotservices.spotcleaning.spotCleaningService
+import kotlinx.android.synthetic.main.fragment_robot_commands.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
@@ -31,23 +33,8 @@ class RobotCommandsActivityFragment : Fragment() {
     private var myJob: Job = Job()
     private var uiScope: CoroutineScope = CoroutineScope(Dispatchers.Main + myJob)
 
-    protected var robot: Robot? = null
-
-    private var houseCleaning: Button? = null
-    private var mapCleaning: Button? = null
-    private var spotCleaning: Button? = null
-    private var pauseCleaning: Button? = null
-    private var stopCleaning: Button? = null
-    private var resumeCleaning: Button? = null
-    private var returnToBaseCleaning: Button? = null
-    private var findMe: Button? = null
-    private var enableDisableScheduling: Button? = null
-    private var scheduleEveryWednesday: Button? = null
-    private var getScheduling: Button? = null
-    private var maps: Button? = null
-
-    private var mapImageView: ImageView? = null
-
+    private var robot: Robot? = null
+    
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
         outState.putParcelable("ROBOT", robot)
@@ -67,64 +54,42 @@ class RobotCommandsActivityFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        val rootView = inflater.inflate(R.layout.fragment_robot_commands, container, false)
+        
+        return inflater.inflate(R.layout.fragment_robot_commands, container, false)
+    }
 
-        houseCleaning = rootView.findViewById<View>(R.id.houseCleaning) as Button
-        spotCleaning = rootView.findViewById<View>(R.id.spotCleaning) as Button
-        mapCleaning = rootView.findViewById<View>(R.id.mapCleaning) as Button
-        pauseCleaning = rootView.findViewById<View>(R.id.pauseCleaning) as Button
-        stopCleaning = rootView.findViewById<View>(R.id.stopCleaning) as Button
-        resumeCleaning = rootView.findViewById<View>(R.id.resumeCleaning) as Button
-        returnToBaseCleaning = rootView.findViewById<View>(R.id.returnToBaseCleaning) as Button
-        findMe = rootView.findViewById<View>(R.id.findMe) as Button
-        enableDisableScheduling = rootView.findViewById<View>(R.id.enableDisableScheduling) as Button
-        scheduleEveryWednesday = rootView.findViewById<View>(R.id.wednesdayScheduling) as Button
-        getScheduling = rootView.findViewById<View>(R.id.getScheduling) as Button
-        maps = rootView.findViewById<View>(R.id.maps) as Button
-        mapImageView = rootView.findViewById<View>(R.id.mapImage) as ImageView
-
-        spotCleaning!!.setOnClickListener { executeSpotCleaning() }
-
-        houseCleaning!!.setOnClickListener { executeHouseCleaning() }
-
-        mapCleaning!!.setOnClickListener { executeMapCleaning() }
-
-        pauseCleaning!!.setOnClickListener { executePause() }
-
-        stopCleaning!!.setOnClickListener { executeStop() }
-
-        returnToBaseCleaning!!.setOnClickListener { executeReturnToBase() }
-
-        resumeCleaning!!.setOnClickListener { executeResumeCleaning() }
-
-        findMe!!.setOnClickListener { executeFindMe() }
-
-        enableDisableScheduling!!.setOnClickListener { enableDisableScheduling() }
-
-        scheduleEveryWednesday!!.setOnClickListener { scheduleEveryWednesday() }
-
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        
+        spotCleaning.setOnClickListener { executeSpotCleaning() }
+        houseCleaning.setOnClickListener { executeHouseCleaning() }
+        mapCleaning.setOnClickListener { executeMapCleaning() }
+        pauseCleaning.setOnClickListener { executePause() }
+        stopCleaning.setOnClickListener { executeStop() }
+        returnToBaseCleaning.setOnClickListener { executeReturnToBase() }
+        resumeCleaning.setOnClickListener { executeResumeCleaning() }
+        findMe.setOnClickListener { executeFindMe() }
+        enableDisableScheduling.setOnClickListener { enableDisableScheduling() }
+        wednesdayScheduling.setOnClickListener { scheduleEveryWednesday() }
         getScheduling!!.setOnClickListener { getScheduling() }
-
-        maps!!.setOnClickListener { getMaps() }
-
-        return rootView
+        maps.setOnClickListener { getMaps() }
     }
 
     private fun updateUIButtons() {
-        if (robot != null && robot!!.state != null) {
-            houseCleaning!!.isEnabled = robot!!.state!!.isStartAvailable
-            spotCleaning!!.isEnabled = robot!!.state!!.isStartAvailable
-            pauseCleaning!!.isEnabled = robot!!.state!!.isPauseAvailable
-            stopCleaning!!.isEnabled = robot!!.state!!.isStopAvailable
-            resumeCleaning!!.isEnabled = robot!!.state!!.isResumeAvailable
-            returnToBaseCleaning!!.isEnabled = robot!!.state!!.isGoToBaseAvailable
+        if (robot != null && robot?.state != null) {
+            houseCleaning.isEnabled = robot?.state?.isStartAvailable?:false
+            spotCleaning.isEnabled = robot?.state?.isStartAvailable?:false
+            pauseCleaning.isEnabled = robot?.state?.isPauseAvailable?:false
+            stopCleaning.isEnabled = robot?.state?.isStopAvailable?:false
+            resumeCleaning.isEnabled = robot?.state?.isResumeAvailable?:false
+            returnToBaseCleaning.isEnabled = robot?.state?.isGoToBaseAvailable?:false
         } else {
-            houseCleaning!!.isEnabled = false
-            spotCleaning!!.isEnabled = false
-            pauseCleaning!!.isEnabled = false
-            stopCleaning!!.isEnabled = false
-            resumeCleaning!!.isEnabled = false
-            returnToBaseCleaning!!.isEnabled = false
+            houseCleaning.isEnabled = false
+            spotCleaning.isEnabled = false
+            pauseCleaning.isEnabled = false
+            stopCleaning.isEnabled = false
+            resumeCleaning.isEnabled = false
+            returnToBaseCleaning.isEnabled = false
         }
     }
 
@@ -153,10 +118,9 @@ class RobotCommandsActivityFragment : Fragment() {
 
     private fun executeHouseCleaning() {
         uiScope.launch {
-            val params = hashMapOf(
-                Nucleo.CLEANING_CATEGORY_KEY to CleaningCategory.HOUSE.value.toString(),
-                Nucleo.CLEANING_MODE_KEY to CleaningMode.TURBO.value.toString()
-            )
+
+            val params = CleaningParams(category = CleaningCategory.HOUSE, mode = CleaningMode.TURBO)
+
             val result = robot?.houseCleaningService?.startCleaning(robot!!, params)
             when(result?.status) {
                 Resource.Status.ERROR -> Toast.makeText(context, result.message, Toast.LENGTH_SHORT).show()
@@ -172,10 +136,8 @@ class RobotCommandsActivityFragment : Fragment() {
         if (robot?.mapService?.isFloorPlanSupported == true) {
 
             uiScope.launch {
-                val params = hashMapOf(
-                    Nucleo.CLEANING_CATEGORY_KEY to CleaningCategory.MAP.value.toString(),
-                    Nucleo.CLEANING_MODE_KEY to CleaningMode.TURBO.value.toString()
-                )
+                val params = CleaningParams(category = CleaningCategory.MAP, mode = CleaningMode.TURBO)
+
                 val result = robot?.houseCleaningService?.startCleaning(robot!!, params)
                 when (result?.status) {
                     Resource.Status.ERROR -> Toast.makeText(context, result.message, Toast.LENGTH_SHORT).show()
@@ -209,7 +171,7 @@ class RobotCommandsActivityFragment : Fragment() {
 
     private fun enableDisableScheduling() {
         if (robot != null) {
-            if (robot!!.state!!.isScheduleEnabled) {
+            if (robot?.state?.isScheduleEnabled == true) {
                 uiScope.launch {
                     val result = robot?.schedulingService?.disableSchedule(robot!!)
                     when(result?.status) {
@@ -286,7 +248,7 @@ class RobotCommandsActivityFragment : Fragment() {
     }
 
     private fun showMapImage(url: String) {
-        Glide.with(this).load(url).into(mapImageView!!)
+        Glide.with(this).load(url).into(mapImage)
     }
 
     private fun getMaps() {
@@ -330,11 +292,9 @@ class RobotCommandsActivityFragment : Fragment() {
 
     private fun executeSpotCleaning() {
         uiScope.launch {
-            val params = hashMapOf(
-                Nucleo.CLEANING_CATEGORY_KEY to CleaningCategory.SPOT.value.toString(),
-                Nucleo.CLEANING_MODE_KEY to CleaningMode.TURBO.value.toString(),
-                Nucleo.CLEANING_MODIFIER_KEY to CleaningModifier.DOUBLE.value.toString()
-            )
+
+            val params = CleaningParams(category = CleaningCategory.SPOT, mode = CleaningMode.TURBO, modifier = CleaningModifier.DOUBLE)
+
             val result = robot?.spotCleaningService?.startCleaning(robot!!, params)
             when(result?.status) {
                 Resource.Status.ERROR -> Toast.makeText(context, result.message, Toast.LENGTH_SHORT).show()

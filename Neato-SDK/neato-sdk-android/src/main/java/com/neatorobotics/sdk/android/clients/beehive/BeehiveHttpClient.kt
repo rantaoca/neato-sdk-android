@@ -59,7 +59,7 @@ class BeehiveHttpClient {
                 urlConnection.doOutput = !(verb == GET || verb == DELETE)
                 urlConnection.requestMethod = verb
 
-                val accessToken = NeatoAuthentication.getInstance(NeatoSDK.applicationContext!!).oauth2AccessToken
+                val accessToken = NeatoAuthentication.oauth2AccessToken
                 if (accessToken != null) {
                     urlConnection.setRequestProperty("Authorization", "Bearer $accessToken")
                 }

@@ -23,7 +23,7 @@ class BeehiveRepository(val endpoint: String,
     var client = BeehiveHttpClient()
 
     suspend fun logOut(): Resource<Boolean> {
-        val params = JSONObject("{\"token\":\"" + NeatoAuthentication.getInstance(NeatoSDK.applicationContext!!).oauth2AccessToken + "\"}")
+        val params = JSONObject("{\"token\":\"" + NeatoAuthentication.oauth2AccessToken + "\"}")
         val result = client.call(POST, "$endpoint/oauth2/revoke", params)
         return when (result.status) {
             Resource.Status.SUCCESS  -> Resource.success(true)

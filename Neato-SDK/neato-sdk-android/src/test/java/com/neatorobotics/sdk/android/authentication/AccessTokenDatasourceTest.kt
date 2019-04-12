@@ -28,7 +28,9 @@ class AccessTokenDatasourceTest {
 
     @Test
     fun customAccessTokenDatasourceTest() {
-        val auth = NeatoAuthentication.getInstance(context, CustomAccessTokenDatasource())
+        val auth = NeatoAuthentication.apply {
+            accessTokenDatasource = CustomAccessTokenDatasource()
+        }
         val expires = Date()
         auth.setOauth2AccessToken("123", expires)
         assertEquals("123", auth.oauth2AccessToken)

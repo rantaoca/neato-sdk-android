@@ -27,18 +27,19 @@ import org.junit.Assert.assertTrue
 import org.junit.Assert.assertFalse
 import org.mockito.Matchers.any
 import org.mockito.Matchers.anyString
-import org.mockito.Mockito.doAnswer
-import org.mockito.Mockito.never
-import org.mockito.Mockito.verify
+import org.mockito.Mockito.*
 
 @RunWith(MockitoJUnitRunner::class)
 class NeatoUserTest {
 
-    //class under test
-    lateinit var neatoUser: NeatoUser
+    // singleton class under test
+    var neatoUser = NeatoUser
 
     @Mock
     lateinit var mockNeatoAutentication: NeatoAuthentication
+
+    @Mock
+    lateinit var mockContext: Context
 
     @Mock
     lateinit var mockBeehiveRepository: BeehiveRepository
@@ -50,33 +51,22 @@ class NeatoUserTest {
     fun setup() {
         MockitoAnnotations.initMocks(this)
 
-        neatoUser = NeatoUser.getInstance(ctx)
+        NeatoSDK.applicationContext = mockContext
+
         neatoUser.neatoAuthentication = mockNeatoAutentication
         neatoUser.beehiveRepository = mockBeehiveRepository
     }
 
     @Test
     fun singletonTest() {
-        val neatoUser1 = NeatoUser.getInstance(ctx)
+        val neatoUser1 = NeatoUser
         assertNotNull(neatoUser1)
 
-        val neatoUser2 = NeatoUser.getInstance(ctx)
+        val neatoUser2 = NeatoUser
         assertNotNull(neatoUser2)
 
         assertEquals(neatoUser1, neatoUser2)
     }
-
-    @Test
-    fun singletonWithCustomDatasourceTest() {
-        val neatoUser1 = NeatoUser.getInstance(ctx, DefaultAccessTokenDatasource(ctx))
-        assertNotNull(neatoUser1)
-
-        val neatoUser2 = NeatoUser.getInstance(ctx)
-        assertNotNull(neatoUser2)
-
-        assertEquals(neatoUser1, neatoUser2)
-    }
-
 
     @Test
     fun logout() {

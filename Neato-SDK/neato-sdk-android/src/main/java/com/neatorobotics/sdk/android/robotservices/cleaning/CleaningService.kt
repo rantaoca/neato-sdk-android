@@ -113,33 +113,31 @@ abstract class CleaningService : RobotService() {
         }
     }
 
-    open suspend fun startCleaning(robot: Robot, params: HashMap<String, String>? = null): Resource<RobotState> {
+    open suspend fun startCleaning(robot: Robot, params: CleaningParams? = null): Resource<RobotState> {
         // override default values, with user values
         // discard unsupported values
         if (params != null) {
-            if (params.containsKey(Nucleo.CLEANING_CATEGORY_KEY)) {
-                cleaningType = CleaningCategory.fromValue(Integer.parseInt(params[Nucleo.CLEANING_CATEGORY_KEY]))
+            if (params.category != null) {
+                cleaningType = params.category!!
             }
-            if (params.containsKey(Nucleo.CLEANING_MODE_KEY)) {
-                cleaningMode = CleaningMode.fromValue(Integer.parseInt(params[Nucleo.CLEANING_MODE_KEY]))
+            if (params.mode != null) {
+                cleaningMode = params.mode!!
             }
-            if (params.containsKey(Nucleo.CLEANING_MODIFIER_KEY)) {
-                cleaningModifier = CleaningModifier.fromValue(Integer.parseInt(params[Nucleo.CLEANING_MODIFIER_KEY]))
+            if (params.modifier != null) {
+                cleaningModifier = params.modifier!!
             }
-            if (params.containsKey(Nucleo.CLEANING_NAVIGATION_MODE_KEY)) {
-                cleaningNavigationMode = NavigationMode.fromValue(Integer.parseInt(params[Nucleo.CLEANING_NAVIGATION_MODE_KEY]))
+            if (params.navigationMode != null) {
+                cleaningNavigationMode = params.navigationMode!!
             }
-            if (params.containsKey(Nucleo.CLEANING_AREA_SPOT_HEIGHT_KEY)) {
-                cleaningAreaHeight = Integer.parseInt(params[Nucleo.CLEANING_AREA_SPOT_HEIGHT_KEY])
+            if (params.spotSize != null) {
+                cleaningAreaHeight = params.spotSize!!
+                cleaningAreaWidth = params.spotSize!!
             }
-            if (params.containsKey(Nucleo.CLEANING_AREA_SPOT_WIDTH_KEY)) {
-                cleaningAreaWidth = Integer.parseInt(params[Nucleo.CLEANING_AREA_SPOT_WIDTH_KEY])
+            if (params.zoneId != null) {
+                boundaryId = params.zoneId!!
             }
-            if (params.containsKey(Nucleo.ZONE_BOUNDARY_ID_KEY)) {
-                boundaryId = params[Nucleo.ZONE_BOUNDARY_ID_KEY]?:""
-            }
-            if (params.containsKey(Nucleo.ZONE_BOUNDARIES_ID_KEY)) {
-                boundaryIds = params[Nucleo.ZONE_BOUNDARIES_ID_KEY]?.split(",")?: listOf()
+            if (params.zonesId != null && params.zonesId?.isNotEmpty() == true) {
+                boundaryIds = params.zonesId!!
             }
         }
 
