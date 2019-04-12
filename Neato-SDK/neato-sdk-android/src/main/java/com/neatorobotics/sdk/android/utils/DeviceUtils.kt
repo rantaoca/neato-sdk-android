@@ -19,7 +19,7 @@ object DeviceUtils {
     val xAgentString: String
         get() {
             val builder = StringBuffer()
-            builder.append("androidsdk-")
+            builder.append("android-")
             builder.append(DeviceUtils.androidVersionAPI)
             builder.append("|")
             builder.append(DeviceUtils.model)

@@ -11,28 +11,23 @@ import android.widget.Toast
 
 import com.bumptech.glide.Glide
 import com.neatorobotics.sdk.android.clients.Resource
+import com.neatorobotics.sdk.android.clients.nucleo.Nucleo
 import com.neatorobotics.sdk.android.example.R
-import com.neatorobotics.sdk.android.models.CleaningMap
-import com.neatorobotics.sdk.android.models.Robot
-import com.neatorobotics.sdk.android.models.RobotState
-import com.neatorobotics.sdk.android.models.updateRobotState
+import com.neatorobotics.sdk.android.models.*
 import com.neatorobotics.sdk.android.robotservices.cleaning.cleaningService
 import com.neatorobotics.sdk.android.robotservices.findme.findMeService
+import com.neatorobotics.sdk.android.robotservices.maps.mapService
 import com.neatorobotics.sdk.android.robotservices.scheduling.schedulingService
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 
-import java.util.ArrayList
-import java.util.HashMap
-
 class RobotCommandsActivityFragment : Fragment() {
 
     // coroutines
     private var myJob: Job = Job()
     private var uiScope: CoroutineScope = CoroutineScope(Dispatchers.Main + myJob)
-
 
     protected var robot: Robot? = null
 
@@ -156,7 +151,11 @@ class RobotCommandsActivityFragment : Fragment() {
 
     private fun executeHouseCleaning() {
         uiScope.launch {
-            val result = robot?.cleaningService?.startCleaning(robot!!)
+            val params = hashMapOf(
+                Nucleo.CLEANING_CATEGORY_KEY to CleaningCategory.HOUSE.value.toString(),
+                Nucleo.CLEANING_MODE_KEY to CleaningMode.TURBO.value.toString()
+            )
+            val result = robot?.cleaningService?.startCleaning(robot!!, params)
             when(result?.status) {
                 Resource.Status.ERROR -> Toast.makeText(context, result.message, Toast.LENGTH_SHORT).show()
             }
@@ -166,7 +165,18 @@ class RobotCommandsActivityFragment : Fragment() {
     }
 
     private fun executeMapCleaning() {
-        // TODO
+        uiScope.launch {
+            val params = hashMapOf(
+                Nucleo.CLEANING_CATEGORY_KEY to CleaningCategory.MAP.value.toString(),
+                Nucleo.CLEANING_MODE_KEY to CleaningMode.TURBO.value.toString()
+            )
+            val result = robot?.cleaningService?.startCleaning(robot!!, params)
+            when(result?.status) {
+                Resource.Status.ERROR -> Toast.makeText(context, result.message, Toast.LENGTH_SHORT).show()
+            }
+            robot?.state = result?.data
+            updateUIButtons()
+        }
     }
 
     private fun executeReturnToBase() {
@@ -214,27 +224,25 @@ class RobotCommandsActivityFragment : Fragment() {
     }
 
     private fun scheduleEveryWednesday() {
-        if (robot != null) {
-            val everyWednesday = ScheduleEvent()
-            everyWednesday.mode = RobotConstants.ROBOT_CLEANING_MODE_TURBO
-            everyWednesday.day = 3//0 is Sunday, 1 Monday and so on
-            everyWednesday.startTime = "15:00"
 
-            val events = ArrayList<ScheduleEvent>()
-            events.add(everyWednesday)
-            robot!!.setSchedule(events, object : NeatoCallback<Void>() {
-                override fun done(result: Void) {
-                    super.done(result)
-                    updateUIButtons()
+        uiScope.launch {
+            val everyWednesday = ScheduleEvent().apply {
+                mode = CleaningMode.TURBO
+                day = 3//0 is Sunday, 1 Monday and so on
+                startTime = "15:00"
+            }
+            val robotSchedule = RobotSchedule(true, arrayListOf(everyWednesday))
+            val result = robot?.schedulingService?.setSchedule(robot!!, robotSchedule)
+            when(result?.status) {
+                Resource.Status.SUCCESS -> {
                     Toast.makeText(context, "Yay! Schedule programmed.", Toast.LENGTH_SHORT).show()
                 }
-
-                override fun fail(error: NeatoError) {
-                    super.fail(error)
-                    updateUIButtons(error)
-                    Toast.makeText(context, "Oops! Impossible to set schedule.", Toast.LENGTH_SHORT).show()
+                else -> {
+                    Toast.makeText(context, "Oops! Impossible to set schedule: "+result?.message, Toast.LENGTH_SHORT).show()
                 }
-            })
+            }
+            robot?.updateRobotState()
+            updateUIButtons()
         }
     }
 
@@ -256,18 +264,17 @@ class RobotCommandsActivityFragment : Fragment() {
     }
 
     private fun getMapDetails(mapId: String) {
-        if (robot != null) {
-            robot!!.getMapDetails(mapId, object : NeatoCallback<CleaningMap>() {
-                override fun done(map: CleaningMap) {
-                    super.done(map)
-                    showMapImage(map.url)
-                }
 
-                override fun fail(error: NeatoError) {
-                    super.fail(error)
+        uiScope.launch {
+            val result = robot?.mapService?.getCleaningMap(robot!!, mapId)
+            when(result?.status) {
+                Resource.Status.SUCCESS -> {
+                    showMapImage(result.data?.url?:"")
+                }
+                else -> {
                     Toast.makeText(context, "Oops! Impossible to get map details.", Toast.LENGTH_SHORT).show()
                 }
-            })
+            }
         }
     }
 
@@ -276,76 +283,56 @@ class RobotCommandsActivityFragment : Fragment() {
     }
 
     private fun getMaps() {
-        if (robot != null) {
-            //check if the robot support this service
-            if (robot!!.hasService("maps")) {
-                robot!!.getMaps(object : NeatoCallback<List<CleaningMap>>() {
-                    override fun done(maps: List<CleaningMap>?) {
-                        super.done(maps)
-                        updateUIButtons()
-                        if (maps != null && maps.isNotEmpty()) {
-                            // now you can get a map id and retrieve the map details
-                            // to download the map image use the map "url" property
-                            // this second call is needed because the map urls expire after a while
-                            getMapDetails(maps[0].id)
 
-                        } else {
-                            Toast.makeText(
-                                context,
-                                "No maps available yet. Complete at least one house cleaning to view maps.",
-                                Toast.LENGTH_SHORT
-                            ).show()
-                        }
-                    }
+        uiScope.launch {
+            val result = robot?.mapService?.getCleaningMaps(robot!!)
+            when(result?.status) {
+                Resource.Status.SUCCESS -> {
+                    if (result.data != null && result.data?.isNotEmpty() == true) {
+                        // now you can get a map id and retrieve the map details
+                        // to download the map image use the map "url" property
+                        // this second call is needed because the map urls expire after a while
+                        getMapDetails(result.data!![0].id?:"")
 
-                    override fun fail(error: NeatoError) {
-                        super.fail(error)
-                        updateUIButtons()
-                        Toast.makeText(context, "Oops! Impossible to get robot maps.", Toast.LENGTH_SHORT).show()
+                    } else {
+                        Toast.makeText(
+                            context,
+                            "No maps available yet. Complete at least one house cleaning to view maps.",
+                            Toast.LENGTH_SHORT
+                        ).show()
                     }
-                })
-            } else {
-                Toast.makeText(context, "The robot doesn't support this service.", Toast.LENGTH_SHORT).show()
+                }
+                else -> {
+                    Toast.makeText(context, "Oops! Impossible to get robot maps.", Toast.LENGTH_SHORT).show()
+                }
             }
         }
     }
 
     private fun executeStop() {
-        if (robot != null) {
-            robot!!.stopCleaning(object : NeatoCallback<RobotState>() {
-                override fun done(result: RobotState) {
-                    super.done(result)
-                    updateUIButtons()
-                }
-
-                override fun fail(error: NeatoError) {
-                    super.fail(error)
-                    updateUIButtons(error)
-                }
-            })
+        uiScope.launch {
+            val result = robot?.cleaningService?.stopCleaning(robot!!)
+            when(result?.status) {
+                Resource.Status.ERROR -> Toast.makeText(context, result.message, Toast.LENGTH_SHORT).show()
+            }
+            robot?.state = result?.data
+            updateUIButtons()
         }
     }
 
     private fun executeSpotCleaning() {
-        if (robot != null) {
-            val params = HashMap<String, String>()
-            params[RobotConstants.CLEANING_MODE_KEY] = RobotConstants.ROBOT_CLEANING_MODE_ECO.toString() + ""
-            params[RobotConstants.CLEANING_AREA_SPOT_HEIGHT_KEY] =
-                RobotConstants.ROBOT_CLEANING_SPOT_SIZE_LARGE.toString() + ""
-            params[RobotConstants.CLEANING_AREA_SPOT_WIDTH_KEY] =
-                RobotConstants.ROBOT_CLEANING_SPOT_SIZE_LARGE.toString() + ""
-
-            robot!!.startSpotCleaning(params, object : NeatoCallback<RobotState>() {
-                override fun done(result: RobotState) {
-                    super.done(result)
-                    updateUIButtons()
-                }
-
-                override fun fail(error: NeatoError) {
-                    super.fail(error)
-                    updateUIButtons(error)
-                }
-            })
+        uiScope.launch {
+            val params = hashMapOf(
+                Nucleo.CLEANING_CATEGORY_KEY to CleaningCategory.SPOT.value.toString(),
+                Nucleo.CLEANING_MODE_KEY to CleaningMode.TURBO.value.toString(),
+                Nucleo.CLEANING_MODIFIER_KEY to CleaningModifier.DOUBLE.value.toString()
+            )
+            val result = robot?.cleaningService?.startCleaning(robot!!, params)
+            when(result?.status) {
+                Resource.Status.ERROR -> Toast.makeText(context, result.message, Toast.LENGTH_SHORT).show()
+            }
+            robot?.state = result?.data
+            updateUIButtons()
         }
     }
 

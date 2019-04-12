@@ -8,7 +8,7 @@ package com.neatorobotics.sdk.android.clients.nucleo.json
 import android.graphics.PointF
 import android.util.Log
 import com.neatorobotics.sdk.android.models.*
-import com.neatorobotics.sdk.android.robotservices.scheduling.model.ScheduleEvent
+import com.neatorobotics.sdk.android.models.ScheduleEvent
 import com.neatorobotics.sdk.android.utils.DateUtils
 import org.json.JSONException
 import org.json.JSONObject

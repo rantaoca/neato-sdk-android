@@ -3,10 +3,9 @@
  * Neato Robotics Inc.
  */
 
-package com.neatorobotics.sdk.android.robotservices.scheduling.model
+package com.neatorobotics.sdk.android.models
 
 import android.os.Parcelable
-import com.neatorobotics.sdk.android.models.CleaningMode
 import kotlinx.android.parcel.Parcelize
 
 @Parcelize

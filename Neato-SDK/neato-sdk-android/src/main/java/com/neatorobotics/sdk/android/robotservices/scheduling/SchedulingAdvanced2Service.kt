@@ -11,7 +11,7 @@ import com.neatorobotics.sdk.android.clients.nucleo.Nucleo
 import com.neatorobotics.sdk.android.clients.nucleo.json.NucleoJSONParser
 import com.neatorobotics.sdk.android.models.Robot
 import com.neatorobotics.sdk.android.models.RobotSchedule
-import com.neatorobotics.sdk.android.robotservices.scheduling.model.ScheduleEvent
+import com.neatorobotics.sdk.android.models.ScheduleEvent
 
 import org.json.JSONArray
 import org.json.JSONException

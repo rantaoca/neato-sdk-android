@@ -5,58 +5,11 @@
 
 package com.neatorobotics.sdk.android.models
 
-import android.util.Log
 import com.neatorobotics.sdk.android.clients.nucleo.NucleoRepository
-import com.neatorobotics.sdk.android.robotservices.RobotServices
-import com.neatorobotics.sdk.android.utils.RobotVersionComparator
 import org.json.JSONException
 import org.json.JSONObject
 
 private const val TAG = "RobotExtensions"
-
-val Robot.latestAvailableFirmware: RobotFirmware?
-    get() {
-        if (state != null && state!!.robotModelName != null && state!!.firmware != null) {
-            val model = state!!.robotModelName?.toLowerCase()
-            if (recentFirmware.containsKey(model)) {
-                return recentFirmware[model]
-            }
-        }
-        return null
-    }
-
-// If OTA service is available OR
-// manual update url is available
-// manual update url available OR OTA
-val Robot.isUpdateAvailable: Boolean
-    get() {
-        var manualUpdateInfoUrl: String? = null
-        if (this.latestAvailableFirmware != null) {
-            manualUpdateInfoUrl = this.latestAvailableFirmware!!.manualUpdateInfoUrl
-        }
-        if (!manualUpdateInfoUrl.isNullOrEmpty() || state != null &&
-                state!!.robotModelName != null &&
-                state!!.firmware != null &&
-                this.hasService(RobotServices.SERVICE_SOFTWARE_UPDATE)) {
-            val model = state!!.robotModelName?.toLowerCase()
-            if (recentFirmware.containsKey(model)) {
-                try {
-                    if (RobotVersionComparator.versionCompare(state!!.firmware!!, recentFirmware[model]!!.version!!) < 0) {
-                        return true
-                    }
-                } catch (e: NumberFormatException) {
-                    e.printStackTrace()
-                    Log.e(TAG, "Exception", e)
-                }
-
-            }
-        }
-        return false
-    }
-
-fun Robot.hasTrait(traitName: String): Boolean {
-    return traits.contains(traitName)
-}
 
 fun Robot.hasService(serviceName: String): Boolean {
     return this.state != null && this.state!!.availableServices.containsKey(serviceName)
@@ -76,30 +29,6 @@ fun Robot.hasService(serviceName: String, vararg serviceVersions: String): Boole
     } else
         return false
     return false
-}
-
-fun Robot.setRecentFirmwares(jsonFirmwares: JSONObject?) {
-    if (jsonFirmwares != null) {
-        val modelIterator = jsonFirmwares.keys()
-        while (modelIterator.hasNext()) {
-            try {
-                val model = modelIterator.next()
-                val version = jsonFirmwares.getJSONObject(model).optString("version", "")
-                val url = jsonFirmwares.getJSONObject(model).optString("url", "")
-                val manualUpdateInfoUrl = jsonFirmwares.getJSONObject(model).optString("manual_update_info_url", "")
-                //String changelogurl = jsonFirmwares.getJSONObject(model).optString("changelog_url", "");
-                val size = jsonFirmwares.getJSONObject(model).optInt("filesize", 0)
-                var minRequiredVersion = jsonFirmwares.getJSONObject(model).optString("min_required_version", "0.0.0")
-                if (minRequiredVersion.isNullOrEmpty()) {
-                    minRequiredVersion = "0.0.0"
-                }
-                recentFirmware[model.toLowerCase()] = RobotFirmware(model, version, url, manualUpdateInfoUrl, size, minRequiredVersion)
-            } catch (e: JSONException) {
-                Log.e(TAG, "Exception", e)
-            }
-
-        }
-    }
 }
 
 fun Robot.loadFromJSON(json: JSONObject?) {

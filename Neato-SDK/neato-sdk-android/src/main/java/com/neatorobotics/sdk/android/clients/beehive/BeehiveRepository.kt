@@ -55,8 +55,8 @@ class BeehiveRepository(val endpoint: String,
         }
     }
 
-    suspend fun loadRobots(): Resource<Dashboard> {
-        val result = client.call(GET, "$endpoint/dashboard")
+    suspend fun loadRobots(): Resource<List<Robot>> {
+        val result = client.call(GET, "$endpoint/users/me/robots")
         return if (result.status === Resource.Status.SUCCESS) {
             val output = BeehiveJSONParser.parseRobotList(result.data)
             Resource.success(output)
@@ -69,14 +69,6 @@ class BeehiveRepository(val endpoint: String,
         val response = client.call(DELETE, "$endpoint/robots/${robot.serial}")
         return when (response.status) {
             Resource.Status.SUCCESS  -> Resource.success(true)
-            else -> Resource.error(response.code, getDescriptiveErrorMessage(response.code))
-        }
-    }
-
-    suspend fun getRobotFirmware(robotModel: String, firmware: String): Resource<RobotFirmware> {
-        val response = client.call(GET, "$endpoint/firmwares/$robotModel/$firmware")
-        return when (response.status) {
-            Resource.Status.SUCCESS  -> Resource.success(BeehiveJSONParser.parseFirmware(response.data))
             else -> Resource.error(response.code, getDescriptiveErrorMessage(response.code))
         }
     }

@@ -39,7 +39,7 @@ private constructor(private val context: Context) {
      * Retrieve the user robots list.
      * @param callback
      */
-    suspend fun loadRobots(): Resource<Dashboard> {
+    suspend fun loadRobots(): Resource<List<Robot>> {
         return beehiveRepository.loadRobots()
     }
 

@@ -117,7 +117,7 @@ class RobotsFragment : Fragment() {
             val result = neatoUser.loadRobots()
             when(result.status) {
                 Resource.Status.SUCCESS -> {
-                    robots = ArrayList(result.data!!.robots)
+                    robots.addAll(result.data as List<Robot>)
                     swipeContainer?.isRefreshing = false
                     if (robots.size == 0) {
                         noRobotsAvailableMessage!!.visibility = View.VISIBLE

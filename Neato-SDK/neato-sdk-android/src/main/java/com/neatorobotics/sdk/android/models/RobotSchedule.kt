@@ -6,7 +6,6 @@
 package com.neatorobotics.sdk.android.models
 
 import android.os.Parcelable
-import com.neatorobotics.sdk.android.robotservices.scheduling.model.ScheduleEvent
 import kotlinx.android.parcel.Parcelize
 
 @Parcelize

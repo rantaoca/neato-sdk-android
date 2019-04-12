@@ -23,42 +23,24 @@ object BeehiveJSONParser {
         return Robot().apply { loadFromJSON(json) }
     }
 
-    fun parseRobotList(json: JSONObject?): Dashboard {
-        val output = Dashboard(rawJson = json.toString())
+    fun parseRobotList(json: JSONObject?): List<Robot> {
         val robots = ArrayList<Robot>()
-        if (json?.has("robots") != null) {
+        if (json?.has("value") != null) {
             try {
-                val arr = json.getJSONArray("robots")
+                val arr = json.getJSONArray("value")
                 for (i in 0 until arr.length()) {
                     val robot = Robot().apply { loadFromJSON(arr.getJSONObject(i)) }
-
-                    //inject recent_firmwares
-                    if (json.has("recent_firmwares")) {
-                        val firmwares = json.getJSONObject("recent_firmwares")
-                        robot.setRecentFirmwares(firmwares)
-                    }
 
                     if (!robot.linkedAt.isNullOrEmpty()) {
                         robots.add(robot)
                     }
-                }
-                output.robots = robots
-                //get current server locale
-                if (json.has("locale")) {
-                    val serverLocale = json.optString("locale", null)
-                    output.locale = serverLocale
-                }
-                //get user country code
-                if (json.has("country_code")) {
-                    val countryCode = json.optString("country_code", null)
-                    output.countryCode = countryCode
                 }
             } catch (e: JSONException) {
                 Log.d(TAG, e.message)
             }
 
         }
-        return output
+        return robots
     }
 
     fun parseRobotMaps(json: JSONObject): List<CleaningMap> {
@@ -180,21 +162,6 @@ object BeehiveJSONParser {
         return maps
     }
 
-
-    fun parseFirmware(data: JSONObject?): RobotFirmware {
-        val output = RobotFirmware()
-        if (data != null) {
-            output.version = data.optString("version", "")
-            output.url = data.optString("url", "")
-            output.manualUpdateInfoUrl = data.optString("manual_update_info_url", "")
-            output.filesize = data.optInt("filesize", 0)
-            output.minRequiredVersion = data.optString("min_required_version", "0.0.0")
-            if (output.minRequiredVersion.isNullOrEmpty()) {
-                output.minRequiredVersion = "0.0.0"
-            }
-        }
-        return output
-    }
 
     fun parseUser(json: JSONObject?): UserInfo {
         val user = UserInfo()

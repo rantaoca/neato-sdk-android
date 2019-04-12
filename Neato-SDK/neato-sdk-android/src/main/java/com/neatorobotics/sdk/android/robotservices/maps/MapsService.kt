@@ -6,10 +6,7 @@
 package com.neatorobotics.sdk.android.robotservices.maps
 
 import com.neatorobotics.sdk.android.clients.Resource
-import com.neatorobotics.sdk.android.models.Boundary
-import com.neatorobotics.sdk.android.models.PersistentMap
-import com.neatorobotics.sdk.android.models.Robot
-import com.neatorobotics.sdk.android.models.hasService
+import com.neatorobotics.sdk.android.models.*
 import com.neatorobotics.sdk.android.robotservices.RobotService
 import com.neatorobotics.sdk.android.robotservices.RobotServices
 
@@ -39,6 +36,14 @@ abstract class MapsService : RobotService() {
     abstract fun areZonesSupported(): Boolean
 
     abstract fun areMultipleFloorPlanSupported(): Boolean
+
+    suspend fun getCleaningMap(robot: Robot, mapId: String): Resource<CleaningMap> {
+        return beehiveRepository.getMapById(robot.serial?:"", mapId)
+    }
+
+    suspend fun getCleaningMaps(robot: Robot): Resource<List<CleaningMap>> {
+        return beehiveRepository.getRobotMaps(robot)
+    }
 
     companion object {
 
