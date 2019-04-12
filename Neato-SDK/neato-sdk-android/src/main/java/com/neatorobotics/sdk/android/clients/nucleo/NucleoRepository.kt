@@ -21,7 +21,7 @@ class NucleoRepository(private val errorsProvider: NucleoErrorsProvider = Nucleo
     suspend fun getRobotState(robot: Robot): Resource<RobotState> {
 
         val result = retry(
-                times = 3,
+                times = 1,
                 initialDelay = 500,
                 block = {
                     val command = Nucleo.GET_ROBOT_STATE_COMMAND.replace("77", "" + reqId++ % 1000)

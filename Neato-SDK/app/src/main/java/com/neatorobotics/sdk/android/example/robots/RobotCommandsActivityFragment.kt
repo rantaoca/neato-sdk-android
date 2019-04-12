@@ -16,8 +16,10 @@ import com.neatorobotics.sdk.android.example.R
 import com.neatorobotics.sdk.android.models.*
 import com.neatorobotics.sdk.android.robotservices.cleaning.cleaningService
 import com.neatorobotics.sdk.android.robotservices.findme.findMeService
+import com.neatorobotics.sdk.android.robotservices.housecleaning.houseCleaningService
 import com.neatorobotics.sdk.android.robotservices.maps.mapService
 import com.neatorobotics.sdk.android.robotservices.scheduling.schedulingService
+import com.neatorobotics.sdk.android.robotservices.spotcleaning.spotCleaningService
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
@@ -155,7 +157,7 @@ class RobotCommandsActivityFragment : Fragment() {
                 Nucleo.CLEANING_CATEGORY_KEY to CleaningCategory.HOUSE.value.toString(),
                 Nucleo.CLEANING_MODE_KEY to CleaningMode.TURBO.value.toString()
             )
-            val result = robot?.cleaningService?.startCleaning(robot!!, params)
+            val result = robot?.houseCleaningService?.startCleaning(robot!!, params)
             when(result?.status) {
                 Resource.Status.ERROR -> Toast.makeText(context, result.message, Toast.LENGTH_SHORT).show()
             }
@@ -165,18 +167,23 @@ class RobotCommandsActivityFragment : Fragment() {
     }
 
     private fun executeMapCleaning() {
-        uiScope.launch {
-            val params = hashMapOf(
-                Nucleo.CLEANING_CATEGORY_KEY to CleaningCategory.MAP.value.toString(),
-                Nucleo.CLEANING_MODE_KEY to CleaningMode.TURBO.value.toString()
-            )
-            val result = robot?.cleaningService?.startCleaning(robot!!, params)
-            when(result?.status) {
-                Resource.Status.ERROR -> Toast.makeText(context, result.message, Toast.LENGTH_SHORT).show()
+
+        // first check if the robot support map cleaning service
+        if (robot?.mapService?.isFloorPlanSupported == true) {
+
+            uiScope.launch {
+                val params = hashMapOf(
+                    Nucleo.CLEANING_CATEGORY_KEY to CleaningCategory.MAP.value.toString(),
+                    Nucleo.CLEANING_MODE_KEY to CleaningMode.TURBO.value.toString()
+                )
+                val result = robot?.houseCleaningService?.startCleaning(robot!!, params)
+                when (result?.status) {
+                    Resource.Status.ERROR -> Toast.makeText(context, result.message, Toast.LENGTH_SHORT).show()
+                }
+                robot?.state = result?.data
+                updateUIButtons()
             }
-            robot?.state = result?.data
-            updateUIButtons()
-        }
+        }else showNotSupportedService()
     }
 
     private fun executeReturnToBase() {
@@ -195,6 +202,7 @@ class RobotCommandsActivityFragment : Fragment() {
             val result = robot?.findMeService?.findMe(robot!!)
             when(result?.status) {
                 Resource.Status.ERROR -> Toast.makeText(context, result.message, Toast.LENGTH_SHORT).show()
+                null -> showNotSupportedService()
             }
         }
     }
@@ -205,19 +213,17 @@ class RobotCommandsActivityFragment : Fragment() {
                 uiScope.launch {
                     val result = robot?.schedulingService?.disableSchedule(robot!!)
                     when(result?.status) {
-                        Resource.Status.ERROR -> Toast.makeText(context, result.message, Toast.LENGTH_SHORT).show()
+                        Resource.Status.SUCCESS -> Toast.makeText(context, "Successfully enabled/disabled schedule", Toast.LENGTH_SHORT).show()
+                        else -> Toast.makeText(context, result?.message, Toast.LENGTH_SHORT).show()
                     }
-                    robot?.updateRobotState()
-                    updateUIButtons()
                 }
             } else {
                 uiScope.launch {
                     val result = robot?.schedulingService?.enableSchedule(robot!!)
                     when(result?.status) {
-                        Resource.Status.ERROR -> Toast.makeText(context, result.message, Toast.LENGTH_SHORT).show()
+                        Resource.Status.SUCCESS -> Toast.makeText(context, "Successfully enabled/disabled schedule", Toast.LENGTH_SHORT).show()
+                        else -> Toast.makeText(context, result?.message, Toast.LENGTH_SHORT).show()
                     }
-                    robot?.updateRobotState()
-                    updateUIButtons()
                 }
             }
         }
@@ -271,6 +277,7 @@ class RobotCommandsActivityFragment : Fragment() {
                 Resource.Status.SUCCESS -> {
                     showMapImage(result.data?.url?:"")
                 }
+                null -> showNotSupportedService()
                 else -> {
                     Toast.makeText(context, "Oops! Impossible to get map details.", Toast.LENGTH_SHORT).show()
                 }
@@ -302,6 +309,7 @@ class RobotCommandsActivityFragment : Fragment() {
                         ).show()
                     }
                 }
+                null -> showNotSupportedService()
                 else -> {
                     Toast.makeText(context, "Oops! Impossible to get robot maps.", Toast.LENGTH_SHORT).show()
                 }
@@ -327,7 +335,7 @@ class RobotCommandsActivityFragment : Fragment() {
                 Nucleo.CLEANING_MODE_KEY to CleaningMode.TURBO.value.toString(),
                 Nucleo.CLEANING_MODIFIER_KEY to CleaningModifier.DOUBLE.value.toString()
             )
-            val result = robot?.cleaningService?.startCleaning(robot!!, params)
+            val result = robot?.spotCleaningService?.startCleaning(robot!!, params)
             when(result?.status) {
                 Resource.Status.ERROR -> Toast.makeText(context, result.message, Toast.LENGTH_SHORT).show()
             }
@@ -353,5 +361,9 @@ class RobotCommandsActivityFragment : Fragment() {
             robot?.updateRobotState()
             updateUIButtons()
         }
+    }
+
+    private fun showNotSupportedService() {
+        Toast.makeText(context, "Service non supported", Toast.LENGTH_SHORT).show()
     }
 }

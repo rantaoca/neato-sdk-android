@@ -139,3 +139,26 @@ val RobotState.iscleaning: Boolean
                  action == Action.MAP_CLEANING)
 
     }
+
+fun RobotState.isNotAvailable(): Boolean {
+    return if (this.isOffline())
+        true
+    else if (this.state == State.INVALID)
+        true
+    else if (this.result == null || !this.result.equals("ok", ignoreCase = true))
+        true
+    else if (this.state == State.BUSY && this.action == Action.INVALID)
+        true
+    else this.state == State.PAUSED && this.action == Action.INVALID
+}
+
+
+fun RobotState.isOffline(): Boolean {
+    return !this.isOnline
+}
+
+
+fun RobotState.isNotAvailableOrOffline(): Boolean {
+    return this.isOffline() || this.isNotAvailable()
+
+}

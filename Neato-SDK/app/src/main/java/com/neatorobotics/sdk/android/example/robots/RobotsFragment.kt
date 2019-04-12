@@ -16,9 +16,7 @@ import com.neatorobotics.sdk.android.NeatoUser
 import com.neatorobotics.sdk.android.clients.Resource
 import com.neatorobotics.sdk.android.clients.ResourceState
 import com.neatorobotics.sdk.android.example.R
-import com.neatorobotics.sdk.android.models.Robot
-import com.neatorobotics.sdk.android.models.State
-import com.neatorobotics.sdk.android.models.updateRobotState
+import com.neatorobotics.sdk.android.models.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
@@ -159,13 +157,13 @@ class RobotsFragment : Fragment() {
                 val position = adapterPosition
                 val robot = robots[position]
 
-                if (robot.state != null) {
+                if (robot.state == null || robot.state?.isNotAvailableOrOffline() == true) {
+                    Toast.makeText(context, "No robot state available yet...", Toast.LENGTH_SHORT).show()
+                } else {
                     val intent = Intent(context, RobotCommandsActivity::class.java)
                     intent.flags = Intent.FLAG_ACTIVITY_SINGLE_TOP
                     intent.putExtra("ROBOT", robot)
                     startActivity(intent)
-                } else {
-                    Toast.makeText(context, "No robot state available yet...", Toast.LENGTH_SHORT).show()
                 }
             }
         }
@@ -183,24 +181,32 @@ class RobotsFragment : Fragment() {
         override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
             (holder as ItemViewHolder).robotName.text = robots[position].name
             holder.robotModel.text = robots[position].model
-            if (robots[position].state != null) {
-                holder.robotCharge.text = "${robots[position].state!!.charge}%"
+            val robotState = robots[position].state
+            if (robotState != null) {
+
+                holder.robotCharge.text = "${robotState.charge}%"
                 when {
-                    robots[position].state?.state == State.IDLE -> {
+                    robotState.isNotAvailableOrOffline() -> {
+                        holder.robotStatus.text = "Not available or offline"
+                        holder.robotCharge.text = "Battery status not available"
+                        holder.robotStatus.setTextColor(resources.getColor(R.color.colorAccent))
+                        holder.robotCharge.setTextColor(resources.getColor(R.color.colorAccent))
+                    }
+                    robotState.iscleaning -> {
+                        holder.robotStatus.setTextColor(resources.getColor(R.color.colorAccentSecondary))
+                        holder.robotStatus.text = "CLEANING"
+                    }
+                    robotState.state == State.IDLE -> {
                         holder.robotStatus.setTextColor(resources.getColor(R.color.colorAccentSecondary))
                         holder.robotStatus.text = "ROBOT IDLE"
                     }
-                    robots[position].state?.state == State.BUSY -> {
+                    robotState.state == State.BUSY -> {
                         holder.robotStatus.setTextColor(resources.getColor(R.color.yellow))
                         holder.robotStatus.text = "ROBOT BUSY"
                     }
-                    robots[position].state?.state == State.ERROR -> {
+                    robotState.state == State.ERROR -> {
                         holder.robotStatus.setTextColor(resources.getColor(R.color.colorAccent))
                         holder.robotStatus.text = "ROBOT ERROR"
-                    }
-                    else -> {
-                        holder.robotStatus.setTextColor(resources.getColor(R.color.colorPrimary))
-                        holder.robotStatus.text = "OTHER ROBOT STATE"
                     }
                 }//TODO you can handle other robot state here if needed
 

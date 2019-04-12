@@ -56,7 +56,7 @@ class SchedulingAdvanced2Service : SchedulingService() {
     fun convertEventToJSON(event: ScheduleEvent, toSendToTheRobot: Boolean = false): JSONObject? {
         val json = JSONObject()
         try {
-            json.put("mode", event.mode)
+            json.put("mode", event.mode.value)
             json.put("day", event.day)
             json.put("startTime", event.startTime)
 

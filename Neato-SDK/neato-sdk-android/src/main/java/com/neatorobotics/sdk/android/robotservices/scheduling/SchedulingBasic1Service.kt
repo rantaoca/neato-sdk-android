@@ -58,7 +58,7 @@ class SchedulingBasic1Service : SchedulingService() {
         val json = JSONObject()
         try {
             json.put("startTime", event.startTime)
-            json.put("mode", event.mode)
+            json.put("mode", event.mode.value)
             json.put("day", event.day)
         } catch (e: JSONException) {
             Log.e(TAG, "Exception", e)
