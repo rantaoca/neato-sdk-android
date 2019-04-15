@@ -14,7 +14,7 @@ import org.junit.Assert.assertEquals
 class StringUtilsUnitTest {
 
     @Test
-    fun testStringToHex() {
+    fun `test string to hex`() {
         var input = "Caffeine"
         assertTrue(
             StringUtils.toHex(input.toByteArray(charset("UTF-8")))!!.equals(
@@ -50,7 +50,7 @@ class StringUtilsUnitTest {
     }
 
     @Test
-    fun testGetStringFromInputStream() {
+    fun `test get string from input stream`() {
         val input = "{\"name\":\"marcoà.,.,.,!$%&€\"}"
         val bais = ByteArrayInputStream(input.toByteArray(Charset.forName("UTF-8")))
         val outputString = StringUtils.getStringFromInputStream(bais)

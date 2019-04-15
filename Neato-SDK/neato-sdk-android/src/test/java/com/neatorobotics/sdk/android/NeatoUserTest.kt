@@ -44,9 +44,6 @@ class NeatoUserTest {
     @Mock
     lateinit var mockBeehiveRepository: BeehiveRepository
 
-    @Mock
-    lateinit var ctx: Context
-
     @Before
     fun setup() {
         MockitoAnnotations.initMocks(this)
@@ -58,7 +55,7 @@ class NeatoUserTest {
     }
 
     @Test
-    fun singletonTest() {
+    fun `NeatoUser is a singleton`() {
         val neatoUser1 = NeatoUser
         assertNotNull(neatoUser1)
 
@@ -69,7 +66,7 @@ class NeatoUserTest {
     }
 
     @Test
-    fun logout() {
+    fun `NeatoUser logout fun should call beehive repository logout fun`() {
         runBlocking {
             neatoUser.logout()
             verify(mockBeehiveRepository).logOut()
@@ -77,7 +74,7 @@ class NeatoUserTest {
     }
 
     @Test
-    fun loadRobots() {
+    fun `NeatoUser loadRobots fun should call beehive repository loadRobots fun`() {
         runBlocking {
             neatoUser.loadRobots()
             verify(mockBeehiveRepository).loadRobots()
@@ -85,40 +82,10 @@ class NeatoUserTest {
     }
 
     @Test
-    fun loadRobots_InvalidToken() {
-
-    }
-
-    @Test
-    fun loadRobots_Error() {
-
-    }
-
-    @Test
-    fun loadRobots_GenericError() {
-
-    }
-
-    @Test
-    fun loadRobots_NullJSON() {
-
-    }
-
-    @Test
-    fun loadRobots_OK_Robot_In_List() {
-
-    }
-
-    @Test
-    fun getUserInfo() {
+    fun `NeatoUser getUserInfo fun should call beehive repository getUser fun`() {
         runBlocking {
             neatoUser.getUserInfo()
             verify(mockBeehiveRepository).getUser()
         }
-    }
-
-    @Test
-    fun getUserInfoFail() {
-
     }
 }

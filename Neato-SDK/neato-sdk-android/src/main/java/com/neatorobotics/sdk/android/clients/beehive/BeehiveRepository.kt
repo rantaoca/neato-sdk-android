@@ -5,7 +5,6 @@
 
 package com.neatorobotics.sdk.android.clients.beehive
 
-import com.neatorobotics.sdk.android.NeatoSDK
 import com.neatorobotics.sdk.android.authentication.NeatoAuthentication
 import com.neatorobotics.sdk.android.clients.Resource
 import com.neatorobotics.sdk.android.clients.ResourceState

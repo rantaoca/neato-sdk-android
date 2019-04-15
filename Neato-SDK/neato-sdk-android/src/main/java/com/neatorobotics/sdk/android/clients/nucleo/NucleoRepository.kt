@@ -43,15 +43,6 @@ class NucleoRepository(private val errorsProvider: NucleoErrorsProvider = Nucleo
         }
     }
 
-    suspend fun dismissAlert(robot: Robot): Resource<Boolean> {
-        val result = executeCommand(robot, JSONObject(Nucleo.DISMISS_CURRENT_ALERT_COMMAND))
-        return if (result.status === Resource.Status.SUCCESS) {
-            Resource.success(true)
-        } else {
-            Resource.error(result.code, errorsProvider.description(result.code))
-        }
-    }
-
     suspend fun executeCommand(robot: Robot, params: JSONObject): Resource<JSONObject> {
         val result = client.call(POST, Nucleo.URL, robot.serial?:"", params.toString(), robot.secret_key?:"")
         return if (result.status === Resource.Status.SUCCESS) {

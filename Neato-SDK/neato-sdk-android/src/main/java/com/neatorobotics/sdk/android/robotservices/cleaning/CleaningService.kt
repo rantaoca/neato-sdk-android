@@ -43,7 +43,7 @@ abstract class CleaningService : RobotService() {
     abstract val isCleaningFrequencySupported: Boolean
     abstract val isMultipleZonesCleaningSupported: Boolean
 
-    suspend fun stopCleaning(robot: Robot, params: HashMap<String, String>? = null): Resource<RobotState> {
+    suspend fun stopCleaning(robot: Robot): Resource<RobotState> {
         val command = JSONObject().apply {
             put("reqId", "77")
             put("cmd", "stopCleaning")
@@ -61,7 +61,7 @@ abstract class CleaningService : RobotService() {
         }
     }
 
-    suspend fun pauseCleaning(robot: Robot, params: HashMap<String, String>? = null): Resource<RobotState> {
+    suspend fun pauseCleaning(robot: Robot): Resource<RobotState> {
         val command = JSONObject().apply {
             put("reqId", "77")
             put("cmd", "pauseCleaning")
@@ -78,7 +78,7 @@ abstract class CleaningService : RobotService() {
         }
     }
 
-    suspend fun resumeCleaning(robot: Robot, params: HashMap<String, String>? = null): Resource<RobotState> {
+    suspend fun resumeCleaning(robot: Robot): Resource<RobotState> {
         val command = JSONObject().apply {
             put("reqId", "77")
             put("cmd", "resumeCleaning")
@@ -95,7 +95,7 @@ abstract class CleaningService : RobotService() {
         }
     }
 
-    suspend fun returnToBase(robot: Robot, params: HashMap<String, String>? = null): Resource<RobotState> {
+    suspend fun returnToBase(robot: Robot): Resource<RobotState> {
         val command = JSONObject().apply {
             put("reqId", "77")
             put("cmd", "sendToBase")

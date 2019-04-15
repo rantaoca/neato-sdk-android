@@ -27,7 +27,7 @@ class AccessTokenDatasourceTest {
     }
 
     @Test
-    fun customAccessTokenDatasourceTest() {
+    fun `test custom access token datasource`() {
         val auth = NeatoAuthentication.apply {
             accessTokenDatasource = CustomAccessTokenDatasource()
         }

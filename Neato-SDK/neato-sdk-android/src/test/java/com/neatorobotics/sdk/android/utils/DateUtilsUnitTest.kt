@@ -13,7 +13,7 @@ import org.junit.Assert.*
 class DateUtilsUnitTest {
 
     @Test
-    fun testGetHTTP11DateStringHeader() {
+    fun `test Get HTTP1 1Date String Header`() {
         val cal = Calendar.getInstance()
         cal.set(2016, 4, 4, 14, 55, 45)//note the month is 0-based
         cal.timeZone = TimeZone.getTimeZone("GMT")
