@@ -7,6 +7,7 @@ package com.neatorobotics.sdk.android.example.robots
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -28,6 +29,7 @@ import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 
 import java.util.ArrayList
+import java.util.concurrent.atomic.AtomicInteger
 
 class RobotsFragment : Fragment() {
 
@@ -99,27 +101,35 @@ class RobotsFragment : Fragment() {
         mAdapter!!.notifyDataSetChanged()
     }
 
+    var lock = AtomicInteger(0)
     private fun loadRobots() {
-
         uiScope.launch {
             val result = NeatoUser.loadRobots()
             if(!isAdded) return@launch
 
             when(result.status) {
                 Resource.Status.SUCCESS -> {
-                    robots.addAll(result.data as List<Robot>)
                     swipeContainer?.isRefreshing = false
+
+                    if(lock.get() != 0) return@launch
+
+                    robots.clear()
+                    robots.addAll(result.data as List<Robot>)
+
+                    lock.set(robots.size)
+
                     if (robots.size == 0) {
                         noRobotsAvailableMessage.visibility = View.VISIBLE
                     } else {
                         noRobotsAvailableMessage.visibility = View.GONE
                     }
-                    mAdapter!!.notifyDataSetChanged()
+                    mAdapter?.notifyDataSetChanged()
 
                     //request the robot states
-                    for (robot in robots) {
+                    robots.forEach { robot ->
                         robot.updateRobotState()
-                        mAdapter!!.notifyDataSetChanged()
+                        mAdapter?.notifyDataSetChanged()
+                        lock.set(lock.get() - 1)
                     }
                 }
                 else -> {
