@@ -1,4 +1,7 @@
-[![Build Status](https://travis-ci.org/NeatoRobotics/neato-sdk-android.svg?branch=master)](https://travis-ci.org/NeatoRobotics/neato-sdk-android)
+
+[![Build Status](https://travis-ci.org/NeatoRobotics/neato-sdk-android.svg?branch=master)](https://travis-ci.org/NeatoRobotics/neato-sdk-android)[
+![Release](https://jitpack.io/v/NeatoRobotics/neato-sdk-android.svg)
+](https://jitpack.io/NeatoRobotics/neato-sdk-android)
 
 # Neato SDK - Android
 
@@ -7,7 +10,9 @@ This is the [Neato Developer Network's](http://developers.neatorobotics.com) off
 The Neato Android SDK enables Android apps to easily communicate with Neato connected robots and use its various features.
 The official Github repository can be found [here](https://github.com/NeatoRobotics/neato-sdk-android).
 
-The SDK has been completely rewritten in **Kotlin** and uses **coroutines** for all async calls. If you're still using Java see below for a proper integration.
+The SDK has been completely rewritten in **Kotlin** and uses **coroutines** for all async calls. 
+
+> If you're still using Java see below for a proper integration or use an older SDK version.
 
 To boost your development, you can also check the *sample application*.
 
@@ -22,7 +27,7 @@ To boost your development, you can also check the *sample application*.
 If you are using Gradle, add this dependency to your app build.gradle file:
 
 ``` groovy
-compile 'com.neatorobotics.sdk.android:neato-sdk-android:0.10.0@aar'
+implementation 'com.github.neatorobotics:neato-sdk-android:0.11.0'
 ```
 
 and this repo reference to your project .gradle file:
@@ -30,10 +35,8 @@ and this repo reference to your project .gradle file:
 ``` groovy
 allprojects {
     repositories {
-        //other repos
-        maven {
-            url  "http://dl.bintray.com/neato/maven"
-        }
+        ...
+        maven { url 'https://jitpack.io' }
     }
 }
 ```
