@@ -5,12 +5,10 @@
 
 package com.neatorobotics.sdk.android.robotservices.maps
 
-import android.graphics.PointF
 import com.neatorobotics.sdk.android.clients.Resource
 import com.neatorobotics.sdk.android.clients.ResourceState
 import com.neatorobotics.sdk.android.clients.beehive.BeehiveRepository
 import com.neatorobotics.sdk.android.clients.nucleo.NucleoRepository
-import com.neatorobotics.sdk.android.models.Boundary
 import com.neatorobotics.sdk.android.models.Robot
 import com.nhaarman.mockitokotlin2.*
 import kotlinx.coroutines.runBlocking
@@ -22,8 +20,6 @@ import org.junit.runner.RunWith
 import org.mockito.Mock
 import org.mockito.MockitoAnnotations
 import org.mockito.junit.MockitoJUnitRunner
-
-import java.util.ArrayList
 
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
