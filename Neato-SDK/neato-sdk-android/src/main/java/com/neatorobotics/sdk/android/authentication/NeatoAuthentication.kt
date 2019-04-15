@@ -1,3 +1,8 @@
+/*
+ * Copyright (c) 2019.
+ * Neato Robotics Inc.
+ */
+
 package com.neatorobotics.sdk.android.authentication
 
 import android.content.Context
@@ -7,11 +12,6 @@ import java.io.InvalidObjectException
 
 import java.util.Date
 
-/**
- * Neato-SDK
- * Created by Marco on 06/05/16.
- * Copyright © 2016 Neato Robotics. All rights reserved.
- */
 object NeatoAuthentication {
 
     private val OAUTH_AUTH_URL = "https://apps.neatorobotics.com/oauth2/authorize?client_id=%1\$s&amp;scope=%2\$s&amp;response_type=token&amp;redirect_uri=%3\$s"

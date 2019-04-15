@@ -1,3 +1,8 @@
+/*
+ * Copyright (c) 2019.
+ * Neato Robotics Inc.
+ */
+
 package com.neatorobotics.sdk.android
 
 import android.content.ContentProvider
@@ -6,10 +11,6 @@ import android.database.Cursor
 import android.net.Uri
 
 /**
- * Neato-SDK
- * Created by Marco on 06/05/16.
- * Copyright © 2019 Neato Robotics. All rights reserved.
- *
  * The only purpose of this content provider is to self-initialize the library with a Context.
  * In that way you don't have to ask the developers to init the library into the Application onCreate() method.
  */

@@ -1,3 +1,8 @@
+/*
+ * Copyright (c) 2019.
+ * Neato Robotics Inc.
+ */
+
 package com.neatorobotics.sdk.android.example.robots
 
 import android.os.Bundle

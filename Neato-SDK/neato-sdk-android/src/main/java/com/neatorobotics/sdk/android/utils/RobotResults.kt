@@ -5,7 +5,6 @@
 
 package com.neatorobotics.sdk.android.utils
 
-import com.neatorobotics.sdk.android.R
 import com.neatorobotics.sdk.android.clients.ResourceState
 import org.json.JSONObject
 

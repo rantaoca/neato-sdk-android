@@ -1,3 +1,8 @@
+/*
+ * Copyright (c) 2019.
+ * Neato Robotics Inc.
+ */
+
 package com.neatorobotics.sdk.android
 
 import com.neatorobotics.sdk.android.authentication.NeatoAuthentication
@@ -6,11 +11,6 @@ import com.neatorobotics.sdk.android.clients.beehive.Beehive
 import com.neatorobotics.sdk.android.clients.beehive.BeehiveRepository
 import com.neatorobotics.sdk.android.models.*
 
-/**
- * Neato-SDK
- * Created by Marco on 06/05/16.
- * Copyright © 2016 Neato Robotics. All rights reserved.
- */
 object NeatoUser {
 
     var neatoAuthentication: NeatoAuthentication = NeatoAuthentication

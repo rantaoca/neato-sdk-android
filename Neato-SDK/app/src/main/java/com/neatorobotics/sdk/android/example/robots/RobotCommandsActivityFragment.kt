@@ -1,3 +1,8 @@
+/*
+ * Copyright (c) 2019.
+ * Neato Robotics Inc.
+ */
+
 package com.neatorobotics.sdk.android.example.robots
 
 import androidx.fragment.app.Fragment
@@ -97,6 +102,7 @@ class RobotCommandsActivityFragment : Fragment() {
 
         uiScope.launch {
             val result = robot?.cleaningService?.pauseCleaning(robot!!)
+            if(!isAdded) return@launch
             when(result?.status) {
                 Resource.Status.ERROR -> Toast.makeText(context, result.message, Toast.LENGTH_SHORT).show()
             }
@@ -108,6 +114,7 @@ class RobotCommandsActivityFragment : Fragment() {
     private fun executeResumeCleaning() {
         uiScope.launch {
             val result = robot?.cleaningService?.resumeCleaning(robot!!)
+            if(!isAdded) return@launch
             when(result?.status) {
                 Resource.Status.ERROR -> Toast.makeText(context, result.message, Toast.LENGTH_SHORT).show()
             }
@@ -122,6 +129,7 @@ class RobotCommandsActivityFragment : Fragment() {
             val params = CleaningParams(category = CleaningCategory.HOUSE, mode = CleaningMode.TURBO)
 
             val result = robot?.houseCleaningService?.startCleaning(robot!!, params)
+            if(!isAdded) return@launch
             when(result?.status) {
                 Resource.Status.ERROR -> Toast.makeText(context, result.message, Toast.LENGTH_SHORT).show()
             }
@@ -151,6 +159,7 @@ class RobotCommandsActivityFragment : Fragment() {
     private fun executeReturnToBase() {
         uiScope.launch {
             val result = robot?.cleaningService?.returnToBase(robot!!)
+            if(!isAdded) return@launch
             when(result?.status) {
                 Resource.Status.ERROR -> Toast.makeText(context, result.message, Toast.LENGTH_SHORT).show()
             }
@@ -162,6 +171,7 @@ class RobotCommandsActivityFragment : Fragment() {
     private fun executeFindMe() {
         uiScope.launch {
             val result = robot?.findMeService?.findMe(robot!!)
+            if(!isAdded) return@launch
             when(result?.status) {
                 Resource.Status.ERROR -> Toast.makeText(context, result.message, Toast.LENGTH_SHORT).show()
                 null -> showNotSupportedService()
@@ -174,6 +184,7 @@ class RobotCommandsActivityFragment : Fragment() {
             if (robot?.state?.isScheduleEnabled == true) {
                 uiScope.launch {
                     val result = robot?.schedulingService?.disableSchedule(robot!!)
+                    if(!isAdded) return@launch
                     when(result?.status) {
                         Resource.Status.SUCCESS -> Toast.makeText(context, "Successfully enabled/disabled schedule", Toast.LENGTH_SHORT).show()
                         else -> Toast.makeText(context, result?.message, Toast.LENGTH_SHORT).show()
@@ -182,6 +193,7 @@ class RobotCommandsActivityFragment : Fragment() {
             } else {
                 uiScope.launch {
                     val result = robot?.schedulingService?.enableSchedule(robot!!)
+                    if(!isAdded) return@launch
                     when(result?.status) {
                         Resource.Status.SUCCESS -> Toast.makeText(context, "Successfully enabled/disabled schedule", Toast.LENGTH_SHORT).show()
                         else -> Toast.makeText(context, result?.message, Toast.LENGTH_SHORT).show()
@@ -201,6 +213,7 @@ class RobotCommandsActivityFragment : Fragment() {
             }
             val robotSchedule = RobotSchedule(true, arrayListOf(everyWednesday))
             val result = robot?.schedulingService?.setSchedule(robot!!, robotSchedule)
+            if(!isAdded) return@launch
             when(result?.status) {
                 Resource.Status.SUCCESS -> {
                     Toast.makeText(context, "Yay! Schedule programmed.", Toast.LENGTH_SHORT).show()
@@ -217,6 +230,7 @@ class RobotCommandsActivityFragment : Fragment() {
     private fun getScheduling() {
         uiScope.launch {
             val result = robot?.schedulingService?.getSchedule(robot!!)
+            if(!isAdded) return@launch
             when(result?.status) {
                 Resource.Status.SUCCESS -> {
                     Toast.makeText(
@@ -235,6 +249,7 @@ class RobotCommandsActivityFragment : Fragment() {
 
         uiScope.launch {
             val result = robot?.mapService?.getCleaningMap(robot!!, mapId)
+            if(!isAdded) return@launch
             when(result?.status) {
                 Resource.Status.SUCCESS -> {
                     showMapImage(result.data?.url?:"")
@@ -255,6 +270,7 @@ class RobotCommandsActivityFragment : Fragment() {
 
         uiScope.launch {
             val result = robot?.mapService?.getCleaningMaps(robot!!)
+            if(!isAdded) return@launch
             when(result?.status) {
                 Resource.Status.SUCCESS -> {
                     if (result.data != null && result.data?.isNotEmpty() == true) {
@@ -282,6 +298,7 @@ class RobotCommandsActivityFragment : Fragment() {
     private fun executeStop() {
         uiScope.launch {
             val result = robot?.cleaningService?.stopCleaning(robot!!)
+            if(!isAdded) return@launch
             when(result?.status) {
                 Resource.Status.ERROR -> Toast.makeText(context, result.message, Toast.LENGTH_SHORT).show()
             }
@@ -296,6 +313,7 @@ class RobotCommandsActivityFragment : Fragment() {
             val params = CleaningParams(category = CleaningCategory.SPOT, mode = CleaningMode.TURBO, modifier = CleaningModifier.DOUBLE)
 
             val result = robot?.spotCleaningService?.startCleaning(robot!!, params)
+            if(!isAdded) return@launch
             when(result?.status) {
                 Resource.Status.ERROR -> Toast.makeText(context, result.message, Toast.LENGTH_SHORT).show()
             }

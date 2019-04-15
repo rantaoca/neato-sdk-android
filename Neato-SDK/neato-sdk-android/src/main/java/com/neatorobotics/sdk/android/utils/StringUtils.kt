@@ -1,3 +1,8 @@
+/*
+ * Copyright (c) 2019.
+ * Neato Robotics Inc.
+ */
+
 package com.neatorobotics.sdk.android.utils
 
 import java.io.BufferedReader
@@ -6,11 +11,6 @@ import java.io.InputStream
 import java.io.InputStreamReader
 import java.math.BigInteger
 
-/**
- * Neato-SDK
- * Created by Marco on 06/05/16.
- * Copyright © 2016 Neato Robotics. All rights reserved.
- */
 object StringUtils {
 
     fun toHex(bytes: ByteArray?): String? {

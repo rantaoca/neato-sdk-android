@@ -1,3 +1,8 @@
+/*
+ * Copyright (c) 2019.
+ * Neato Robotics Inc.
+ */
+
 package com.neatorobotics.sdk.android.authentication
 
 import android.content.Context
@@ -10,11 +15,6 @@ import java.util.Calendar
 import java.util.Date
 import java.util.Locale
 
-/**
- * Neato-SDK
- * Created by Marco on 06/05/16.
- * Copyright © 2016 Neato Robotics. All rights reserved.
- */
 class DefaultAccessTokenDatasource : AccessTokenDatasource {
 
     private val TOKEN_KEY = "TOKEN_KEY"

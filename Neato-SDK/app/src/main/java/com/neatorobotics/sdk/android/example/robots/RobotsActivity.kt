@@ -1,3 +1,8 @@
+/*
+ * Copyright (c) 2019.
+ * Neato Robotics Inc.
+ */
+
 package com.neatorobotics.sdk.android.example.robots
 
 import android.content.Intent
@@ -21,11 +26,6 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 
-/**
- * Neato-SDK
- * Created by Marco on 06/05/16.
- * Copyright © 2016 Neato Robotics. All rights reserved.
- */
 class RobotsActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
 
     // coroutines
@@ -111,6 +111,8 @@ class RobotsActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelec
     private fun logout() {
         uiScope.launch {
             val result = NeatoUser.logout()
+            if(isFinishing) return@launch
+
             when (result.status) {
                 Resource.Status.SUCCESS -> {
                     val intent = Intent(applicationContext, LoginActivity::class.java)

@@ -1,3 +1,8 @@
+/*
+ * Copyright (c) 2019.
+ * Neato Robotics Inc.
+ */
+
 package com.neatorobotics.sdk.android.utils
 
 import java.text.ParseException
@@ -5,11 +10,6 @@ import java.text.SimpleDateFormat
 import java.util.*
 import java.util.concurrent.TimeUnit
 
-/**
- * Neato-SDK
- * Created by Marco on 06/05/16.
- * Copyright © 2016 Neato Robotics. All rights reserved.
- */
 object DateUtils {
 
     private val EPOCH_TIME = DateUtils.getDate("yyyy-MM-dd'T'HH:mm:ss'Z'", "2013-01-06T00:00:00Z")

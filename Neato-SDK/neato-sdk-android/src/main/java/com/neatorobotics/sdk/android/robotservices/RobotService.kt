@@ -5,7 +5,6 @@
 
 package com.neatorobotics.sdk.android.robotservices
 
-import com.neatorobotics.sdk.android.NeatoUser
 import com.neatorobotics.sdk.android.clients.beehive.Beehive
 import com.neatorobotics.sdk.android.clients.beehive.BeehiveRepository
 import com.neatorobotics.sdk.android.clients.nucleo.NucleoRepository

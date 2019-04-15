@@ -1,3 +1,8 @@
+/*
+ * Copyright (c) 2019.
+ * Neato Robotics Inc.
+ */
+
 package com.neatorobotics.sdk.android.example.robots
 
 import android.content.Intent
@@ -24,11 +29,6 @@ import kotlinx.coroutines.launch
 
 import java.util.ArrayList
 
-/**
- * Neato-SDK
- * Created by Marco on 06/05/16.
- * Copyright © 2016 Neato Robotics. All rights reserved.
- */
 class RobotsFragment : Fragment() {
 
     // coroutines
@@ -103,6 +103,8 @@ class RobotsFragment : Fragment() {
 
         uiScope.launch {
             val result = NeatoUser.loadRobots()
+            if(!isAdded) return@launch
+
             when(result.status) {
                 Resource.Status.SUCCESS -> {
                     robots.addAll(result.data as List<Robot>)
