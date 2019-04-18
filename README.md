@@ -1,7 +1,7 @@
 
 [![Build Status](https://travis-ci.org/NeatoRobotics/neato-sdk-android.svg?branch=master)](https://travis-ci.org/NeatoRobotics/neato-sdk-android)[
 ![Release](https://jitpack.io/v/NeatoRobotics/neato-sdk-android.svg)
-](https://jitpack.io/NeatoRobotics/neato-sdk-android)
+](https://jitpack.io/#NeatoRobotics/neato-sdk-android)
 
 # Neato SDK - Android
 
