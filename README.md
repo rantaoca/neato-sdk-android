@@ -382,7 +382,7 @@ if (extras != null && savedInstanceState == null) {
 In the same way you can save and restore your activities and fragments state when needed.
 
 ## Integration with Java code
-Kotlin is 100% interoperable with Java, but you cannot use coroutines the same clean way you use them in Kotlin. Please check yourself how to invoke suspend functions from Java, below you can see a basic example.
+Kotlin is 100% interoperable with Java, but you cannot use coroutines the same clean way you use them in Kotlin. Please check by yourself how to invoke suspend functions from Java, below you can see a basic example.
 
 ```java
 BeehiveRepository repository = new BeehiveRepository(Beehive.URL, new BeehiveErrorsProvider());  
