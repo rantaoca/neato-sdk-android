@@ -381,6 +381,61 @@ if (extras != null && savedInstanceState == null) {
 
 In the same way you can save and restore your activities and fragments state when needed.
 
+## Robot DSL
+
+In order to write idiomatic and concise code during robot and robot state testing and configuration, we made an *inner DSL* (Domain Specific Language) you can use like this:
+
+```kotlin
+val r = robot {
+    name = "Jeeves"
+    serial = "SR01234567890"
+    secret_key = "xyz"
+    state {
+        action = Action.HOUSE_CLEANING
+        charge = 50.0
+        boundaries {
+            boundary {
+                id = "b123"
+                name = "myBoundary"
+            }
+            boundary {
+                id = "b456"
+                name = "myBoundary2"
+            }
+        }
+        services {
+            service {
+                name = RobotServices.SERVICE_FIND_ME
+                version = RobotServices.VERSION_BASIC_1
+            }
+            service {
+                name = RobotServices.SERVICE_SPOT_CLEANING
+                version = RobotServices.VERSION_ADVANCED_2
+            }
+        }
+    }
+    traits {
+        trait {
+            name = "maps"
+        }
+    }
+    persistentMaps {
+        persistentMap {
+            id = "1"
+            name = "My Home"
+        }
+        persistentMap {
+            id = "2"
+            name = "Mezzanine"
+        }
+    }
+}
+```
+
+In order to do that we use Kotlin features like *[lambda](https://kotlinlang.org/docs/reference/lambdas.html)*, *[lambda with receivers](https://kotlinlang.org/docs/reference/lambdas.html#function-literals-with-receiver)* and *[extension functions](https://kotlinlang.org/docs/reference/extensions.html#extension-functions)*.
+
+It is not mandatory to use this DSL, use it only if you like.
+
 ## Integration with Java code
 Kotlin is 100% interoperable with Java, but you cannot use coroutines the same clean way you use them in Kotlin. Please check by yourself how to invoke suspend functions from Java, below you can see a basic example.
 
