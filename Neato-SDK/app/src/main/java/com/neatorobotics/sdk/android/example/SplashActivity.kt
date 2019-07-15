@@ -11,6 +11,7 @@ import android.os.Bundle
 
 import com.neatorobotics.sdk.android.authentication.NeatoAuthentication
 import com.neatorobotics.sdk.android.example.login.LoginActivity
+import com.neatorobotics.sdk.android.example.robots.ArCleaningActivity
 import com.neatorobotics.sdk.android.example.robots.RobotsActivity
 
 /**
@@ -25,11 +26,18 @@ class SplashActivity : AppCompatActivity() {
 
         //here we're checking the access token
         if (NeatoAuthentication.isAuthenticated) {
-            openRobotsActivity()
+            //openRobotsActivity()
+            openArCleaningActivity()
         } else {
             //need to sign in first
             openLoginActivity()
         }
+    }
+
+    private fun openArCleaningActivity() {
+        val intent = Intent(this, ArCleaningActivity::class.java)
+        startActivity(intent)
+        finish()
     }
 
     private fun openRobotsActivity() {

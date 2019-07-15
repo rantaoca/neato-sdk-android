@@ -1,42 +1,51 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.neatorobotics.sdk.android.example">
+          package="com.neatorobotics.sdk.android.example">
 
-    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.CAMERA"/>
+    <!-- This tag indicates that this application requires ARCore.  This results in the application
+         only being visible in the Google Play Store on devices that support ARCore. -->
+    <uses-feature android:name="android.hardware.camera.ar" android:required="true"/>
 
     <application
-        android:allowBackup="true"
-        android:icon="@mipmap/ic_launcher"
-        android:label="@string/app_name"
-        android:supportsRtl="true"
-        android:theme="@style/AppTheme">
+            android:allowBackup="true"
+            android:icon="@mipmap/ic_launcher"
+            android:label="@string/app_name"
+            android:supportsRtl="true"
+            android:theme="@style/AppTheme">
+        <activity android:name=".robots.ArCleaningActivity">
+        </activity>
         <activity
-            android:name=".login.LoginActivity"
-            android:launchMode="singleInstance">
+                android:name=".login.LoginActivity"
+                android:launchMode="singleInstance">
             <intent-filter>
-                <category android:name="android.intent.category.DEFAULT" />
-                <category android:name="android.intent.category.BROWSABLE" />
+                <category android:name="android.intent.category.DEFAULT"/>
+                <category android:name="android.intent.category.BROWSABLE"/>
 
-                <action android:name="android.intent.action.VIEW" />
+                <action android:name="android.intent.action.VIEW"/>
 
                 <data
-                    android:host="neato"
-                    android:scheme="my-neato-app" />
+                        android:host="neato"
+                        android:scheme="my-neato-app"/>
             </intent-filter>
         </activity>
         <activity android:name=".SplashActivity">
             <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
+                <action android:name="android.intent.action.MAIN"/>
 
-                <category android:name="android.intent.category.LAUNCHER" />
+                <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
         <activity
-            android:name=".robots.RobotsActivity"
-            android:label="@string/title_activity_robots"/>
+                android:name=".robots.RobotsActivity"
+                android:label="@string/title_activity_robots"/>
         <activity
-            android:name=".robots.RobotCommandsActivity"
-            android:label="@string/title_activity_robot_commands" />
+                android:name=".robots.RobotCommandsActivity"
+                android:label="@string/title_activity_robot_commands"/>
+        <!-- This tag indicates that this application requires ARCore.  This results in the Google Play
+             Store downloading and installing ARCore along with the application. -->
+        <meta-data android:name="com.google.ar.core" android:value="required" />
     </application>
 
 </manifest>

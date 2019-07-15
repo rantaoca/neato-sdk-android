@@ -23,6 +23,7 @@ import com.neatorobotics.sdk.android.robotservices.cleaning.CleaningParams
 import com.neatorobotics.sdk.android.robotservices.cleaning.cleaningService
 import com.neatorobotics.sdk.android.robotservices.findme.findMeService
 import com.neatorobotics.sdk.android.robotservices.housecleaning.houseCleaningService
+import com.neatorobotics.sdk.android.robotservices.manualdrive.manualDriveService
 import com.neatorobotics.sdk.android.robotservices.maps.mapService
 import com.neatorobotics.sdk.android.robotservices.scheduling.schedulingService
 import com.neatorobotics.sdk.android.robotservices.spotcleaning.spotCleaningService

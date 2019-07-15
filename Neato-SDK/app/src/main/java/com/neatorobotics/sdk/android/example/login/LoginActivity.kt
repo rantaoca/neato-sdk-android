@@ -17,6 +17,7 @@ import com.neatorobotics.sdk.android.authentication.NeatoAuthentication
 import com.neatorobotics.sdk.android.authentication.NeatoAuthenticationResponse
 import com.neatorobotics.sdk.android.authentication.NeatoOAuth2Scope
 import com.neatorobotics.sdk.android.example.R
+import com.neatorobotics.sdk.android.example.robots.ArCleaningActivity
 import com.neatorobotics.sdk.android.example.robots.RobotsActivity
 import kotlinx.android.synthetic.main.activity_login.*
 
@@ -29,6 +30,7 @@ class LoginActivity : AppCompatActivity() {
 
     private var REDIRECT_URI = "my-neato-app://neato"
     private var CLIENT_ID = "32547b00f17b08e408d93a5b922fa97a23ff5e6d953427a6f3f9a98122c16c17"
+
     private var scopes = arrayOf(NeatoOAuth2Scope.CONTROL_ROBOTS,
                                                         NeatoOAuth2Scope.PUBLIC_PROFILE,
                                                         NeatoOAuth2Scope.MAPS)
@@ -62,7 +64,16 @@ class LoginActivity : AppCompatActivity() {
     }
 
     private fun onAuthenticated() {
-        openRobotsActivity()
+        //openRobotsActivity()
+        openArCleaningActivity()
+    }
+
+    private fun openArCleaningActivity() {
+        val intent = Intent(this, ArCleaningActivity::class.java).apply {
+            flags = Intent.FLAG_ACTIVITY_SINGLE_TOP
+        }
+        startActivity(intent)
+        finish()
     }
 
     private fun openRobotsActivity() {
